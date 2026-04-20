@@ -16,6 +16,17 @@ use Illuminate\View\View;
 class KegiatanController extends Controller
 {
     private const PROPOSAL_DIRECTORY = 'proposal-kegiatan';
+    private const ALLOWED_STATUSES = [
+        'pending',
+        'disetujui pembina',
+        'disetujui admin',
+        'ditolak pembina',
+        'ditolak admin',
+    ];
+    private const REJECTED_STATUSES = [
+        'ditolak pembina',
+        'ditolak admin',
+    ];
 
     public function __invoke(): View
     {
@@ -32,6 +43,7 @@ class KegiatanController extends Controller
                 'tempat',
                 'proposal',
                 'status',
+                'keterangan',
             ]);
 
         $organisasiList = Organisasi::orderBy('nama_organisasi')
@@ -49,8 +61,15 @@ class KegiatanController extends Controller
             'tanggal_mulai' => ['nullable', 'date'],
             'tempat' => ['nullable', 'string', 'max:150'],
             'proposal' => ['required'],
-            'status' => ['required', Rule::in(['pending', 'disetujui', 'ditolak'])],
+            'status' => ['required', Rule::in(self::ALLOWED_STATUSES)],
+            'keterangan' => ['nullable', 'string'],
         ]);
+
+        if (in_array($validated['status'], self::REJECTED_STATUSES, true) && blank($validated['keterangan'] ?? null)) {
+            return back()
+                ->withErrors(['keterangan' => 'Keterangan wajib diisi jika status ditolak.'])
+                ->withInput();
+        }
 
         if (! $request->hasFile('proposal')) {
             return back()
@@ -89,8 +108,15 @@ class KegiatanController extends Controller
             'deskripsi' => ['nullable', 'string'],
             'tanggal_mulai' => ['nullable', 'date'],
             'tempat' => ['nullable', 'string', 'max:150'],
-            'status' => ['required', Rule::in(['pending', 'disetujui', 'ditolak'])],
+            'status' => ['required', Rule::in(self::ALLOWED_STATUSES)],
+            'keterangan' => ['nullable', 'string'],
         ]);
+
+        if (in_array($validated['status'], self::REJECTED_STATUSES, true) && blank($validated['keterangan'] ?? null)) {
+            return back()
+                ->withErrors(['keterangan' => 'Keterangan wajib diisi jika status ditolak.'])
+                ->withInput();
+        }
 
         if ($request->hasFile('proposal')) {
             $proposalFile = $request->file('proposal');

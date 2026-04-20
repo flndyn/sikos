@@ -51,44 +51,37 @@
             <ul class="nav flex-column">
 
                 <li class="nav-item mb-1">
-                    <a href="" class="nav-link  ? 'active bg-white' : 'text-white' }}">
+                    <a href="{{ route('ketua.dashboard') }}"
+                        class="nav-link {{ request()->routeIs('ketua.dashboard') ? 'active bg-white' : 'text-white' }}">
                         <i class="bi bi-speedometer2 me-2"></i> Dashboard
                     </a>
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a href="" class="nav-link  'active bg-white' : 'text-white' }}">
-                        <i class="bi bi-people me-2"></i> Data Organisasi
+                    <a href="{{ route('ketua.organisasi') }}"
+                        class="nav-link {{ request()->routeIs('ketua.organisasi') ? 'active bg-white' : 'text-white' }}">
+                        <i class="bi bi-building me-2"></i> Profile Organisasi
                     </a>
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a href="" class="nav-link ? 'active bg-white' : 'text-white' }}">
-                        <i class="bi bi-building me-2"></i> Data Kegiatan
+                    <a href="{{ route('ketua.kegiatan') }}"
+                        class="nav-link {{ request()->routeIs('ketua.kegiatan') ? 'active bg-white' : 'text-white' }}">
+                        <i class="bi bi-calendar-event me-2"></i> Manajemen Kegiatan
                     </a>
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a href="" class="nav-link  ? 'active bg-white' : 'text-white' }}">
-                        <i class="bi bi-check-circle me-2"></i> Validasi Kegiatan
+                    <a href="{{ route('ketua.jadwal') }}"
+                        class="nav-link {{ request()->routeIs('ketua.jadwal') ? 'active bg-white' : 'text-white' }}">
+                        <i class="bi bi-calendar2-week me-2"></i> Jadwal Kegiatan
                     </a>
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a href="" class="nav-link  ? 'active bg-white' : 'text-white' }}">
-                        <i class="bi bi-calendar-event  me-2"></i> Jadwal Kegiatan
-                    </a>
-                </li>
-
-                <li class="nav-item mb-1">
-                    <a href="" class="nav-link  ? 'active bg-white' : 'text-white' }}">
+                    <a href="{{ route('ketua.dokumentasi') }}"
+                        class="nav-link {{ request()->routeIs('ketua.dokumentasi') ? 'active bg-white' : 'text-white' }}">
                         <i class="bi bi-images me-2"></i> Dokumentasi
-                    </a>
-                </li>
-
-                <li class="nav-item mb-1">
-                    <a href="" class="nav-link  ? 'active bg-white' : 'text-white' }}">
-                        <i class="bi bi-file-earmark-bar-graph me-2"></i> Laporan Kegiatan
                     </a>
                 </li>
 
@@ -138,6 +131,8 @@
         </div>
 
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

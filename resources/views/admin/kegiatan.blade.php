@@ -48,6 +48,7 @@
                         <th>Tanggal</th>
                         <th>Tempat</th>
                         <th>Status</th>
+                        <th>Keterangan</th>
                         <th class="text-center">Proposal</th>
                         <th class="text-nowrap">Aksi</th>
                     </tr>
@@ -71,16 +72,16 @@
                             </td>
                             <td>{{ $item->tempat ?? '-' }}</td>
                             <td>
-                                @if ($item->status === 'disetujui')
-                                    <span class="badge bg-success">Disetujui</span>
-                                @elseif ($item->status === 'pending')
-                                    <span class="badge bg-warning text-dark">Pending</span>
-                                @elseif ($item->status === 'ditolak')
-                                    <span class="badge bg-danger">Ditolak</span>
-                                @else
-                                    <span class="badge bg-secondary">{{ $item->status }}</span>
-                                @endif
+                                @php
+                                    $badgeClass = match ($item->status) {
+                                        'disetujui admin', 'disetujui pembina' => 'bg-success',
+                                        'ditolak admin', 'ditolak pembina' => 'bg-danger',
+                                        default => 'bg-warning text-dark',
+                                    };
+                                @endphp
+                                <span class="badge {{ $badgeClass }}">{{ ucfirst($item->status) }}</span>
                             </td>
+                            <td>{{ \Illuminate\Support\Str::limit($item->keterangan ?? '-', 60) }}</td>
                             <td class="text-center">
                                 @if ($item->proposal)
                                     @php
@@ -111,7 +112,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="text-center py-4">
+                            <td colspan="10" class="text-center py-4">
                                 <p class="text-muted mb-0">Tidak ada data kegiatan</p>
                             </td>
                         </tr>
@@ -174,8 +175,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="tanggal_mulai" class="form-label">Tanggal Mulai</label>
-                                    <input type="date"
-                                        class="form-control @error('tanggal_mulai') is-invalid @enderror"
+                                    <input type="date" class="form-control @error('tanggal_mulai') is-invalid @enderror"
                                         id="tanggal_mulai" name="tanggal_mulai" value="{{ old('tanggal_mulai') }}">
                                     @error('tanggal_mulai')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -204,10 +204,21 @@
                                         <option value="">-- Pilih Status --</option>
                                         <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Pending
                                         </option>
-                                        <option value="disetujui" {{ old('status') == 'disetujui' ? 'selected' : '' }}>
-                                            Disetujui
+                                        <option value="disetujui pembina"
+                                            {{ old('status') == 'disetujui pembina' ? 'selected' : '' }}>
+                                            Disetujui Pembina
                                         </option>
-                                        <option value="ditolak" {{ old('status') == 'ditolak' ? 'selected' : '' }}>Ditolak
+                                        <option value="disetujui admin"
+                                            {{ old('status') == 'disetujui admin' ? 'selected' : '' }}>
+                                            Disetujui Admin
+                                        </option>
+                                        <option value="ditolak pembina"
+                                            {{ old('status') == 'ditolak pembina' ? 'selected' : '' }}>
+                                            Ditolak Pembina
+                                        </option>
+                                        <option value="ditolak admin"
+                                            {{ old('status') == 'ditolak admin' ? 'selected' : '' }}>
+                                            Ditolak Admin
                                         </option>
                                     </select>
                                     @error('status')
@@ -216,6 +227,19 @@
                                 </div>
                             </div>
 
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="keterangan" class="form-label">Keterangan</label>
+                                    <textarea class="form-control @error('keterangan') is-invalid @enderror" id="keterangan" name="keterangan"
+                                        rows="2" placeholder="Wajib diisi jika status ditolak">{{ old('keterangan') }}</textarea>
+                                    @error('keterangan')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="proposal" class="form-label">Proposal (File)</label>
@@ -308,14 +332,37 @@
                                             required>
                                             <option value="pending" {{ $item->status == 'pending' ? 'selected' : '' }}>
                                                 Pending</option>
-                                            <option value="disetujui"
-                                                {{ $item->status == 'disetujui' ? 'selected' : '' }}>Disetujui</option>
-                                            <option value="ditolak" {{ $item->status == 'ditolak' ? 'selected' : '' }}>
-                                                Ditolak</option>
+                                            <option value="disetujui pembina"
+                                                {{ $item->status == 'disetujui pembina' ? 'selected' : '' }}>
+                                                Disetujui Pembina
+                                            </option>
+                                            <option value="disetujui admin"
+                                                {{ $item->status == 'disetujui admin' ? 'selected' : '' }}>
+                                                Disetujui Admin
+                                            </option>
+                                            <option value="ditolak pembina"
+                                                {{ $item->status == 'ditolak pembina' ? 'selected' : '' }}>
+                                                Ditolak Pembina
+                                            </option>
+                                            <option value="ditolak admin"
+                                                {{ $item->status == 'ditolak admin' ? 'selected' : '' }}>
+                                                Ditolak Admin
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
 
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="edit_keterangan_{{ $item->id }}"
+                                            class="form-label">Keterangan</label>
+                                        <textarea class="form-control" id="edit_keterangan_{{ $item->id }}" name="keterangan" rows="2"
+                                            placeholder="Wajib diisi jika status ditolak">{{ $item->keterangan }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="edit_proposal_{{ $item->id }}" class="form-label">Proposal

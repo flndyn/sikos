@@ -5,14 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Kegiatan;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ValidasiController extends Controller
 {
     public function __invoke(): View
     {
-        $kegiatanPending = Kegiatan::with('organisasi:id,nama_organisasi')
-            ->where('status', 'pending')
+        $kegiatanMenungguValidasiAdmin = Kegiatan::with('organisasi:id,nama_organisasi')
+            ->where('status', 'disetujui pembina')
             ->latest('id')
             ->get([
                 'id',
@@ -24,36 +25,46 @@ class ValidasiController extends Controller
                 'status',
             ]);
 
-        return view('admin.validasi', compact('kegiatanPending'));
+        return view('admin.validasi', compact('kegiatanMenungguValidasiAdmin'));
     }
 
     public function approve(Kegiatan $kegiatan): RedirectResponse
     {
-        if ($kegiatan->status !== 'pending') {
+        if ($kegiatan->status !== 'disetujui pembina') {
             return redirect()
                 ->route('admin.validasi')
-                ->with('error', 'Kegiatan ini tidak dalam status pending.');
+                ->with('error', 'Kegiatan hanya bisa divalidasi admin setelah disetujui pembina.');
         }
 
-        $kegiatan->update(['status' => 'disetujui']);
+        $kegiatan->update([
+            'status' => 'disetujui admin',
+            'keterangan' => null,
+        ]);
 
         return redirect()
             ->route('admin.validasi')
-            ->with('success', 'Kegiatan "' . $kegiatan->nama_kegiatan . '" telah disetujui.');
+            ->with('success', 'Kegiatan "' . $kegiatan->nama_kegiatan . '" telah disetujui admin.');
     }
 
-    public function reject(Kegiatan $kegiatan): RedirectResponse
+    public function reject(Request $request, Kegiatan $kegiatan): RedirectResponse
     {
-        if ($kegiatan->status !== 'pending') {
+        if ($kegiatan->status !== 'disetujui pembina') {
             return redirect()
                 ->route('admin.validasi')
-                ->with('error', 'Kegiatan ini tidak dalam status pending.');
+                ->with('error', 'Kegiatan hanya bisa divalidasi admin setelah disetujui pembina.');
         }
 
-        $kegiatan->update(['status' => 'ditolak']);
+        $validated = $request->validate([
+            'keterangan' => ['required', 'string'],
+        ]);
+
+        $kegiatan->update([
+            'status' => 'ditolak admin',
+            'keterangan' => $validated['keterangan'],
+        ]);
 
         return redirect()
             ->route('admin.validasi')
-            ->with('success', 'Kegiatan "' . $kegiatan->nama_kegiatan . '" telah ditolak.');
+            ->with('success', 'Kegiatan "' . $kegiatan->nama_kegiatan . '" telah ditolak admin.');
     }
 }

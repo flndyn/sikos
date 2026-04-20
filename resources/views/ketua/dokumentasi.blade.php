@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.ketua')
 
 @section('title', 'Dokumentasi Kegiatan')
 
@@ -7,6 +7,13 @@
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <strong>Sukses!</strong> {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Gagal!</strong> {{ session('error') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
@@ -150,7 +157,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form action="{{ route('admin.dokumentasi.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('ketua.dokumentasi.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <div class="mb-3">
@@ -165,6 +172,11 @@
                                     </option>
                                 @endforeach
                             </select>
+                            @if ($kegiatanList->isEmpty())
+                                <div class="form-text text-danger">
+                                    Belum ada kegiatan untuk ditambahkan dokumentasi.
+                                </div>
+                            @endif
                             @error('kegiatan_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -186,7 +198,7 @@
                         <div class="mb-3">
                             <label class="form-label">Keterangan per Foto *</label>
                             <p class="text-muted small mb-2">Keterangan akan muncul sesuai jumlah file yang dipilih.</p>
-                            <div id="keteranganPerFileContainer" data-old-keterangan='@json(old("keterangan", []))'></div>
+                            <div id="keteranganPerFileContainer" data-old-keterangan='@json(old('keterangan', []))'></div>
                             @error('keterangan')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
@@ -217,7 +229,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
-                    <form action="{{ route('admin.dokumentasi.update', $item->id) }}" method="POST"
+                    <form action="{{ route('ketua.dokumentasi.update', $item->id) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
@@ -282,7 +294,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <form action="{{ route('admin.dokumentasi.destroy', $item->id) }}" method="POST"
+                        <form action="{{ route('ketua.dokumentasi.destroy', $item->id) }}" method="POST"
                             class="d-inline">
                             @csrf
                             @method('DELETE')

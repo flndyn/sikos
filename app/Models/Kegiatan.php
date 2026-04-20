@@ -21,6 +21,7 @@ class Kegiatan extends Model
         'tempat',
         'proposal',
         'status',
+        'keterangan',
     ];
 
     protected $casts = [

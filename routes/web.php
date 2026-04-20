@@ -3,11 +3,16 @@
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\DokumentasiController;
 use App\Http\Controllers\Admin\KegiatanController;
+use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\Admin\OrganisasiController as AdminOrganisasiController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\ValidasiController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Ketua\DashboardController as KetuaDashboardController;
+use App\Http\Controllers\Ketua\DokumentasiController as KetuaDokumentasiController;
+use App\Http\Controllers\Ketua\JadwalController as KetuaJadwalController;
+use App\Http\Controllers\Ketua\OrganisasiController as KetuaOrganisasiController;
+use App\Http\Controllers\Ketua\KegiatanController as KetuaKegiatanController;
 use App\Http\Controllers\Pembina\DashboardController as PembinaDashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -49,11 +54,23 @@ Route::middleware(['auth', 'role:admin'])->group(function (): void {
     Route::post('/admin/dokumentasi', [DokumentasiController::class, 'store'])->name('admin.dokumentasi.store');
     Route::put('/admin/dokumentasi/{dokumentasi}', [DokumentasiController::class, 'update'])->name('admin.dokumentasi.update');
     Route::delete('/admin/dokumentasi/{dokumentasi}', [DokumentasiController::class, 'destroy'])->name('admin.dokumentasi.destroy');
-    Route::get('/admin/laporan', fn () => view('admin.laporan'))->name('admin.laporan');
+    Route::get('/admin/laporan', LaporanController::class)->name('admin.laporan');
+    Route::get('/admin/laporan/export-pdf', [LaporanController::class, 'exportPdf'])->name('admin.laporan.export-pdf');
+    Route::get('/admin/laporan/{laporan}/download', [LaporanController::class, 'download'])->name('admin.laporan.download');
 });
 
 Route::middleware(['auth', 'role:ketua'])->group(function (): void {
     Route::get('/ketua/dashboard', KetuaDashboardController::class)->name('ketua.dashboard');
+    Route::get('/ketua/organisasi', KetuaOrganisasiController::class)->name('ketua.organisasi');
+    Route::get('/ketua/kegiatan', KetuaKegiatanController::class)->name('ketua.kegiatan');
+    Route::post('/ketua/kegiatan', [KetuaKegiatanController::class, 'store'])->name('ketua.kegiatan.store');
+    Route::put('/ketua/kegiatan/{kegiatan}', [KetuaKegiatanController::class, 'update'])->name('ketua.kegiatan.update');
+    Route::delete('/ketua/kegiatan/{kegiatan}', [KetuaKegiatanController::class, 'destroy'])->name('ketua.kegiatan.destroy');
+    Route::get('/ketua/jadwal', KetuaJadwalController::class)->name('ketua.jadwal');
+    Route::get('/ketua/dokumentasi', KetuaDokumentasiController::class)->name('ketua.dokumentasi');
+    Route::post('/ketua/dokumentasi', [KetuaDokumentasiController::class, 'store'])->name('ketua.dokumentasi.store');
+    Route::put('/ketua/dokumentasi/{dokumentasi}', [KetuaDokumentasiController::class, 'update'])->name('ketua.dokumentasi.update');
+    Route::delete('/ketua/dokumentasi/{dokumentasi}', [KetuaDokumentasiController::class, 'destroy'])->name('ketua.dokumentasi.destroy');
 });
 
 Route::middleware(['auth', 'role:pembina'])->group(function (): void {

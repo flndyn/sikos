@@ -23,7 +23,7 @@
 
         <!-- HEADER -->
         <div class="card-header">
-            <h5 class="mb-0">Validasi Kegiatan (Pending)</h5>
+            <h5 class="mb-0">Validasi Kegiatan (Disetujui Pembina)</h5>
         </div>
 
         <!-- BODY -->
@@ -44,7 +44,7 @@
 
                 <tbody>
 
-                    @forelse ($kegiatanPending as $item)
+                    @forelse ($kegiatanMenungguValidasiAdmin as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->organisasi?->nama_organisasi ?? '-' }}</td>
@@ -92,7 +92,7 @@
                     @empty
                         <tr>
                             <td colspan="7" class="text-center py-4">
-                                <p class="text-muted mb-0">Tidak ada kegiatan dengan status pending</p>
+                                <p class="text-muted mb-0">Tidak ada kegiatan dengan status disetujui pembina</p>
                             </td>
                         </tr>
                     @endforelse
@@ -102,7 +102,7 @@
     </div>
 
     <!-- MODAL APPROVE (Per Row) -->
-    @foreach ($kegiatanPending as $item)
+    @foreach ($kegiatanMenungguValidasiAdmin as $item)
         <div class="modal fade" id="approveModal{{ $item->id }}" tabindex="-1"
             aria-labelledby="approveModalLabel{{ $item->id }}" aria-hidden="true">
             <div class="modal-dialog">
@@ -118,7 +118,8 @@
                             <strong>{{ $item->nama_kegiatan }}</strong><br>
                             <small>{{ $item->organisasi?->nama_organisasi ?? '-' }}</small>
                         </div>
-                        <p class="text-muted small mb-0">Status akan diubah dari "Pending" menjadi "Disetujui".</p>
+                        <p class="text-muted small mb-0">Status akan diubah dari "Disetujui Pembina" menjadi "Disetujui
+                            Admin".</p>
                     </div>
 
                     <div class="modal-footer">
@@ -134,32 +135,39 @@
     @endforeach
 
     <!-- MODAL REJECT (Per Row) -->
-    @foreach ($kegiatanPending as $item)
+    @foreach ($kegiatanMenungguValidasiAdmin as $item)
         <div class="modal fade" id="rejectModal{{ $item->id }}" tabindex="-1"
             aria-labelledby="rejectModalLabel{{ $item->id }}" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="rejectModalLabel{{ $item->id }}">Konfirmasi Penolakan</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-
-                    <div class="modal-body">
-                        <p>Apakah Anda yakin ingin <strong>menolak</strong> kegiatan berikut?</p>
-                        <div class="alert alert-warning" role="alert">
-                            <strong>{{ $item->nama_kegiatan }}</strong><br>
-                            <small>{{ $item->organisasi?->nama_organisasi ?? '-' }}</small>
+                    <form action="{{ route('admin.validasi.reject', $item->id) }}" method="POST">
+                        @csrf
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="rejectModalLabel{{ $item->id }}">Konfirmasi Penolakan</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <p class="text-muted small mb-0">Status akan diubah dari "Pending" menjadi "Ditolak".</p>
-                    </div>
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <form action="{{ route('admin.validasi.reject', $item->id) }}" method="POST" class="d-inline">
-                            @csrf
+                        <div class="modal-body">
+                            <p>Apakah Anda yakin ingin <strong>menolak</strong> kegiatan berikut?</p>
+                            <div class="alert alert-warning" role="alert">
+                                <strong>{{ $item->nama_kegiatan }}</strong><br>
+                                <small>{{ $item->organisasi?->nama_organisasi ?? '-' }}</small>
+                            </div>
+                            <div class="mb-0">
+                                <label for="keterangan_reject_{{ $item->id }}" class="form-label">Keterangan Penolakan
+                                    *</label>
+                                <textarea id="keterangan_reject_{{ $item->id }}" name="keterangan" class="form-control" rows="3"
+                                    placeholder="Tuliskan alasan penolakan" required></textarea>
+                            </div>
+                            <p class="text-muted small mb-0">Status akan diubah dari "Disetujui Pembina" menjadi "Ditolak
+                                Admin".</p>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                             <button type="submit" class="btn btn-danger">Ya, Tolak</button>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

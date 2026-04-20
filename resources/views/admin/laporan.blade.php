@@ -1,73 +1,84 @@
 @extends('layouts.admin')
 
 @section('content')
+    @if (session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
-<div class="card shadow-sm">
+    <div class="card shadow-sm">
 
-    <!-- HEADER -->
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">Laporan Kegiatan</h5>
-    </div>
-
-    <!-- SEARCH + EXPORT -->
-    <div class="card-body">
-
-        <div class="d-flex justify-content-between mb-3">
-
-            <!-- SEARCH -->
-            <input type="text" class="form-control w-25" placeholder="Search...">
-
-            <!-- EXPORT -->
-            <button class="btn btn-danger">
-                <i class="bi bi-file-earmark-pdf"></i> Export PDF
-            </button>
-
+        <!-- HEADER -->
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Laporan Kegiatan</h5>
         </div>
 
-        <!-- TABLE -->
-        <table class="table table-bordered table-striped">
-            <thead class="table-light">
-                <tr>
-                    <th>No</th>
-                    <th>Nama Kegiatan</th>
-                    <th>Organisasi</th>
-                    <th>Tanggal</th>
-                    <th>Laporan</th>
-                </tr>
-            </thead>
+        <!-- SEARCH + EXPORT -->
+        <div class="card-body">
 
-            <tbody>
+            <div class="d-flex justify-content-between mb-3">
 
-                <!-- DATA DUMMY -->
-                <tr>
-                    <td>1</td>
-                    <td>Lomba 17 Agustus</td>
-                    <td>OSIS</td>
-                    <td>2026-08-17</td>
-                    <td>
-                        <a href="#" class="btn btn-info btn-sm">
-                            <i class="bi bi-eye"></i> Lihat
-                        </a>
-                    </td>
-                </tr>
+                <!-- SEARCH -->
+                <input type="text" class="form-control w-25" placeholder="Search...">
 
-                <tr>
-                    <td>2</td>
-                    <td>Bakti Sosial</td>
-                    <td>PMR</td>
-                    <td>2026-09-01</td>
-                    <td>
-                        <a href="#" class="btn btn-info btn-sm">
-                            <i class="bi bi-eye"></i> Lihat
-                        </a>
-                    </td>
-                </tr>
+                <!-- EXPORT -->
+                <a href="{{ route('admin.laporan.export-pdf') }}" class="btn btn-danger">
+                    <i class="bi bi-file-earmark-pdf"></i> Export PDF
+                </a>
 
-            </tbody>
+            </div>
 
-        </table>
+            <!-- TABLE -->
+            <table class="table table-bordered table-striped">
+                <thead class="table-light">
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Kegiatan</th>
+                        <th>Organisasi</th>
+                        <th>Tanggal</th>
+                        <th>Laporan</th>
+                    </tr>
+                </thead>
 
+                <tbody>
+                    @forelse ($laporan as $item)
+                        @php
+                            $fileUrl = null;
+
+                            if ($item->file_laporan) {
+                                $fileUrl = \Illuminate\Support\Str::startsWith($item->file_laporan, 'http')
+                                    ? $item->file_laporan
+                                    : asset('storage/' . $item->file_laporan);
+                            }
+                        @endphp
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $item->kegiatan?->nama_kegiatan ?? '-' }}</td>
+                            <td>{{ $item->kegiatan?->organisasi?->nama_organisasi ?? '-' }}</td>
+                            <td>{{ $item->kegiatan?->tanggal_mulai?->format('Y-m-d') ?? '-' }}</td>
+                            <td>
+                                @if ($fileUrl)
+                                    <a href="{{ route('admin.laporan.download', $item->id) }}"
+                                        class="btn btn-primary btn-sm">
+                                        <i class="bi bi-download"></i> Download
+                                    </a>
+                                @else
+                                    <span class="text-muted">Tidak ada file</span>
+                                @endif
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">Belum ada laporan kegiatan.</td>
+                        </tr>
+                    @endforelse
+
+                </tbody>
+
+            </table>
+
+        </div>
     </div>
-</div>
-
 @endsection

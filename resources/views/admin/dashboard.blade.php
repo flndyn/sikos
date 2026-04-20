@@ -70,14 +70,16 @@
                     @forelse($kegiatanTerbaru as $item)
                         @php
                             $badgeClass = match ($item->status) {
-                                'disetujui' => 'bg-success',
-                                'ditolak' => 'bg-danger',
+                                'disetujui admin', 'disetujui pembina' => 'bg-success',
+                                'ditolak admin', 'ditolak pembina' => 'bg-danger',
                                 default => 'bg-warning text-dark',
                             };
 
                             $statusLabel = match ($item->status) {
-                                'disetujui' => 'Disetujui',
-                                'ditolak' => 'Ditolak',
+                                'disetujui admin' => 'Disetujui Admin',
+                                'disetujui pembina' => 'Disetujui Pembina',
+                                'ditolak admin' => 'Ditolak Admin',
+                                'ditolak pembina' => 'Ditolak Pembina',
                                 default => 'Pending',
                             };
                         @endphp
@@ -90,11 +92,10 @@
                     @empty
                         <tr>
                             <td colspan="4" class="text-center text-muted">Belum ada data kegiatan.</td>
-                        </tr>0
+                        </tr>
                     @endforelse
                 </tbody>
             </table>
-
         </div>
     </div>
 

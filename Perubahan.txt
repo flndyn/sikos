@@ -1,0 +1,2 @@
+Pada migrasi database terdapat penambahan kolom baru "Keterangan"
+Pada migrasi database terdapat perubahan dan penambahan isi status pada kolom "Status" (Disetujui Pembina, Disetujui Admin, Ditolak Pembina, Ditolak Admin)

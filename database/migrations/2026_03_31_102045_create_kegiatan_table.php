@@ -12,19 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('kegiatan', function (Blueprint $table) {
-    $table->id();
+            $table->id();
 
-    $table->foreignId('organisasi_id')
-          ->constrained('organisasi')
-          ->cascadeOnDelete();
+            $table->foreignId('organisasi_id')
+                ->constrained('organisasi')
+                ->cascadeOnDelete();
 
             $table->string('nama_kegiatan', 150);
             $table->text('deskripsi')->nullable();
             $table->date('tanggal_mulai')->nullable();
             $table->string('tempat', 150)->nullable();
             $table->string('proposal', 255)->nullable();
+            $table->string('keterangan')->nullable();
 
-            $table->enum('status', ['pending', 'disetujui', 'ditolak'])
+            $table->enum('status', ['pending', 'disetujui pembina', 'disetujui admin', 'ditolak pembina', 'ditolak admin'])
                 ->default('pending');
 
             $table->timestamps();
