@@ -51,51 +51,44 @@
             <ul class="nav flex-column">
 
                 <li class="nav-item mb-1">
-                    <a href="{{ route('admin.dashboard') }}"
-                        class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active bg-white' : 'text-white' }}">
+                    <a href="" class="nav-link  ? 'active bg-white' : 'text-white' }}">
                         <i class="bi bi-speedometer2 me-2"></i> Dashboard
                     </a>
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a href="{{ route('admin.users') }}"
-                        class="nav-link {{ request()->routeIs('admin.users') ? 'active bg-white' : 'text-white' }}">
-                        <i class="bi bi-people me-2"></i> Data User
+                    <a href="" class="nav-link  'active bg-white' : 'text-white' }}">
+                        <i class="bi bi-people me-2"></i> Data Organisasi
                     </a>
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a href="{{ route('admin.organisasi') }}"
-                        class="nav-link {{ request()->routeIs('admin.organisasi') ? 'active bg-white' : 'text-white' }}">
-                        <i class="bi bi-building me-2"></i> Organisasi
+                    <a href="" class="nav-link ? 'active bg-white' : 'text-white' }}">
+                        <i class="bi bi-building me-2"></i> Data Kegiatan
                     </a>
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a href="{{ route('admin.kegiatan') }}"
-                        class="nav-link {{ request()->routeIs('admin.kegiatan') ? 'active bg-white' : 'text-white' }}">
-                        <i class="bi bi-calendar-event me-2"></i> Kegiatan
+                    <a href="" class="nav-link  ? 'active bg-white' : 'text-white' }}">
+                        <i class="bi bi-check-circle me-2"></i> Validasi Kegiatan
                     </a>
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a href="{{ route('admin.validasi') }}"
-                        class="nav-link {{ request()->routeIs('admin.validasi') ? 'active bg-white' : 'text-white' }}">
-                        <i class="bi bi-check-circle me-2"></i> Validasi
+                    <a href="" class="nav-link  ? 'active bg-white' : 'text-white' }}">
+                        <i class="bi bi-calendar-event  me-2"></i> Jadwal Kegiatan
                     </a>
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a href="{{ route('admin.dokumentasi') }}"
-                        class="nav-link {{ request()->routeIs('admin.dokumentasi') ? 'active bg-white' : 'text-white' }}">
+                    <a href="" class="nav-link  ? 'active bg-white' : 'text-white' }}">
                         <i class="bi bi-images me-2"></i> Dokumentasi
                     </a>
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a href="{{ route('admin.laporan') }}"
-                        class="nav-link {{ request()->routeIs('admin.laporan') ? 'active bg-white' : 'text-white' }}">
-                        <i class="bi bi-images me-2"></i> Laporan
+                    <a href="" class="nav-link  ? 'active bg-white' : 'text-white' }}">
+                        <i class="bi bi-file-earmark-bar-graph me-2"></i> Laporan Kegiatan
                     </a>
                 </li>
 
@@ -145,8 +138,6 @@
         </div>
 
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

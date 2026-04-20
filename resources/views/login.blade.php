@@ -11,15 +11,15 @@
 <body class="bg-light">
 
 <div class="container d-flex align-items-center justify-content-center vh-100">
-    
+
     <div class="row shadow rounded overflow-hidden" style="max-width: 800px;">
-        
+
         <!-- LEFT SIDE -->
         <div class="col-md-6 bg-primary text-white d-flex flex-column justify-content-center p-4">
             <h3 class="fw-bold">SIOKAS</h3>
             <p class="mb-2">Sistem Informasi Administrasi</p>
             <p class="small">
-                Mengelola kegiatan organisasi siswa secara digital, 
+                Mengelola kegiatan organisasi siswa secara digital,
                 transparan, dan terstruktur di SMAN 1 Paiton.
             </p>
         </div>
@@ -28,17 +28,30 @@
         <div class="col-md-6 bg-white p-4">
             <h5 class="text-center mb-4">Login Sistem</h5>
 
-            <form method="POST" action="#">
+            @if ($errors->any())
+                <div class="alert alert-danger py-2" role="alert">
+                    {{ $errors->first() }}
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('login.attempt') }}">
                 @csrf
 
                 <div class="mb-3">
-                    <label class="form-label">Username</label>
-                    <input type="text" name="username" class="form-control" placeholder="Masukkan username">
+                    <label class="form-label">Email atau Username</label>
+                    <input
+                        type="text"
+                        name="login"
+                        value="{{ old('login') }}"
+                        class="form-control"
+                        placeholder="Masukkan email atau username"
+                        required
+                    >
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Password</label>
-                    <input type="password" name="password" class="form-control" placeholder="Masukkan password">
+                    <input type="password" name="password" class="form-control" placeholder="Masukkan password" required>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100">

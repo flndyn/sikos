@@ -4,62 +4,165 @@
 
 @section('content')
 
-<div class="card shadow-sm">
+    <!-- Alert Messages -->
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Sukses!</strong> {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
-    <!-- HEADER -->
-    <div class="card-header">
-        <h5 class="mb-0">Validasi Kegiatan (Pending)</h5>
+    @if (session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Error!</strong> {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <div class="card shadow-sm">
+
+        <!-- HEADER -->
+        <div class="card-header">
+            <h5 class="mb-0">Validasi Kegiatan (Pending)</h5>
+        </div>
+
+        <!-- BODY -->
+        <div class="card-body">
+
+            <table class="table table-bordered table-striped">
+                <thead class="table-light">
+                    <tr>
+                        <th>No</th>
+                        <th>Organisasi</th>
+                        <th>Nama Kegiatan</th>
+                        <th>Deskripsi</th>
+                        <th>Tanggal</th>
+                        <th>Proposal</th>
+                        <th class="text-nowrap">Aksi</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @forelse ($kegiatanPending as $item)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $item->organisasi?->nama_organisasi ?? '-' }}</td>
+                            <td>{{ $item->nama_kegiatan }}</td>
+                            <td>
+                                {{ \Illuminate\Support\Str::limit($item->deskripsi ?? '-', 40) }}
+                            </td>
+                            <td class="text-nowrap">
+                                @if ($item->tanggal_mulai)
+                                    {{ $item->tanggal_mulai->format('d-m-Y') }}
+                                @else
+                                    -
+                                @endif
+                            </td>
+
+                            <td class="text-center">
+                                @if ($item->proposal)
+                                    @php
+                                        $proposalUrl = \Illuminate\Support\Str::startsWith($item->proposal, 'http')
+                                            ? $item->proposal
+                                            : asset('storage/proposal-kegiatan/' . $item->proposal);
+                                    @endphp
+                                    <a href="{{ $proposalUrl }}" class="btn btn-info btn-sm" target="_blank"
+                                        title="Lihat PDF Proposal">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                @else
+                                    -
+                                @endif
+                            </td>
+
+                            <td class="text-nowrap">
+                                <div class="d-inline-flex flex-nowrap gap-1">
+                                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#approveModal{{ $item->id }}">
+                                        <i class="bi bi-check"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#rejectModal{{ $item->id }}">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center py-4">
+                                <p class="text-muted mb-0">Tidak ada kegiatan dengan status pending</p>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <!-- BODY -->
-    <div class="card-body">
+    <!-- MODAL APPROVE (Per Row) -->
+    @foreach ($kegiatanPending as $item)
+        <div class="modal fade" id="approveModal{{ $item->id }}" tabindex="-1"
+            aria-labelledby="approveModalLabel{{ $item->id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="approveModalLabel{{ $item->id }}">Konfirmasi Persetujuan</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
 
-        <table class="table table-bordered table-striped">
-            <thead class="table-light">
-                <tr>
-                    <th>No</th>
-                    <th>Organisasi</th>
-                    <th>Nama Kegiatan</th>
-                    <th>Deskripsi</th>
-                    <th>Tanggal</th>
-                    <th>Proposal</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
+                    <div class="modal-body">
+                        <p>Apakah Anda yakin ingin <strong>menyetujui</strong> kegiatan berikut?</p>
+                        <div class="alert alert-info" role="alert">
+                            <strong>{{ $item->nama_kegiatan }}</strong><br>
+                            <small>{{ $item->organisasi?->nama_organisasi ?? '-' }}</small>
+                        </div>
+                        <p class="text-muted small mb-0">Status akan diubah dari "Pending" menjadi "Disetujui".</p>
+                    </div>
 
-            <tbody>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <form action="{{ route('admin.validasi.approve', $item->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-success">Ya, Setujui</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
 
-                <!-- DATA DUMMY (PENDING SAJA) -->
-                <tr>
-                    <td>1</td>
-                    <td>OSIS</td>
-                    <td>Lomba 17 Agustus</td>
-                    <td>
-                        {{ \Illuminate\Support\Str::limit('Lomba untuk memperingati hari kemerdekaan', 40) }}
-                    </td>
-                    <td>2026-08-17</td>
+    <!-- MODAL REJECT (Per Row) -->
+    @foreach ($kegiatanPending as $item)
+        <div class="modal fade" id="rejectModal{{ $item->id }}" tabindex="-1"
+            aria-labelledby="rejectModalLabel{{ $item->id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="rejectModalLabel{{ $item->id }}">Konfirmasi Penolakan</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
 
-                    <td>
-                        <a href="#" class="btn btn-info btn-sm">
-                            <i class="bi bi-file-earmark"></i>
-                        </a>
-                    </td>
+                    <div class="modal-body">
+                        <p>Apakah Anda yakin ingin <strong>menolak</strong> kegiatan berikut?</p>
+                        <div class="alert alert-warning" role="alert">
+                            <strong>{{ $item->nama_kegiatan }}</strong><br>
+                            <small>{{ $item->organisasi?->nama_organisasi ?? '-' }}</small>
+                        </div>
+                        <p class="text-muted small mb-0">Status akan diubah dari "Pending" menjadi "Ditolak".</p>
+                    </div>
 
-                    <td>
-                        <button class="btn btn-success btn-sm">
-                            <i class="bi bi-check"></i>
-                        </button>
-                        <button class="btn btn-danger btn-sm">
-                            <i class="bi bi-x"></i>
-                        </button>
-                    </td>
-                </tr>
-
-            </tbody>
-
-        </table>
-
-    </div>
-</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <form action="{{ route('admin.validasi.reject', $item->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-danger">Ya, Tolak</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
 
 @endsection
