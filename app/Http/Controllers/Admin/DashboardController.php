@@ -27,6 +27,24 @@ class DashboardController extends Controller
             ->take(10)
             ->get(['id', 'organisasi_id', 'nama_kegiatan', 'status', 'created_at']);
 
-        return view('admin.dashboard', compact('stats', 'kegiatanTerbaru'));
+        // Data pengajuan kegiatan per bulan (12 bulan terakhir)
+        $kegiatanPerBulan = Kegiatan::where('created_at', '>=', now()->subMonths(11)->startOfMonth())
+            ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as bulan, COUNT(*) as jumlah')
+            ->groupByRaw('DATE_FORMAT(created_at, "%Y-%m")')
+            ->orderBy('bulan')
+            ->get()
+            ->pluck('jumlah', 'bulan')
+            ->toArray();
+
+        // Siapkan data chart untuk 12 bulan
+        $chartLabels = [];
+        $chartData = [];
+        for ($i = 11; $i >= 0; $i--) {
+            $bulan = now()->subMonths($i)->format('Y-m');
+            $chartLabels[] = now()->subMonths($i)->format('M Y');
+            $chartData[] = $kegiatanPerBulan[$bulan] ?? 0;
+        }
+
+        return view('admin.dashboard', compact('stats', 'kegiatanTerbaru', 'chartLabels', 'chartData'));
     }
 }

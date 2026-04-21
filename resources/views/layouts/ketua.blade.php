@@ -30,6 +30,19 @@
         .nav-link.active.bg-white {
             color: #0d6efd !important;
         }
+
+        .app-sidebar {
+            width: 250px;
+            min-width: 250px;
+            max-width: 250px;
+            flex: 0 0 250px;
+            min-height: 100vh;
+        }
+
+        .app-content {
+            flex: 1 1 auto;
+            min-width: 0;
+        }
     </style>
 </head>
 
@@ -43,7 +56,7 @@
     <div class="d-flex">
 
         <!-- SIDEBAR -->
-        <div class="bg-primary text-white p-3" style="width:250px; min-height:100vh;">
+        <div class="app-sidebar bg-primary text-white p-3">
 
             <h4 class="text-center fw-bold">SIOKAS</h4>
             <hr class="text-white">
@@ -85,6 +98,13 @@
                     </a>
                 </li>
 
+                <li class="nav-item mb-1">
+                    <a href="{{ route('ketua.laporan') }}"
+                        class="nav-link {{ request()->routeIs('ketua.laporan*') ? 'active bg-white' : 'text-white' }}">
+                        <i class="bi bi-journal-text me-2"></i> Laporan Kegiatan
+                    </a>
+                </li>
+
             </ul>
 
             <hr class="text-white">
@@ -99,7 +119,7 @@
         </div>
 
         <!-- MAIN CONTENT -->
-        <div class="flex-grow-1 bg-light">
+        <div class="app-content bg-light">
 
             <!-- TOPBAR -->
             <div class="d-flex justify-content-between align-items-center bg-white p-3 shadow-sm">

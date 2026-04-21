@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -34,9 +35,9 @@ class User extends Authenticatable
         return $this->hasMany(Organisasi::class, 'pembina_id');
     }
 
-    public function organisasiSebagaiKetua(): HasMany
+    public function organisasiSebagaiKetua(): HasOne
     {
-        return $this->hasMany(Organisasi::class, 'ketua_id');
+        return $this->hasOne(Organisasi::class, 'ketua_id');
     }
 
     public function sessions(): HasMany

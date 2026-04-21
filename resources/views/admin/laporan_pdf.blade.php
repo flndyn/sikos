@@ -51,11 +51,11 @@
     <table>
         <thead>
             <tr>
-                <th style="width: 48px;">No</th>
-                <th>Nama Kegiatan</th>
-                <th>Organisasi</th>
-                <th style="width: 100px;">Tanggal</th>
-                <th>Laporan</th>
+                <th class="text-nowrap" style="width: 48px;">No</th>
+                <th class="text-nowrap">Nama Kegiatan</th>
+                <th class="text-nowrap">Organisasi</th>
+                <th class="text-nowrap" style="width: 100px;">Tanggal</th>
+                <th class="text-nowrap">Laporan</th>
             </tr>
         </thead>
         <tbody>

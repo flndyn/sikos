@@ -41,15 +41,15 @@
             <table class="table table-bordered table-striped">
                 <thead class="table-light">
                     <tr>
-                        <th>No</th>
-                        <th>Organisasi</th>
-                        <th>Nama Kegiatan</th>
-                        <th>Deskripsi</th>
-                        <th>Tanggal</th>
-                        <th>Tempat</th>
-                        <th>Status</th>
-                        <th>Keterangan</th>
-                        <th class="text-center">Proposal</th>
+                        <th class="text-nowrap">No</th>
+                        <th class="text-nowrap">Organisasi</th>
+                        <th class="text-nowrap">Nama Kegiatan</th>
+                        <th class="text-nowrap">Deskripsi</th>
+                        <th class="text-nowrap">Tanggal</th>
+                        <th class="text-nowrap">Tempat</th>
+                        <th class="text-nowrap">Status</th>
+                        <th class="text-nowrap">Keterangan</th>
+                        <th class="text-nowrap text-center">Proposal</th>
                         <th class="text-nowrap">Aksi</th>
                     </tr>
                 </thead>
@@ -87,7 +87,12 @@
                                     @php
                                         $proposalUrl = \Illuminate\Support\Str::startsWith($item->proposal, 'http')
                                             ? $item->proposal
-                                            : asset('storage/proposal-kegiatan/' . $item->proposal);
+                                            : (\Illuminate\Support\Str::startsWith(
+                                                $item->proposal,
+                                                'proposal-kegiatan/',
+                                            )
+                                                ? asset('storage/' . $item->proposal)
+                                                : asset('storage/proposal-kegiatan/' . $item->proposal));
                                     @endphp
                                     <a href="{{ $proposalUrl }}" class="btn btn-info btn-sm" target="_blank"
                                         title="Lihat Proposal">
@@ -175,7 +180,8 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="tanggal_mulai" class="form-label">Tanggal Mulai</label>
-                                    <input type="date" class="form-control @error('tanggal_mulai') is-invalid @enderror"
+                                    <input type="date"
+                                        class="form-control @error('tanggal_mulai') is-invalid @enderror"
                                         id="tanggal_mulai" name="tanggal_mulai" value="{{ old('tanggal_mulai') }}">
                                     @error('tanggal_mulai')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -374,7 +380,12 @@
                                                     'http',
                                                 )
                                                     ? $item->proposal
-                                                    : asset('storage/proposal-kegiatan/' . $item->proposal);
+                                                    : (\Illuminate\Support\Str::startsWith(
+                                                        $item->proposal,
+                                                        'proposal-kegiatan/',
+                                                    )
+                                                        ? asset('storage/' . $item->proposal)
+                                                        : asset('storage/proposal-kegiatan/' . $item->proposal));
                                             @endphp
                                             <div class="mb-2">
                                                 <a href="{{ $proposalUrl }}" target="_blank" class="small">

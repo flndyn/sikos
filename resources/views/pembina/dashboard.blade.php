@@ -1,27 +1,150 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.pembina')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Pembina</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+@section('title', 'Dashboard')
 
-<body class="bg-light">
-    <div class="container py-5">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h3 class="mb-2">Dashboard Pembina</h3>
-                <p class="text-muted mb-4">Anda login sebagai pembina organisasi.</p>
+@section('content')
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card text-center p-3 shadow-sm">
+                <h6>Total Organisasi</h6>
+                <h3>{{ $stats['total_organisasi'] }}</h3>
+            </div>
+        </div>
 
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-outline-danger">Logout</button>
-                </form>
+        <div class="col-md-4">
+            <div class="card text-center p-3 shadow-sm">
+                <h6>Total Kegiatan</h6>
+                <h3>{{ $stats['total_kegiatan'] }}</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-center p-3 shadow-sm">
+                <h6>Kegiatan Pending</h6>
+                <h3>{{ $stats['kegiatan_pending'] }}</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-center p-3 shadow-sm">
+                <h6>Disetujui Pembina</h6>
+                <h3>{{ $stats['kegiatan_disetujui_pembina'] }}</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-center p-3 shadow-sm">
+                <h6>Disetujui Admin</h6>
+                <h3>{{ $stats['kegiatan_disetujui_admin'] }}</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-center p-3 shadow-sm">
+                <h6>Total Dokumentasi</h6>
+                <h3>{{ $stats['total_dokumentasi'] }}</h3>
             </div>
         </div>
     </div>
-</body>
 
-</html>
+    <div class="card mt-4 shadow-sm">
+        <div class="card-header">
+            <h5 class="mb-0">Grafik Pengajuan Kegiatan per Bulan (12 Bulan Terakhir)</h5>
+        </div>
+        <div class="card-body">
+            <div style="position: relative; height: 300px;">
+                <canvas id="kegiatanChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-4 shadow-sm">
+        <div class="card-header">Data Kegiatan Terbaru</div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead class="table-light">
+                    <tr>
+                        <th class="text-nowrap">No</th>
+                        <th class="text-nowrap">Organisasi</th>
+                        <th class="text-nowrap">Nama Kegiatan</th>
+                        <th class="text-nowrap">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($kegiatanTerbaru as $item)
+                        @php
+                            $badgeClass = match ($item->status) {
+                                'disetujui admin' => 'bg-success',
+                                'disetujui pembina' => 'bg-primary',
+                                'ditolak admin', 'ditolak pembina' => 'bg-danger',
+                                default => 'bg-warning text-dark',
+                            };
+
+                            $statusLabel = match ($item->status) {
+                                'disetujui admin' => 'Disetujui Admin',
+                                'disetujui pembina' => 'Disetujui Pembina',
+                                'ditolak admin' => 'Ditolak Admin',
+                                'ditolak pembina' => 'Ditolak Pembina',
+                                default => 'Pending',
+                            };
+                        @endphp
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $item->organisasi?->nama_organisasi ?? '-' }}</td>
+                            <td>{{ $item->nama_kegiatan }}</td>
+                            <td><span class="badge {{ $badgeClass }}">{{ $statusLabel }}</span></td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">Belum ada data kegiatan.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+@endsection
+
+@section('scripts')
+    <script>
+        const ctx = document.getElementById('kegiatanChart').getContext('2d');
+        const kegiatanChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: @json($chartLabels),
+                datasets: [{
+                    label: 'Jumlah Pengajuan Kegiatan',
+                    data: @json($chartData),
+                    borderColor: '#0d6efd',
+                    backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#0d6efd',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+@endsection

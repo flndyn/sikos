@@ -12,6 +12,10 @@
         <div class="alert alert-danger">{{ $errors->first() }}</div>
     @endif
 
+    @php
+        $usedKetuaIds = $organisasi->pluck('ketua_id')->filter()->map(fn($id) => (int) $id)->all();
+    @endphp
+
     <div class="card shadow-sm">
 
         <!-- HEADER -->
@@ -29,12 +33,12 @@
             <table class="table table-bordered table-striped">
                 <thead class="table-light">
                     <tr>
-                        <th>No</th>
-                        <th>Nama Organisasi</th>
-                        <th>Deskripsi</th>
-                        <th>Pembina</th>
-                        <th>Ketua</th>
-                        <th>Aksi</th>
+                        <th class="text-nowrap">No</th>
+                        <th class="text-nowrap">Nama Organisasi</th>
+                        <th class="text-nowrap">Deskripsi</th>
+                        <th class="text-nowrap">Pembina</th>
+                        <th class="text-nowrap">Ketua</th>
+                        <th class="text-nowrap">Aksi</th>
                     </tr>
                 </thead>
 
@@ -110,11 +114,19 @@
                                 <select name="ketua_id" class="form-select">
                                     <option value="">- Pilih Ketua -</option>
                                     @foreach ($ketuaUsers as $ketua)
-                                        <option value="{{ $ketua->id }}" @selected((int) $item->ketua_id === (int) $ketua->id)>
+                                        @php
+                                            $isUsedByOtherOrganisasi =
+                                                in_array((int) $ketua->id, $usedKetuaIds, true) &&
+                                                (int) $item->ketua_id !== (int) $ketua->id;
+                                        @endphp
+                                        <option value="{{ $ketua->id }}" @selected((int) $item->ketua_id === (int) $ketua->id)
+                                            @disabled($isUsedByOtherOrganisasi)>
                                             {{ $ketua->name }}
                                         </option>
                                     @endforeach
                                 </select>
+                                <small class="text-muted">Ketua yang sudah dipakai organisasi lain tidak bisa
+                                    dipilih.</small>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -187,11 +199,13 @@
                             <select name="ketua_id" class="form-select">
                                 <option value="">- Pilih Ketua -</option>
                                 @foreach ($ketuaUsers as $ketua)
-                                    <option value="{{ $ketua->id }}" @selected((string) old('ketua_id') === (string) $ketua->id)>
+                                    <option value="{{ $ketua->id }}" @selected((string) old('ketua_id') === (string) $ketua->id)
+                                        @disabled(in_array((int) $ketua->id, $usedKetuaIds, true))>
                                         {{ $ketua->name }}
                                     </option>
                                 @endforeach
                             </select>
+                            <small class="text-muted">Ketua yang sudah dipakai organisasi lain tidak bisa dipilih.</small>
                         </div>
                     </div>
                     <div class="modal-footer">

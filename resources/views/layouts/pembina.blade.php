@@ -6,10 +6,7 @@
     <title>SIOKAS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
@@ -54,64 +51,59 @@
     @endphp
 
     <div class="d-flex">
-
-        <!-- SIDEBAR -->
         <div class="app-sidebar bg-primary text-white p-3">
-
             <h4 class="text-center fw-bold">SIOKAS</h4>
             <hr class="text-white">
 
             <ul class="nav flex-column">
-
                 <li class="nav-item mb-1">
-                    <a href="{{ route('admin.dashboard') }}"
-                        class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active bg-white' : 'text-white' }}">
+                    <a href="{{ route('pembina.dashboard') }}"
+                        class="nav-link {{ request()->routeIs('pembina.dashboard') ? 'active bg-white' : 'text-white' }}">
                         <i class="bi bi-speedometer2 me-2"></i> Dashboard
                     </a>
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a href="{{ route('admin.users') }}"
-                        class="nav-link {{ request()->routeIs('admin.users') ? 'active bg-white' : 'text-white' }}">
-                        <i class="bi bi-people me-2"></i> Data User
+                    <a href="{{ route('pembina.organisasi') }}"
+                        class="nav-link {{ request()->routeIs('pembina.organisasi') ? 'active bg-white' : 'text-white' }}">
+                        <i class="bi bi-building me-2"></i> Data Organisasi
                     </a>
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a href="{{ route('admin.organisasi') }}"
-                        class="nav-link {{ request()->routeIs('admin.organisasi') ? 'active bg-white' : 'text-white' }}">
-                        <i class="bi bi-building me-2"></i> Organisasi
+                    <a href="{{ route('pembina.kegiatan') }}"
+                        class="nav-link {{ request()->routeIs('pembina.kegiatan') ? 'active bg-white' : 'text-white' }}">
+                        <i class="bi bi-calendar-event me-2"></i> Data Kegiatan
                     </a>
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a href="{{ route('admin.kegiatan') }}"
-                        class="nav-link {{ request()->routeIs('admin.kegiatan') ? 'active bg-white' : 'text-white' }}">
-                        <i class="bi bi-calendar-event me-2"></i> Kegiatan
+                    <a href="{{ route('pembina.validasi') }}"
+                        class="nav-link {{ request()->routeIs('pembina.validasi') ? 'active bg-white' : 'text-white' }}">
+                        <i class="bi bi-check-circle me-2"></i> Validasi Kegiatan
                     </a>
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a href="{{ route('admin.validasi') }}"
-                        class="nav-link {{ request()->routeIs('admin.validasi') ? 'active bg-white' : 'text-white' }}">
-                        <i class="bi bi-check-circle me-2"></i> Validasi
+                    <a href="{{ route('pembina.jadwal') }}"
+                        class="nav-link {{ request()->routeIs('pembina.jadwal') ? 'active bg-white' : 'text-white' }}">
+                        <i class="bi bi-calendar2-week me-2"></i> Jadwal Kegiatan
                     </a>
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a href="{{ route('admin.dokumentasi') }}"
-                        class="nav-link {{ request()->routeIs('admin.dokumentasi') ? 'active bg-white' : 'text-white' }}">
+                    <a href="{{ route('pembina.dokumentasi') }}"
+                        class="nav-link {{ request()->routeIs('pembina.dokumentasi') ? 'active bg-white' : 'text-white' }}">
                         <i class="bi bi-images me-2"></i> Dokumentasi
                     </a>
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a href="{{ route('admin.laporan') }}"
-                        class="nav-link {{ request()->routeIs('admin.laporan') ? 'active bg-white' : 'text-white' }}">
-                        <i class="bi bi-images me-2"></i> Laporan
+                    <a href="{{ route('pembina.laporan') }}"
+                        class="nav-link {{ request()->routeIs('pembina.laporan') ? 'active bg-white' : 'text-white' }}">
+                        <i class="bi bi-journal-text me-2"></i> Laporan Kegiatan
                     </a>
                 </li>
-
             </ul>
 
             <hr class="text-white">
@@ -122,21 +114,12 @@
                     <i class="bi bi-box-arrow-right me-1"></i> Logout
                 </button>
             </form>
-
         </div>
 
-        <!-- MAIN CONTENT -->
         <div class="app-content bg-light">
-
-            <!-- TOPBAR -->
             <div class="d-flex justify-content-between align-items-center bg-white p-3 shadow-sm">
+                <h5 class="mb-0">@yield('title', 'Dashboard')</h5>
 
-                <!-- JUDUL -->
-                <h5 class="mb-0">
-                    @yield('title', 'Dashboard')
-                </h5>
-
-                <!-- PROFIL -->
                 <div class="d-flex align-items-center">
                     <div class="text-end me-2">
                         <div class="fw-semibold">{{ $user?->name ?? 'Tamu' }}</div>
@@ -147,22 +130,17 @@
                         {{ $userInitial }}
                     </div>
                 </div>
-
             </div>
 
-            <!-- ISI HALAMAN -->
             <div class="p-4">
                 @yield('content')
             </div>
-
         </div>
-
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     @yield('scripts')
-
 </body>
 
 </html>

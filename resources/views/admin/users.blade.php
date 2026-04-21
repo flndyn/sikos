@@ -28,12 +28,12 @@
             <table class="table table-bordered table-striped align-middle">
                 <thead class="table-light">
                     <tr>
-                        <th>No</th>
-                        <th>Nama</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>Organisasi</th>
-                        <th>Aksi</th>
+                        <th class="text-nowrap">No</th>
+                        <th class="text-nowrap">Nama</th>
+                        <th class="text-nowrap">Email</th>
+                        <th class="text-nowrap">Role</th>
+                        <th class="text-nowrap">Organisasi</th>
+                        <th class="text-nowrap">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,7 +49,7 @@
                             $roleLabel = ucfirst($user->role);
 
                             $organisasi = match ($user->role) {
-                                'ketua' => $user->organisasiSebagaiKetua->pluck('nama_organisasi')->implode(', '),
+                                'ketua' => $user->organisasiSebagaiKetua?->nama_organisasi ?? '',
                                 'pembina' => $user->organisasiSebagaiPembina->pluck('nama_organisasi')->implode(', '),
                                 default => '',
                             };

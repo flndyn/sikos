@@ -34,11 +34,11 @@
             <table class="table table-bordered table-striped">
                 <thead class="table-light">
                     <tr>
-                        <th>No</th>
-                        <th>Nama Kegiatan</th>
-                        <th>Organisasi</th>
-                        <th>Tanggal</th>
-                        <th>Laporan</th>
+                        <th class="text-nowrap">No</th>
+                        <th class="text-nowrap">Nama Kegiatan</th>
+                        <th class="text-nowrap">Organisasi</th>
+                        <th class="text-nowrap">Tanggal</th>
+                        <th class="text-nowrap">Laporan</th>
                     </tr>
                 </thead>
 

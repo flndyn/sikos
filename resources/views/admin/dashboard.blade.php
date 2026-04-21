@@ -50,6 +50,17 @@
 
     </div>
 
+    <div class="card mt-4 shadow-sm">
+        <div class="card-header">
+            <h5 class="mb-0">Grafik Pengajuan Kegiatan per Bulan (12 Bulan Terakhir)</h5>
+        </div>
+        <div class="card-body">
+            <div style="position: relative; height: 300px;">
+                <canvas id="kegiatanChart"></canvas>
+            </div>
+        </div>
+    </div>
+
     <!-- TABEL KEGIATAN -->
     <div class="card mt-4 shadow-sm">
         <div class="card-header">
@@ -60,10 +71,10 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>No</th>
-                        <th>Nama Kegiatan</th>
-                        <th>Organisasi</th>
-                        <th>Status</th>
+                        <th class="text-nowrap">No</th>
+                        <th class="text-nowrap">Nama Kegiatan</th>
+                        <th class="text-nowrap">Organisasi</th>
+                        <th class="text-nowrap">Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -99,4 +110,48 @@
         </div>
     </div>
 
+@endsection
+
+@section('scripts')
+    <script>
+        const ctx = document.getElementById('kegiatanChart').getContext('2d');
+        const kegiatanChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: @json($chartLabels),
+                datasets: [{
+                    label: 'Jumlah Pengajuan Kegiatan',
+                    data: @json($chartData),
+                    borderColor: '#0d6efd',
+                    backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#0d6efd',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    </script>
 @endsection

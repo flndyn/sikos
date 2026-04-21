@@ -11,9 +11,16 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Ketua\DashboardController as KetuaDashboardController;
 use App\Http\Controllers\Ketua\DokumentasiController as KetuaDokumentasiController;
 use App\Http\Controllers\Ketua\JadwalController as KetuaJadwalController;
+use App\Http\Controllers\Ketua\LaporanController as KetuaLaporanController;
 use App\Http\Controllers\Ketua\OrganisasiController as KetuaOrganisasiController;
 use App\Http\Controllers\Ketua\KegiatanController as KetuaKegiatanController;
 use App\Http\Controllers\Pembina\DashboardController as PembinaDashboardController;
+use App\Http\Controllers\Pembina\DokumentasiController as PembinaDokumentasiController;
+use App\Http\Controllers\Pembina\JadwalController as PembinaJadwalController;
+use App\Http\Controllers\Pembina\KegiatanController as PembinaKegiatanController;
+use App\Http\Controllers\Pembina\LaporanController as PembinaLaporanController;
+use App\Http\Controllers\Pembina\OrganisasiController as PembinaOrganisasiController;
+use App\Http\Controllers\Pembina\ValidasiController as PembinaValidasiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -71,8 +78,22 @@ Route::middleware(['auth', 'role:ketua'])->group(function (): void {
     Route::post('/ketua/dokumentasi', [KetuaDokumentasiController::class, 'store'])->name('ketua.dokumentasi.store');
     Route::put('/ketua/dokumentasi/{dokumentasi}', [KetuaDokumentasiController::class, 'update'])->name('ketua.dokumentasi.update');
     Route::delete('/ketua/dokumentasi/{dokumentasi}', [KetuaDokumentasiController::class, 'destroy'])->name('ketua.dokumentasi.destroy');
+    Route::get('/ketua/laporan', KetuaLaporanController::class)->name('ketua.laporan');
+    Route::post('/ketua/laporan', [KetuaLaporanController::class, 'store'])->name('ketua.laporan.store');
+    Route::put('/ketua/laporan/{laporan}', [KetuaLaporanController::class, 'update'])->name('ketua.laporan.update');
+    Route::delete('/ketua/laporan/{laporan}', [KetuaLaporanController::class, 'destroy'])->name('ketua.laporan.destroy');
+    Route::get('/ketua/laporan/{laporan}/download', [KetuaLaporanController::class, 'download'])->name('ketua.laporan.download');
 });
 
 Route::middleware(['auth', 'role:pembina'])->group(function (): void {
     Route::get('/pembina/dashboard', PembinaDashboardController::class)->name('pembina.dashboard');
+    Route::get('/pembina/organisasi', PembinaOrganisasiController::class)->name('pembina.organisasi');
+    Route::get('/pembina/kegiatan', PembinaKegiatanController::class)->name('pembina.kegiatan');
+    Route::get('/pembina/validasi', PembinaValidasiController::class)->name('pembina.validasi');
+    Route::post('/pembina/validasi/{kegiatan}/approve', [PembinaValidasiController::class, 'approve'])->name('pembina.validasi.approve');
+    Route::post('/pembina/validasi/{kegiatan}/reject', [PembinaValidasiController::class, 'reject'])->name('pembina.validasi.reject');
+    Route::get('/pembina/jadwal', PembinaJadwalController::class)->name('pembina.jadwal');
+    Route::get('/pembina/dokumentasi', PembinaDokumentasiController::class)->name('pembina.dokumentasi');
+    Route::get('/pembina/laporan', PembinaLaporanController::class)->name('pembina.laporan');
+    Route::get('/pembina/laporan/{laporan}/download', [PembinaLaporanController::class, 'download'])->name('pembina.laporan.download');
 });

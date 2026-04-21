@@ -39,13 +39,13 @@
             <table class="table table-bordered table-striped">
                 <thead class="table-light">
                     <tr>
-                        <th>No</th>
-                        <th>Nama Kegiatan</th>
-                        <th>Deskripsi</th>
-                        <th>Tanggal</th>
-                        <th>Tempat</th>
-                        <th>Status</th>
-                        <th class="text-nowrap">Aksi</th>
+                        <th class="text-nowrap">No</th>
+                        <th class="text-nowrap">Nama Kegiatan</th>
+                        <th class="text-nowrap">Deskripsi</th>
+                        <th class="text-nowrap">Tanggal</th>
+                        <th class="text-nowrap">Tempat</th>
+                        <th class="text-nowrap">Status</th>
+                        <th class="text-nowrap text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -73,7 +73,7 @@
                             <td>{{ $item->tanggal_mulai->format('d-m-Y') }}</td>
                             <td>{{ $item->tempat }}</td>
                             <td><span class="badge {{ $badgeClass }}">{{ $statusLabel }}</span></td>
-                            <td class="text-nowrap">
+                            <td class="text-nowrap text-center">
                                 @if (!in_array($item->status, ['disetujui pembina', 'disetujui admin']))
                                     <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                                         data-bs-target="#editKegiatanModal{{ $item->id }}">

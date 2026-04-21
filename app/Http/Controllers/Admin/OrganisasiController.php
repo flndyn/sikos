@@ -46,7 +46,10 @@ class OrganisasiController extends Controller
                 'nullable',
                 'integer',
                 Rule::exists('users', 'id')->where(fn ($query) => $query->where('role', 'ketua')),
+                Rule::unique('organisasi', 'ketua_id'),
             ],
+        ], [
+            'ketua_id.unique' => 'Ketua sudah digunakan oleh organisasi lain.',
         ]);
 
         Organisasi::create($validated);
@@ -70,7 +73,10 @@ class OrganisasiController extends Controller
                 'nullable',
                 'integer',
                 Rule::exists('users', 'id')->where(fn ($query) => $query->where('role', 'ketua')),
+                Rule::unique('organisasi', 'ketua_id')->ignore($organisasi->id),
             ],
+        ], [
+            'ketua_id.unique' => 'Ketua sudah digunakan oleh organisasi lain.',
         ]);
 
         $organisasi->update($validated);

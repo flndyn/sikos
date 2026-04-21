@@ -46,10 +46,10 @@
             <table class="table table-bordered">
                 <thead class="table-light">
                     <tr>
-                        <th>No</th>
-                        <th>Nama Kegiatan</th>
-                        <th>Status</th>
-                        <th>Tanggal Dibuat</th>
+                        <th class="text-nowrap">No</th>
+                        <th class="text-nowrap">Nama Kegiatan</th>
+                        <th class="text-nowrap">Status</th>
+                        <th class="text-nowrap">Tanggal Dibuat</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -125,6 +125,10 @@
                         <a href="{{ route('ketua.dokumentasi') }}"
                             class="btn btn-success d-flex align-items-center justify-content-center" style="height: 60px;">
                             <i class="bi bi-upload me-2"></i>Upload Dokumentasi
+                        </a>
+                        <a href="{{ route('ketua.laporan') }}"
+                            class="btn btn-danger d-flex align-items-center justify-content-center" style="height: 60px;">
+                            <i class="bi bi-file-earmark-text me-2"></i>Upload Laporan
                         </a>
                         <a href="{{ route('ketua.jadwal') }}"
                             class="btn btn-secondary d-flex align-items-center justify-content-center text-white"
