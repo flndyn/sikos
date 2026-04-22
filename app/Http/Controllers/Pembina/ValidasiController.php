@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Pembina;
 
 use App\Http\Controllers\Controller;
 use App\Models\Kegiatan;
+use App\Models\User;
+use App\Notifications\KegiatanWorkflowNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -46,6 +48,8 @@ class ValidasiController extends Controller
             'keterangan' => null,
         ]);
 
+        $this->notifyAdminSetelahDisetujuiPembina($kegiatan->fresh());
+
         return redirect()->route('pembina.validasi')->with('success', 'Kegiatan "' . $kegiatan->nama_kegiatan . '" telah disetujui pembina.');
     }
 
@@ -68,6 +72,8 @@ class ValidasiController extends Controller
             'keterangan' => $validated['keterangan'],
         ]);
 
+        $this->notifyKetuaSetelahDitolakPembina($kegiatan->fresh());
+
         return redirect()->route('pembina.validasi')->with('success', 'Kegiatan "' . $kegiatan->nama_kegiatan . '" telah ditolak pembina.');
     }
 
@@ -76,5 +82,42 @@ class ValidasiController extends Controller
         return $kegiatan->organisasi()
             ->where('pembina_id', auth()->id())
             ->exists();
+    }
+
+    private function notifyAdminSetelahDisetujuiPembina(Kegiatan $kegiatan): void
+    {
+        $organisasi = $kegiatan->organisasi()->first();
+
+        $admins = User::query()
+            ->where('role', 'admin')
+            ->get();
+
+        foreach ($admins as $admin) {
+            $admin->notify(new KegiatanWorkflowNotification(
+                'Validasi Admin Dibutuhkan',
+                'Kegiatan "' . $kegiatan->nama_kegiatan . '" dari ' . ($organisasi?->nama_organisasi ?? 'organisasi') . ' telah disetujui pembina dan menunggu persetujuan admin.',
+                route('admin.validasi'),
+                'Buka validasi admin'
+            ));
+        }
+    }
+
+    private function notifyKetuaSetelahDitolakPembina(Kegiatan $kegiatan): void
+    {
+        $organisasi = $kegiatan->organisasi()->with('ketua')->first();
+        $ketua = $organisasi?->ketua;
+
+        if (! $ketua) {
+            return;
+        }
+
+        $keterangan = $kegiatan->keterangan ?: '-';
+
+        $ketua->notify(new KegiatanWorkflowNotification(
+            'Proposal Ditolak Pembina',
+            'Proposal kegiatan "' . $kegiatan->nama_kegiatan . '" ditolak pembina. Keterangan: ' . $keterangan,
+            route('ketua.kegiatan'),
+            'Lihat kegiatan'
+        ));
     }
 }

@@ -14,6 +14,7 @@ use App\Http\Controllers\Ketua\JadwalController as KetuaJadwalController;
 use App\Http\Controllers\Ketua\LaporanController as KetuaLaporanController;
 use App\Http\Controllers\Ketua\OrganisasiController as KetuaOrganisasiController;
 use App\Http\Controllers\Ketua\KegiatanController as KetuaKegiatanController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Pembina\DashboardController as PembinaDashboardController;
 use App\Http\Controllers\Pembina\DokumentasiController as PembinaDokumentasiController;
 use App\Http\Controllers\Pembina\JadwalController as PembinaJadwalController;
@@ -38,6 +39,8 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 Route::middleware('auth')->group(function (): void {
     Route::get('/dashboard', [AuthController::class, 'redirectDashboard'])->name('dashboard.redirect');
+    Route::post('/notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.read-all');
+    Route::post('/notifications/{notificationId}/read', [NotificationController::class, 'readOne'])->name('notifications.read-one');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function (): void {

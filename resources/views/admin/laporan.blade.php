@@ -20,9 +20,6 @@
 
             <div class="d-flex justify-content-between mb-3">
 
-                <!-- SEARCH -->
-                <input type="text" class="form-control w-25" placeholder="Search...">
-
                 <!-- EXPORT -->
                 <a href="{{ route('admin.laporan.export-pdf') }}" class="btn btn-danger">
                     <i class="bi bi-file-earmark-pdf"></i> Export PDF

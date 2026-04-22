@@ -38,6 +38,35 @@
         </button>
     </div>
 
+    <div class="card border-0 shadow-sm mb-3">
+        <div class="card-body">
+            <form method="GET" action="{{ route('ketua.dokumentasi') }}" class="row g-2 align-items-end">
+                <div class="col-md-8 col-lg-6">
+                    <label for="filter_nama_kegiatan" class="form-label mb-1">Filter Nama Kegiatan</label>
+                    <select class="form-select" id="filter_nama_kegiatan" name="nama_kegiatan">
+                        <option value="">Semua kegiatan</option>
+                        @foreach ($kegiatanList as $kegiatan)
+                            <option value="{{ $kegiatan->nama_kegiatan }}"
+                                {{ ($filterNamaKegiatan ?? '') === $kegiatan->nama_kegiatan ? 'selected' : '' }}>
+                                {{ $kegiatan->nama_kegiatan }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-auto">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-funnel"></i> Terapkan
+                    </button>
+                </div>
+                <div class="col-md-auto">
+                    <a href="{{ route('ketua.dokumentasi') }}" class="btn btn-outline-secondary w-100">
+                        Reset
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="row">
         @php
             $dokumentasiPerKegiatan = $dokumentasi->groupBy('kegiatan_id');

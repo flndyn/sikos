@@ -15,15 +15,21 @@ class DokumentasiController extends Controller
 {
     private const DIRECTORY = 'dokumentasi-kegiatan';
 
-    public function __invoke(): View
+    public function __invoke(Request $request): View
     {
         $user = auth()->user();
         $organisasi = $user->organisasiSebagaiKetua()->first();
         $organisasiId = $organisasi?->id;
+        $filterNamaKegiatan = trim((string) $request->query('nama_kegiatan', ''));
 
         $dokumentasi = Dokumentasi::with('kegiatan:id,nama_kegiatan')
             ->whereHas('kegiatan', function ($query) use ($organisasiId) {
                 $query->where('organisasi_id', $organisasiId);
+            })
+            ->when($filterNamaKegiatan !== '', function ($query) use ($filterNamaKegiatan) {
+                $query->whereHas('kegiatan', function ($kegiatanQuery) use ($filterNamaKegiatan) {
+                    $kegiatanQuery->where('nama_kegiatan', 'like', '%' . $filterNamaKegiatan . '%');
+                });
             })
             ->latest('id')
             ->get(['id', 'kegiatan_id', 'file_dokumentasi', 'keterangan']);
@@ -33,7 +39,7 @@ class DokumentasiController extends Controller
             ->orderBy('nama_kegiatan')
             ->get(['id', 'nama_kegiatan']);
 
-        return view('ketua.dokumentasi', compact('dokumentasi', 'kegiatanList'));
+        return view('ketua.dokumentasi', compact('dokumentasi', 'kegiatanList', 'filterNamaKegiatan'));
     }
 
     public function store(Request $request): RedirectResponse

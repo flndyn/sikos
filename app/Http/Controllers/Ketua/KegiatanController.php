@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ketua;
 
 use App\Http\Controllers\Controller;
 use App\Models\Kegiatan;
+use App\Notifications\KegiatanWorkflowNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -64,7 +65,9 @@ class KegiatanController extends Controller
         $validated['organisasi_id'] = $organisasiId;
         $validated['status'] = 'pending';
 
-        Kegiatan::create($validated);
+        $kegiatan = Kegiatan::create($validated);
+
+        $this->notifyPembinaProposalDiajukan($kegiatan);
 
         return redirect()->route('ketua.kegiatan')->with('success', 'Kegiatan berhasil diajukan');
     }
@@ -100,12 +103,18 @@ class KegiatanController extends Controller
         }
 
         // Jika sebelumnya ditolak, saat ketua mengedit status kembali ke proses review.
-        if (in_array($kegiatan->status, ['ditolak admin', 'ditolak pembina'], true)) {
+        $perluDikirimUlangKePembina = in_array($kegiatan->status, ['ditolak admin', 'ditolak pembina'], true);
+
+        if ($perluDikirimUlangKePembina) {
             $validated['status'] = 'pending';
             $validated['keterangan'] = null;
         }
 
         $kegiatan->update($validated);
+
+        if ($perluDikirimUlangKePembina) {
+            $this->notifyPembinaProposalDiajukan($kegiatan->fresh());
+        }
 
         return redirect()->route('ketua.kegiatan')->with('success', 'Kegiatan berhasil diperbarui');
     }
@@ -127,5 +136,22 @@ class KegiatanController extends Controller
         $kegiatan->delete();
 
         return redirect()->route('ketua.kegiatan')->with('success', 'Kegiatan berhasil dihapus');
+    }
+
+    private function notifyPembinaProposalDiajukan(Kegiatan $kegiatan): void
+    {
+        $organisasi = $kegiatan->organisasi()->with('pembina')->first();
+        $pembina = $organisasi?->pembina;
+
+        if (! $pembina) {
+            return;
+        }
+
+        $pembina->notify(new KegiatanWorkflowNotification(
+            'Pengajuan Proposal Baru',
+            'Proposal kegiatan "' . $kegiatan->nama_kegiatan . '" dari ' . ($organisasi?->nama_organisasi ?? 'organisasi') . ' menunggu validasi Anda.',
+            route('pembina.validasi'),
+            'Buka validasi'
+        ));
     }
 }

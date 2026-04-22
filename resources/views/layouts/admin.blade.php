@@ -43,6 +43,15 @@
             flex: 1 1 auto;
             min-width: 0;
         }
+
+        .notification-menu {
+            width: 360px;
+            max-width: calc(100vw - 2rem);
+        }
+
+        .notification-item {
+            white-space: normal;
+        }
     </style>
 </head>
 
@@ -51,6 +60,8 @@
     @php
         $user = auth()->user();
         $userInitial = $user?->name ? strtoupper(mb_substr($user->name, 0, 1)) : 'U';
+        $unreadNotificationsCount = $user ? $user->unreadNotifications()->count() : 0;
+        $recentNotifications = $user ? $user->notifications()->latest()->limit(6)->get() : collect();
     @endphp
 
     <div class="d-flex">
@@ -138,6 +149,63 @@
 
                 <!-- PROFIL -->
                 <div class="d-flex align-items-center">
+                    <div class="dropdown me-3">
+                        <button class="btn btn-outline-secondary position-relative" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifikasi">
+                            <i class="bi bi-bell"></i>
+                            @if ($unreadNotificationsCount > 0)
+                                <span
+                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ $unreadNotificationsCount > 9 ? '9+' : $unreadNotificationsCount }}
+                                </span>
+                            @endif
+                        </button>
+
+                        <div class="dropdown-menu dropdown-menu-end p-0 shadow notification-menu">
+                            <div class="d-flex align-items-center justify-content-between px-3 py-2 border-bottom">
+                                <strong>Notifikasi</strong>
+                                @if ($unreadNotificationsCount > 0)
+                                    <form action="{{ route('notifications.read-all') }}" method="POST">
+                                        @csrf
+                                        <button type="submit"
+                                            class="btn btn-sm btn-link text-decoration-none p-0">Tandai semua
+                                            dibaca</button>
+                                    </form>
+                                @endif
+                            </div>
+
+                            @forelse ($recentNotifications as $notification)
+                                @php
+                                    $data = $notification->data;
+                                @endphp
+                                <div
+                                    class="notification-item px-3 py-2 border-bottom {{ is_null($notification->read_at) ? 'bg-light' : '' }}">
+                                    <div class="fw-semibold small">{{ $data['title'] ?? 'Notifikasi' }}</div>
+                                    <div class="small text-muted">{{ $data['message'] ?? '-' }}</div>
+                                    <div class="small text-secondary mt-1">
+                                        {{ $notification->created_at?->diffForHumans() }}</div>
+                                    <div class="d-flex gap-2 mt-2">
+                                        @if (!empty($data['action_url']))
+                                            <a href="{{ $data['action_url'] }}" class="btn btn-sm btn-primary">
+                                                {{ $data['action_label'] ?? 'Lihat detail' }}
+                                            </a>
+                                        @endif
+                                        @if (is_null($notification->read_at))
+                                            <form action="{{ route('notifications.read-one', $notification->id) }}"
+                                                method="POST">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary">Tandai
+                                                    dibaca</button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="px-3 py-3 small text-muted">Belum ada notifikasi.</div>
+                            @endforelse
+                        </div>
+                    </div>
+
                     <div class="text-end me-2">
                         <div class="fw-semibold">{{ $user?->name ?? 'Tamu' }}</div>
                         <small class="text-muted text-uppercase">{{ $user?->role ?? '-' }}</small>
@@ -161,6 +229,63 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tables = document.querySelectorAll('table');
+
+            tables.forEach(function(table, index) {
+                const tbody = table.querySelector('tbody');
+
+                if (!tbody || table.dataset.hasGlobalSearch === '1') {
+                    return;
+                }
+
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+
+                if (!rows.length) {
+                    return;
+                }
+
+                table.dataset.hasGlobalSearch = '1';
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'd-flex justify-content-end mt-2 mb-2';
+
+                const searchGroup = document.createElement('div');
+                searchGroup.className = 'input-group input-group-sm';
+                searchGroup.style.maxWidth = '360px';
+
+                const span = document.createElement('span');
+                span.className = 'input-group-text';
+                span.innerHTML = '<i class="bi bi-search"></i>';
+
+                const input = document.createElement('input');
+                input.type = 'search';
+                input.className = 'form-control';
+                input.placeholder = 'Search semua data tabel';
+                input.setAttribute('aria-label', 'Search semua data tabel');
+                input.id = `table-global-search-${index + 1}`;
+
+                searchGroup.appendChild(span);
+                searchGroup.appendChild(input);
+                wrapper.appendChild(searchGroup);
+
+                const container = table.closest('.table-responsive') || table.parentElement;
+                container.prepend(wrapper);
+
+                input.addEventListener('input', function(event) {
+                    const keyword = (event.target.value || '').toLowerCase().trim();
+
+                    rows.forEach(function(row) {
+                        const text = row.textContent.toLowerCase().replace(/\s+/g, ' ')
+                            .trim();
+                        row.style.display = keyword === '' || text.includes(keyword) ? '' :
+                            'none';
+                    });
+                });
+            });
+        });
+    </script>
     @yield('scripts')
 
 </body>
