@@ -123,7 +123,29 @@
                             <div class="mb-0">
                                 <label for="keterangan_reject_{{ $item->id }}" class="form-label">Keterangan Penolakan
                                     *</label>
-                                <textarea id="keterangan_reject_{{ $item->id }}" name="keterangan" class="form-control" rows="3" required></textarea>
+                                <div id="keterangan_reject_{{ $item->id }}" class="d-grid gap-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="keterangan"
+                                            id="pembina_reason_proposal_{{ $item->id }}" value="Proposal belum lengkap" required>
+                                        <label class="form-check-label" for="pembina_reason_proposal_{{ $item->id }}">
+                                            Proposal belum lengkap
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="keterangan"
+                                            id="pembina_reason_anggaran_{{ $item->id }}" value="Anggaran tidak sesuai" required>
+                                        <label class="form-check-label" for="pembina_reason_anggaran_{{ $item->id }}">
+                                            Anggaran tidak sesuai
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="keterangan"
+                                            id="pembina_reason_deskripsi_{{ $item->id }}" value="Deskripsi atau data kegiatan kurang jelas" required>
+                                        <label class="form-check-label" for="pembina_reason_deskripsi_{{ $item->id }}">
+                                            Deskripsi atau data kegiatan kurang jelas
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">

@@ -161,8 +161,24 @@
                             <div class="mb-0">
                                 <label for="keterangan_reject_{{ $item->id }}" class="form-label">Keterangan Penolakan
                                     *</label>
-                                <textarea id="keterangan_reject_{{ $item->id }}" name="keterangan" class="form-control" rows="3"
-                                    placeholder="Tuliskan alasan penolakan" required></textarea>
+                                <div id="keterangan_reject_{{ $item->id }}" class="d-grid gap-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="keterangan"
+                                            id="admin_reason_jadwal_{{ $item->id }}"
+                                            value="Jadwal bentrok dengan kegiatan lain" required>
+                                        <label class="form-check-label" for="admin_reason_jadwal_{{ $item->id }}">
+                                            Jadwal bentrok dengan kegiatan lain
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="keterangan"
+                                            id="admin_reason_kebijakan_{{ $item->id }}"
+                                            value="Melanggar kebijakan sekolah" required>
+                                        <label class="form-check-label" for="admin_reason_kebijakan_{{ $item->id }}">
+                                            Melanggar kebijakan sekolah
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                             <p class="text-muted small mb-0">Status akan diubah dari "Disetujui Pembina" menjadi "Ditolak
                                 Admin".</p>

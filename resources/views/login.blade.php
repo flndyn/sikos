@@ -62,6 +62,11 @@
             <p class="text-center small mt-3 text-muted">
                 Akses untuk Admin, Ketua Organisasi, dan Pembina
             </p>
+
+            <p class="text-center small mb-0">
+                Belum punya akun Ketua?
+                <a href="{{ route('register') }}">Daftar di sini</a>
+            </p>
         </div>
 
     </div>

@@ -64,7 +64,11 @@ class ValidasiController extends Controller
         }
 
         $validated = $request->validate([
-            'keterangan' => ['required', 'string'],
+            'keterangan' => [
+                'required',
+                'string',
+                'in:Proposal belum lengkap,Anggaran tidak sesuai,Deskripsi atau data kegiatan kurang jelas',
+            ],
         ]);
 
         $kegiatan->update([

@@ -58,7 +58,11 @@ class ValidasiController extends Controller
         }
 
         $validated = $request->validate([
-            'keterangan' => ['required', 'string'],
+            'keterangan' => [
+                'required',
+                'string',
+                'in:Jadwal bentrok dengan kegiatan lain,Melanggar kebijakan sekolah',
+            ],
         ]);
 
         $kegiatan->update([
