@@ -123,7 +123,7 @@
             text-decoration: none;
         }
 
-        /* ========== HERO SECTION ========== */
+        /* HERO SECTION */
         .hero-section {
             background: linear-gradient(180deg, var(--light-bg) 0%, #e8f0fe 100%);
             padding: 50px 0 60px;
@@ -320,7 +320,7 @@
             border-radius: 0 0 1px 1px;
         }
 
-        /* ========== FEATURES SECTION ========== */
+        /*FEATURES SECTION*/
         .features-section {
             padding: 60px 0;
             background: #fff;
@@ -384,7 +384,7 @@
             margin: 0;
         }
 
-        /* ========== KEGIATAN SECTION ========== */
+        /*KEGIATAN SECTION*/
         .kegiatan-section {
             padding: 50px 0 60px;
             background: var(--light-bg);
@@ -483,7 +483,7 @@
             color: #fff;
         }
 
-        /* ========== FOOTER ========== */
+        /*FOOTER*/
         .footer-siokas {
             background: var(--dark-blue);
             color: #ccc;
@@ -601,7 +601,7 @@
             color: #888;
         }
 
-        /* ========== RESPONSIVE ========== */
+        /*RESPONSIVE*/
         @media (max-width: 991px) {
             .hero-title { font-size: 1.7rem; }
             .hero-illustration { margin-top: 30px; }
@@ -619,7 +619,7 @@
 </head>
 <body>
 
-    <!-- ========== NAVBAR ========== -->
+    <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-siokas sticky-top">
         <div class="container">
             <a class="navbar-brand" href="index.html">
@@ -656,7 +656,7 @@
         </div>
     </nav>
 
-    <!-- ========== HERO SECTION ========== -->
+    <!-- HERO SECTION -->
     <section class="hero-section">
         <div class="container">
             <div class="row align-items-center">
@@ -757,7 +757,7 @@
         </div>
     </section>
 
-    <!-- ========== FEATURES SECTION ========== -->
+    <!-- FEATURES SECTION -->
     <section class="features-section" id="fitur">
         <div class="container">
             <div class="text-center">
@@ -797,7 +797,7 @@
         </div>
     </section>
 
-    <!-- ========== KEGIATAN TERBARU SECTION ========== -->
+    <!--  KEGIATAN TERBARU SECTION -->
     <section class="kegiatan-section" id="kegiatan">
         <div class="container">
             <div class="section-header">
@@ -884,7 +884,7 @@
         </div>
     </section>
 
-    <!-- ========== FOOTER ========== -->
+    <!-- FOOTER -->
     <footer class="footer-siokas">
         <div class="container">
             <div class="row g-4">
