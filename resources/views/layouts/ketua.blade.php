@@ -52,6 +52,35 @@
         .notification-item {
             white-space: normal;
         }
+
+        .profile-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+            padding: 0.35rem 0.5rem;
+            border-radius: 12px;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .profile-link:hover {
+            text-decoration: none;
+            color: inherit;
+            background-color: rgba(13, 110, 253, 0.06);
+            transform: translateY(-1px);
+        }
+
+        .profile-link .profile-text {
+            line-height: 1.1;
+        }
+
+        .profile-link .profile-hint {
+            font-size: 0.72rem;
+            color: #0d6efd;
+            font-weight: 600;
+        }
     </style>
 </head>
 
@@ -60,6 +89,7 @@
     @php
         $user = auth()->user();
         $userInitial = $user?->name ? strtoupper(mb_substr($user->name, 0, 1)) : 'U';
+        $profilePhotoUrl = $user?->profile_photo_path ? asset('storage/' . $user->profile_photo_path) : null;
         $unreadNotificationsCount = $user ? $user->unreadNotifications()->count() : 0;
         $recentNotifications = $user ? $user->notifications()->latest()->limit(6)->get() : collect();
     @endphp
@@ -141,8 +171,9 @@
                 </h5>
 
                 <!-- PROFIL -->
-                <div class="d-flex align-items-center">
-                    <div class="dropdown me-3">
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="dropdown">
                         <button class="btn btn-outline-secondary position-relative" type="button"
                             data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifikasi">
                             <i class="bi bi-bell"></i>
@@ -199,14 +230,24 @@
                         </div>
                     </div>
 
-                    <div class="text-end me-2">
-                        <div class="fw-semibold">{{ $user?->name ?? 'Tamu' }}</div>
-                        <small class="text-muted text-uppercase">{{ $user?->role ?? '-' }}</small>
-                    </div>
-                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
-                        style="width:40px; height:40px;">
-                        {{ $userInitial }}
-                    </div>
+                    <a href="{{ route('ketua.profil') }}" class="profile-link me-3"
+                        title="Klik untuk mengubah profil akun" aria-label="Klik untuk mengubah profil akun">
+                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold overflow-hidden"
+                            style="width:40px; height:40px;">
+                            @if ($profilePhotoUrl)
+                                <img src="{{ $profilePhotoUrl }}" alt="Foto Profil"
+                                    class="w-100 h-100 object-fit-cover">
+                            @else
+                                {{ $userInitial }}
+                            @endif
+                        </div>
+
+                        <div class="text-start profile-text">
+                            <div class="fw-semibold">{{ $user?->name ?? 'Tamu' }}</div>
+                            <small class="text-muted text-uppercase">{{ $user?->role ?? '-' }}</small>
+                        </div>
+                    </a>
+
                 </div>
 
             </div>

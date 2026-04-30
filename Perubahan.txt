@@ -1,3 +1,4 @@
 Pada migrasi database terdapat penambahan kolom baru "Keterangan"
 Pada migrasi database terdapat perubahan dan penambahan isi status pada kolom "Status" (Disetujui Pembina, Disetujui Admin, Ditolak Pembina, Ditolak Admin)
 Pada migrasi database terdapat penambahan tabel baru bernama "notifikasi"
+Pada migrasi database terdapat penambahakn kolom photo_profile_path untuk kolom "Users"

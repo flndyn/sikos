@@ -5,13 +5,16 @@ use App\Http\Controllers\Admin\DokumentasiController;
 use App\Http\Controllers\Admin\KegiatanController;
 use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\Admin\OrganisasiController as AdminOrganisasiController;
+use App\Http\Controllers\Admin\ProfilController as AdminProfilController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\ValidasiController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Ketua\DashboardController as KetuaDashboardController;
 use App\Http\Controllers\Ketua\DokumentasiController as KetuaDokumentasiController;
 use App\Http\Controllers\Ketua\JadwalController as KetuaJadwalController;
 use App\Http\Controllers\Ketua\LaporanController as KetuaLaporanController;
+use App\Http\Controllers\Ketua\ProfilController as KetuaProfilController;
 use App\Http\Controllers\Ketua\OrganisasiController as KetuaOrganisasiController;
 use App\Http\Controllers\Ketua\KegiatanController as KetuaKegiatanController;
 use App\Http\Controllers\NotificationController;
@@ -21,12 +24,11 @@ use App\Http\Controllers\Pembina\JadwalController as PembinaJadwalController;
 use App\Http\Controllers\Pembina\KegiatanController as PembinaKegiatanController;
 use App\Http\Controllers\Pembina\LaporanController as PembinaLaporanController;
 use App\Http\Controllers\Pembina\OrganisasiController as PembinaOrganisasiController;
+use App\Http\Controllers\Pembina\ProfilController as PembinaProfilController;
 use App\Http\Controllers\Pembina\ValidasiController as PembinaValidasiController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', HomeController::class)->name('home');
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -47,6 +49,8 @@ Route::middleware('auth')->group(function (): void {
 
 Route::middleware(['auth', 'role:admin'])->group(function (): void {
     Route::get('/admin/dashboard', AdminDashboardController::class)->name('admin.dashboard');
+    Route::get('/admin/profil', AdminProfilController::class)->name('admin.profil');
+    Route::put('/admin/profil', [AdminProfilController::class, 'update'])->name('admin.profil.update');
     Route::get('/admin/users', AdminUserController::class)->name('admin.users');
     Route::post('/admin/users', [AdminUserController::class, 'store'])->name('admin.users.store');
     Route::put('/admin/users/{user}', [AdminUserController::class, 'update'])->name('admin.users.update');
@@ -73,6 +77,8 @@ Route::middleware(['auth', 'role:admin'])->group(function (): void {
 
 Route::middleware(['auth', 'role:ketua'])->group(function (): void {
     Route::get('/ketua/dashboard', KetuaDashboardController::class)->name('ketua.dashboard');
+    Route::get('/ketua/profil', KetuaProfilController::class)->name('ketua.profil');
+    Route::put('/ketua/profil', [KetuaProfilController::class, 'update'])->name('ketua.profil.update');
     Route::get('/ketua/organisasi', KetuaOrganisasiController::class)->name('ketua.organisasi');
     Route::get('/ketua/kegiatan', KetuaKegiatanController::class)->name('ketua.kegiatan');
     Route::post('/ketua/kegiatan', [KetuaKegiatanController::class, 'store'])->name('ketua.kegiatan.store');
@@ -92,6 +98,8 @@ Route::middleware(['auth', 'role:ketua'])->group(function (): void {
 
 Route::middleware(['auth', 'role:pembina'])->group(function (): void {
     Route::get('/pembina/dashboard', PembinaDashboardController::class)->name('pembina.dashboard');
+    Route::get('/pembina/profil', PembinaProfilController::class)->name('pembina.profil');
+    Route::put('/pembina/profil', [PembinaProfilController::class, 'update'])->name('pembina.profil.update');
     Route::get('/pembina/organisasi', PembinaOrganisasiController::class)->name('pembina.organisasi');
     Route::get('/pembina/kegiatan', PembinaKegiatanController::class)->name('pembina.kegiatan');
     Route::get('/pembina/validasi', PembinaValidasiController::class)->name('pembina.validasi');

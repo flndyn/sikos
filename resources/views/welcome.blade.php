@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +10,8 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --primary-blue: #0d6efd;
@@ -19,7 +21,11 @@
             --light-blue-bg: #e8f0fe;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -31,9 +37,10 @@
         /* ========== NAVBAR ========== */
         .navbar-siokas {
             background: #fff;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
             padding: 12px 0;
         }
+
         .navbar-siokas .navbar-brand {
             display: flex;
             align-items: center;
@@ -43,6 +50,7 @@
             font-size: 1.25rem;
             text-decoration: none;
         }
+
         .navbar-siokas .navbar-brand small {
             display: block;
             font-size: 0.7rem;
@@ -50,6 +58,7 @@
             color: #555;
             line-height: 1.2;
         }
+
         .navbar-siokas .logo-badge {
             width: 42px;
             height: 42px;
@@ -64,6 +73,7 @@
             position: relative;
             overflow: hidden;
         }
+
         .navbar-siokas .logo-badge::after {
             content: '';
             position: absolute;
@@ -76,7 +86,11 @@
             border-radius: 50%;
             opacity: 0.9;
         }
-        .navbar-siokas .logo-badge i { position: relative; z-index: 1; }
+
+        .navbar-siokas .logo-badge i {
+            position: relative;
+            z-index: 1;
+        }
 
         .nav-link-siokas {
             color: #555 !important;
@@ -87,13 +101,16 @@
             text-decoration: none;
             display: inline-block;
         }
+
         .nav-link-siokas:hover,
         .nav-link-siokas.active {
             color: var(--primary-blue) !important;
         }
+
         .nav-link-siokas.active {
             position: relative;
         }
+
         .nav-link-siokas.active::after {
             content: '';
             position: absolute;
@@ -104,6 +121,7 @@
             background: var(--primary-blue);
             border-radius: 2px;
         }
+
         .btn-login-nav {
             background: var(--primary-blue);
             color: #fff !important;
@@ -117,6 +135,7 @@
             display: inline-flex;
             align-items: center;
         }
+
         .btn-login-nav:hover {
             background: #0b5ed7;
             color: #fff;
@@ -130,6 +149,7 @@
             position: relative;
             overflow: hidden;
         }
+
         .hero-section::before {
             content: '';
             position: absolute;
@@ -137,9 +157,10 @@
             right: -100px;
             width: 500px;
             height: 500px;
-            background: radial-gradient(circle, rgba(13,110,253,0.05) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(13, 110, 253, 0.05) 0%, transparent 70%);
             border-radius: 50%;
         }
+
         .badge-sistem {
             display: inline-block;
             background: #dbeafe;
@@ -152,6 +173,7 @@
             text-transform: uppercase;
             margin-bottom: 16px;
         }
+
         .hero-title {
             font-size: 2.1rem;
             font-weight: 800;
@@ -159,13 +181,18 @@
             line-height: 1.25;
             margin-bottom: 10px;
         }
-        .hero-title span { color: var(--primary-blue); }
+
+        .hero-title span {
+            color: var(--primary-blue);
+        }
+
         .hero-subtitle {
             font-size: 1.05rem;
             font-weight: 600;
             color: #444;
             margin-bottom: 12px;
         }
+
         .hero-desc {
             font-size: 0.92rem;
             color: #666;
@@ -173,6 +200,7 @@
             margin-bottom: 28px;
             max-width: 480px;
         }
+
         .btn-login-hero {
             background: var(--primary-blue);
             color: #fff;
@@ -186,12 +214,14 @@
             display: inline-flex;
             align-items: center;
         }
+
         .btn-login-hero:hover {
             background: #0b5ed7;
             color: #fff;
             transform: translateY(-1px);
             text-decoration: none;
         }
+
         .btn-lihat-kegiatan {
             background: #fff;
             color: var(--primary-blue);
@@ -205,6 +235,7 @@
             display: inline-flex;
             align-items: center;
         }
+
         .btn-lihat-kegiatan:hover {
             background: #e8f0fe;
             color: var(--primary-blue);
@@ -216,31 +247,39 @@
             position: relative;
             padding: 20px;
         }
+
         .hero-illustration .illustration-wrapper {
             position: relative;
             width: 100%;
             max-width: 560px;
             margin: 0 auto;
         }
+
         .hero-illustration .bg-cloud {
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, rgba(13,110,253,0.08) 0%, rgba(13,110,253,0.03) 100%);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(13, 110, 253, 0.08) 0%, rgba(13, 110, 253, 0.03) 100%);
             border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
             z-index: 0;
         }
+
         .hero-illustration .building {
             position: relative;
             z-index: 1;
             text-align: center;
             margin-bottom: -10px;
         }
+
         .building-svg {
             width: 100%;
             max-width: 320px;
             margin: 0 auto;
             display: block;
         }
+
         .hero-illustration .students-group {
             position: relative;
             z-index: 2;
@@ -250,16 +289,21 @@
             margin-top: -30px;
             flex-wrap: wrap;
         }
+
         .student-card {
             background: #fff;
             border-radius: 16px;
             padding: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             text-align: center;
             width: 100px;
             transition: transform 0.3s;
         }
-        .student-card:hover { transform: translateY(-4px); }
+
+        .student-card:hover {
+            transform: translateY(-4px);
+        }
+
         .student-avatar {
             width: 56px;
             height: 56px;
@@ -271,20 +315,34 @@
             font-size: 1.5rem;
             color: #fff;
         }
+
         .student-card .student-name {
             font-size: 0.7rem;
             font-weight: 600;
             color: #333;
             margin-bottom: 2px;
         }
+
         .student-card .student-role {
             font-size: 0.6rem;
             color: #888;
         }
-        .avatar-blue { background: linear-gradient(135deg, #64b5f6, #1e88e5); }
-        .avatar-green { background: linear-gradient(135deg, #81c784, #43a047); }
-        .avatar-purple { background: linear-gradient(135deg, #ce93d8, #8e24aa); }
-        .avatar-orange { background: linear-gradient(135deg, #ffb74d, #f57c00); }
+
+        .avatar-blue {
+            background: linear-gradient(135deg, #64b5f6, #1e88e5);
+        }
+
+        .avatar-green {
+            background: linear-gradient(135deg, #81c784, #43a047);
+        }
+
+        .avatar-purple {
+            background: linear-gradient(135deg, #ce93d8, #8e24aa);
+        }
+
+        .avatar-orange {
+            background: linear-gradient(135deg, #ffb74d, #f57c00);
+        }
 
         /* Flag */
         .flag-indonesia {
@@ -293,24 +351,28 @@
             right: 30px;
             z-index: 3;
         }
+
         .flag-pole {
             width: 3px;
             height: 60px;
             background: #888;
             margin: 0 auto;
         }
+
         .flag-cloth {
             display: flex;
             width: 30px;
             height: 18px;
             margin-left: 3px;
         }
+
         .flag-red {
             width: 100%;
             height: 50%;
             background: #e53935;
             border-radius: 1px 1px 0 0;
         }
+
         .flag-white {
             width: 100%;
             height: 50%;
@@ -325,6 +387,7 @@
             padding: 60px 0;
             background: #fff;
         }
+
         .badge-fitur {
             display: inline-block;
             background: #dbeafe;
@@ -337,12 +400,14 @@
             text-transform: uppercase;
             margin-bottom: 10px;
         }
+
         .section-title {
             font-size: 1.5rem;
             font-weight: 700;
             color: var(--dark-blue);
             margin-bottom: 40px;
         }
+
         .feature-card {
             background: #fff;
             border: 1.5px solid #e8ecf1;
@@ -352,11 +417,13 @@
             transition: all 0.3s;
             height: 100%;
         }
+
         .feature-card:hover {
             border-color: var(--primary-blue);
-            box-shadow: 0 8px 30px rgba(13,110,253,0.1);
+            box-shadow: 0 8px 30px rgba(13, 110, 253, 0.1);
             transform: translateY(-4px);
         }
+
         .feature-icon {
             width: 64px;
             height: 64px;
@@ -367,16 +434,34 @@
             margin: 0 auto 16px;
             font-size: 1.5rem;
         }
-        .icon-blue { background: #dbeafe; color: var(--primary-blue); }
-        .icon-green { background: #d1fae5; color: #16a34a; }
-        .icon-yellow { background: #fef3c7; color: #d97706; }
-        .icon-purple { background: #ede9fe; color: #7c3aed; }
+
+        .icon-blue {
+            background: #dbeafe;
+            color: var(--primary-blue);
+        }
+
+        .icon-green {
+            background: #d1fae5;
+            color: #16a34a;
+        }
+
+        .icon-yellow {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .icon-purple {
+            background: #ede9fe;
+            color: #7c3aed;
+        }
+
         .feature-card h5 {
             font-size: 0.95rem;
             font-weight: 700;
             color: var(--dark-blue);
             margin-bottom: 10px;
         }
+
         .feature-card p {
             font-size: 0.82rem;
             color: #666;
@@ -389,6 +474,7 @@
             padding: 50px 0 60px;
             background: var(--light-bg);
         }
+
         .section-header {
             display: flex;
             justify-content: space-between;
@@ -397,12 +483,14 @@
             flex-wrap: wrap;
             gap: 10px;
         }
+
         .section-header h4 {
             font-size: 1.2rem;
             font-weight: 700;
             color: var(--dark-blue);
             margin: 0;
         }
+
         .btn-lihat-semua {
             color: var(--primary-blue);
             font-weight: 600;
@@ -410,16 +498,25 @@
             text-decoration: none;
             transition: color 0.2s;
         }
+
         .btn-lihat-semua:hover {
             color: #0b5ed7;
             text-decoration: none;
         }
+
         .table-kegiatan {
             background: #fff;
             border-radius: 14px;
             overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+            margin: 0 auto;
         }
+
+        .table-responsive {
+            display: flex;
+            justify-content: center;
+        }
+
         .table-kegiatan thead th {
             background: #f8fafc;
             border-bottom: 1.5px solid #e8ecf1;
@@ -431,6 +528,7 @@
             padding: 14px 16px;
             white-space: nowrap;
         }
+
         .table-kegiatan tbody td {
             padding: 12px 16px;
             vertical-align: middle;
@@ -438,8 +536,15 @@
             border-bottom: 1px solid #f0f2f5;
             color: #444;
         }
-        .table-kegiatan tbody tr:last-child td { border-bottom: none; }
-        .table-kegiatan tbody tr:hover { background: #fafbff; }
+
+        .table-kegiatan tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-kegiatan tbody tr:hover {
+            background: #fafbff;
+        }
+
         .kegiatan-thumb {
             width: 48px;
             height: 36px;
@@ -453,11 +558,13 @@
             font-size: 0.75rem;
             flex-shrink: 0;
         }
+
         .kegiatan-nama {
             font-weight: 600;
             color: var(--dark-blue);
             font-size: 0.85rem;
         }
+
         .status-badge {
             display: inline-block;
             padding: 3px 12px;
@@ -465,9 +572,22 @@
             font-size: 0.75rem;
             font-weight: 600;
         }
-        .status-disetujui { background: #d1fae5; color: #059669; }
-        .status-pending { background: #fef3c7; color: #d97706; }
-        .status-ditolak { background: #fee2e2; color: #dc2626; }
+
+        .status-disetujui {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-ditolak {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
         .btn-detail {
             background: none;
             border: 1.5px solid var(--primary-blue);
@@ -478,6 +598,7 @@
             font-weight: 600;
             transition: all 0.2s;
         }
+
         .btn-detail:hover {
             background: var(--primary-blue);
             color: #fff;
@@ -489,12 +610,14 @@
             color: #ccc;
             padding: 50px 0 0;
         }
+
         .footer-brand {
             display: flex;
             align-items: center;
             gap: 10px;
             margin-bottom: 16px;
         }
+
         .footer-brand .logo-badge {
             width: 42px;
             height: 42px;
@@ -507,23 +630,27 @@
             font-size: 1.1rem;
             flex-shrink: 0;
         }
+
         .footer-brand h5 {
             color: #fff;
             font-weight: 700;
             font-size: 1.2rem;
             margin: 0;
         }
+
         .footer-brand small {
             color: #aaa;
             font-size: 0.75rem;
             display: block;
         }
+
         .footer-desc {
             font-size: 0.82rem;
             color: #aaa;
             line-height: 1.7;
             margin-bottom: 20px;
         }
+
         .footer-social a {
             display: inline-flex;
             align-items: center;
@@ -531,35 +658,46 @@
             width: 36px;
             height: 36px;
             border-radius: 8px;
-            background: rgba(255,255,255,0.08);
+            background: rgba(255, 255, 255, 0.08);
             color: #ccc;
             margin-right: 8px;
             transition: all 0.2s;
             text-decoration: none;
         }
+
         .footer-social a:hover {
             background: var(--primary-blue);
             color: #fff;
         }
+
         .footer-title {
             color: #fff;
             font-size: 0.9rem;
             font-weight: 700;
             margin-bottom: 18px;
         }
+
         .footer-links {
             list-style: none;
             padding: 0;
             margin: 0;
         }
-        .footer-links li { margin-bottom: 10px; }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
         .footer-links a {
             color: #aaa;
             text-decoration: none;
             font-size: 0.83rem;
             transition: color 0.2s;
         }
-        .footer-links a:hover { color: #fff; }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
         .footer-info-item {
             display: flex;
             align-items: flex-start;
@@ -568,11 +706,13 @@
             font-size: 0.83rem;
             color: #aaa;
         }
+
         .footer-info-item i {
             color: var(--primary-blue);
             margin-top: 3px;
             flex-shrink: 0;
         }
+
         .btn-hubungi {
             background: var(--primary-blue);
             color: #fff;
@@ -587,13 +727,15 @@
             display: inline-flex;
             align-items: center;
         }
+
         .btn-hubungi:hover {
             background: #0b5ed7;
             color: #fff;
             text-decoration: none;
         }
+
         .footer-bottom {
-            border-top: 1px solid rgba(255,255,255,0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
             padding: 20px 0;
             margin-top: 40px;
             text-align: center;
@@ -603,26 +745,56 @@
 
         /*RESPONSIVE*/
         @media (max-width: 991px) {
-            .hero-title { font-size: 1.7rem; }
-            .hero-illustration { margin-top: 30px; }
-            .student-card { width: 80px; padding: 12px; }
-            .student-avatar { width: 44px; height: 44px; font-size: 1.2rem; }
+            .hero-title {
+                font-size: 1.7rem;
+            }
+
+            .hero-illustration {
+                margin-top: 30px;
+            }
+
+            .student-card {
+                width: 80px;
+                padding: 12px;
+            }
+
+            .student-avatar {
+                width: 44px;
+                height: 44px;
+                font-size: 1.2rem;
+            }
         }
+
         @media (max-width: 767px) {
-            .hero-title { font-size: 1.4rem; }
-            .hero-section { padding: 30px 0 40px; }
-            .features-section { padding: 40px 0; }
-            .section-title { font-size: 1.25rem; }
-            .table-kegiatan { font-size: 0.8rem; }
+            .hero-title {
+                font-size: 1.4rem;
+            }
+
+            .hero-section {
+                padding: 30px 0 40px;
+            }
+
+            .features-section {
+                padding: 40px 0;
+            }
+
+            .section-title {
+                font-size: 1.25rem;
+            }
+
+            .table-kegiatan {
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-siokas sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="{{ route('home') }}">
                 <div class="logo-badge">
                     <i class="bi bi-shield-check"></i>
                 </div>
@@ -631,27 +803,34 @@
                     <small>SMAN 1 Paiton</small>
                 </div>
             </a>
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav align-items-center gap-1">
                     <li class="nav-item">
-                        <a class="nav-link nav-link-siokas active" href="index.html">Beranda</a>
+                        <a class="nav-link nav-link-siokas active" href="{{ route('home') }}">Beranda</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-link-siokas" href="#tentang">Tentang</a>
+                        <a class="nav-link nav-link-siokas" href="#fitur">Tentang</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link nav-link-siokas" href="#kegiatan">Kegiatan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-link-siokas" href="#informasi">Informasi</a>
+                        <a class="nav-link nav-link-siokas" href="#footer">Informasi</a>
                     </li>
                 </ul>
-                <a href="#login" class="btn btn-login-nav ms-lg-3">
-                    <i class="bi bi-person-fill me-1"></i> Login
-                </a>
+                @guest
+                    <a href="{{ route('login') }}" class="btn btn-login-nav ms-lg-3">
+                        <i class="bi bi-person-fill me-1"></i> Login
+                    </a>
+                @else
+                    <a href="{{ route('dashboard.redirect') }}" class="btn btn-login-nav ms-lg-3">
+                        <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                    </a>
+                @endguest
             </div>
         </div>
     </nav>
@@ -674,9 +853,15 @@
                         cepat, dan transparan.
                     </p>
                     <div class="d-flex gap-3 flex-wrap">
-                        <a href="#login" class="btn btn-login-hero">
-                            <i class="bi bi-lock-fill me-2"></i>Login Sistem
-                        </a>
+                        @guest
+                            <a href="{{ route('login') }}" class="btn btn-login-hero">
+                                <i class="bi bi-lock-fill me-2"></i>Login Sistem
+                            </a>
+                        @else
+                            <a href="{{ route('dashboard.redirect') }}" class="btn btn-login-hero">
+                                <i class="bi bi-speedometer2 me-2"></i>Buka Dashboard
+                            </a>
+                        @endguest
                         <a href="#kegiatan" class="btn btn-lihat-kegiatan">
                             <i class="bi bi-calendar-event me-2"></i>Lihat Kegiatan
                         </a>
@@ -698,32 +883,55 @@
 
                             <!-- School Building SVG -->
                             <div class="building">
-                                <svg class="building-svg" viewBox="0 0 320 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect x="20" y="10" width="280" height="170" rx="16" fill="#dbeafe" opacity="0.5"/>
-                                    <ellipse cx="80" cy="35" rx="25" ry="12" fill="white" opacity="0.8"/>
-                                    <ellipse cx="100" cy="32" rx="20" ry="10" fill="white" opacity="0.9"/>
-                                    <ellipse cx="220" cy="28" rx="22" ry="10" fill="white" opacity="0.7"/>
-                                    <rect x="60" y="60" width="200" height="120" rx="4" fill="#e8f0fe"/>
-                                    <rect x="60" y="60" width="200" height="120" rx="4" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
-                                    <polygon points="50,60 160,25 270,60" fill="#60a5fa" opacity="0.3"/>
-                                    <polygon points="50,60 160,25 270,60" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
-                                    <rect x="110" y="70" width="100" height="20" rx="3" fill="white"/>
-                                    <text x="160" y="84" text-anchor="middle" font-size="8" font-weight="700" fill="#1e40af">SMAN 1 Paiton</text>
-                                    <rect x="80" y="100" width="28" height="24" rx="2" fill="white" stroke="#93c5fd" stroke-width="1"/>
-                                    <rect x="85" y="104" width="8" height="16" rx="1" fill="#93c5fd" opacity="0.3"/>
-                                    <rect x="97" y="104" width="8" height="16" rx="1" fill="#93c5fd" opacity="0.3"/>
-                                    <rect x="146" y="100" width="28" height="24" rx="2" fill="white" stroke="#93c5fd" stroke-width="1"/>
-                                    <rect x="151" y="104" width="8" height="16" rx="1" fill="#93c5fd" opacity="0.3"/>
-                                    <rect x="163" y="104" width="8" height="16" rx="1" fill="#93c5fd" opacity="0.3"/>
-                                    <rect x="212" y="100" width="28" height="24" rx="2" fill="white" stroke="#93c5fd" stroke-width="1"/>
-                                    <rect x="217" y="104" width="8" height="16" rx="1" fill="#93c5fd" opacity="0.3"/>
-                                    <rect x="229" y="104" width="8" height="16" rx="1" fill="#93c5fd" opacity="0.3"/>
-                                    <rect x="80" y="135" width="28" height="24" rx="2" fill="white" stroke="#93c5fd" stroke-width="1"/>
-                                    <rect x="146" y="135" width="28" height="24" rx="2" fill="white" stroke="#93c5fd" stroke-width="1"/>
-                                    <rect x="212" y="135" width="28" height="24" rx="2" fill="white" stroke="#93c5fd" stroke-width="1"/>
-                                    <rect x="145" y="140" width="30" height="40" rx="2" fill="#1e88e5"/>
-                                    <circle cx="170" cy="162" r="2" fill="white"/>
-                                    <rect x="10" y="175" width="300" height="25" rx="12" fill="#86efac" opacity="0.4"/>
+                                <svg class="building-svg" viewBox="0 0 320 200" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="20" y="10" width="280" height="170" rx="16" fill="#dbeafe"
+                                        opacity="0.5" />
+                                    <ellipse cx="80" cy="35" rx="25" ry="12" fill="white"
+                                        opacity="0.8" />
+                                    <ellipse cx="100" cy="32" rx="20" ry="10" fill="white"
+                                        opacity="0.9" />
+                                    <ellipse cx="220" cy="28" rx="22" ry="10" fill="white"
+                                        opacity="0.7" />
+                                    <rect x="60" y="60" width="200" height="120" rx="4" fill="#e8f0fe" />
+                                    <rect x="60" y="60" width="200" height="120" rx="4" fill="none"
+                                        stroke="#93c5fd" stroke-width="1.5" />
+                                    <polygon points="50,60 160,25 270,60" fill="#60a5fa" opacity="0.3" />
+                                    <polygon points="50,60 160,25 270,60" fill="none" stroke="#60a5fa"
+                                        stroke-width="1.5" />
+                                    <rect x="110" y="70" width="100" height="20" rx="3"
+                                        fill="white" />
+                                    <text x="160" y="84" text-anchor="middle" font-size="8" font-weight="700"
+                                        fill="#1e40af">SMAN 1 Paiton</text>
+                                    <rect x="80" y="100" width="28" height="24" rx="2" fill="white"
+                                        stroke="#93c5fd" stroke-width="1" />
+                                    <rect x="85" y="104" width="8" height="16" rx="1" fill="#93c5fd"
+                                        opacity="0.3" />
+                                    <rect x="97" y="104" width="8" height="16" rx="1" fill="#93c5fd"
+                                        opacity="0.3" />
+                                    <rect x="146" y="100" width="28" height="24" rx="2"
+                                        fill="white" stroke="#93c5fd" stroke-width="1" />
+                                    <rect x="151" y="104" width="8" height="16" rx="1"
+                                        fill="#93c5fd" opacity="0.3" />
+                                    <rect x="163" y="104" width="8" height="16" rx="1"
+                                        fill="#93c5fd" opacity="0.3" />
+                                    <rect x="212" y="100" width="28" height="24" rx="2"
+                                        fill="white" stroke="#93c5fd" stroke-width="1" />
+                                    <rect x="217" y="104" width="8" height="16" rx="1"
+                                        fill="#93c5fd" opacity="0.3" />
+                                    <rect x="229" y="104" width="8" height="16" rx="1"
+                                        fill="#93c5fd" opacity="0.3" />
+                                    <rect x="80" y="135" width="28" height="24" rx="2" fill="white"
+                                        stroke="#93c5fd" stroke-width="1" />
+                                    <rect x="146" y="135" width="28" height="24" rx="2"
+                                        fill="white" stroke="#93c5fd" stroke-width="1" />
+                                    <rect x="212" y="135" width="28" height="24" rx="2"
+                                        fill="white" stroke="#93c5fd" stroke-width="1" />
+                                    <rect x="145" y="140" width="30" height="40" rx="2"
+                                        fill="#1e88e5" />
+                                    <circle cx="170" cy="162" r="2" fill="white" />
+                                    <rect x="10" y="175" width="300" height="25" rx="12" fill="#86efac"
+                                        opacity="0.4" />
                                 </svg>
                             </div>
 
@@ -800,92 +1008,67 @@
     <!--  KEGIATAN TERBARU SECTION -->
     <section class="kegiatan-section" id="kegiatan">
         <div class="container">
-            <div class="section-header">
-                <h4>Kegiatan Terbaru</h4>
-                <a href="#" class="btn-lihat-semua">
-                    Lihat Semua Kegiatan <i class="bi bi-arrow-right ms-1"></i>
-                </a>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-kegiatan mb-0">
-                    <thead>
-                        <tr>
-                            <th>Nama Kegiatan</th>
-                            <th>Organisasi</th>
-                            <th>Tanggal</th>
-                            <th>Status</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="kegiatan-thumb"><i class="bi bi-people-fill"></i></div>
-                                    <span class="kegiatan-nama">Pelatihan Kepemimpinan Siswa</span>
-                                </div>
-                            </td>
-                            <td>OSIS</td>
-                            <td>10 - 12 Mei 2024</td>
-                            <td><span class="status-badge status-disetujui">Disetujui</span></td>
-                            <td><button class="btn btn-detail">Detail</button></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="kegiatan-thumb"><i class="bi bi-heart-fill"></i></div>
-                                    <span class="kegiatan-nama">Bakti Sosial ke Panti Asuhan</span>
-                                </div>
-                            </td>
-                            <td>PMR</td>
-                            <td>18 Mei 2024</td>
-                            <td><span class="status-badge status-pending">Pending</span></td>
-                            <td><button class="btn btn-detail">Detail</button></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="kegiatan-thumb"><i class="bi bi-music-note-beamed"></i></div>
-                                    <span class="kegiatan-nama">Lomba Tari Tradisional</span>
-                                </div>
-                            </td>
-                            <td>Ekstrakurikuler Tari</td>
-                            <td>25 Mei 2024</td>
-                            <td><span class="status-badge status-disetujui">Disetujui</span></td>
-                            <td><button class="btn btn-detail">Detail</button></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="kegiatan-thumb"><i class="bi bi-laptop"></i></div>
-                                    <span class="kegiatan-nama">Seminar Literasi Digital</span>
-                                </div>
-                            </td>
-                            <td>Jurnalistik</td>
-                            <td>30 Mei 2024</td>
-                            <td><span class="status-badge status-ditolak">Ditolak</span></td>
-                            <td><button class="btn btn-detail">Detail</button></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="kegiatan-thumb"><i class="bi bi-book-fill"></i></div>
-                                    <span class="kegiatan-nama">Latihan Rutin Hadrah</span>
-                                </div>
-                            </td>
-                            <td>Ekstrakurikuler Hadrah</td>
-                            <td>01 Juni 2024</td>
-                            <td><span class="status-badge status-pending">Pending</span></td>
-                            <td><button class="btn btn-detail">Detail</button></td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="row justify-content-center">
+                <div class="col-lg-10 col-xl-9">
+                    <div class="table-responsive">
+                        <table class="table table-kegiatan mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Nama Kegiatan</th>
+                                    <th>Organisasi</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($kegiatanTerbaru as $kegiatan)
+                                    @php
+                                        $badgeClass = match ($kegiatan->status) {
+                                            'disetujui admin', 'disetujui pembina' => 'status-disetujui',
+                                            'ditolak admin', 'ditolak pembina' => 'status-ditolak',
+                                            default => 'status-pending',
+                                        };
+
+                                        $statusLabel = match ($kegiatan->status) {
+                                            'disetujui admin' => 'Disetujui Admin',
+                                            'disetujui pembina' => 'Disetujui Pembina',
+                                            'ditolak admin' => 'Ditolak Admin',
+                                            'ditolak pembina' => 'Ditolak Pembina',
+                                            default => 'Pending',
+                                        };
+
+                                        $tanggal =
+                                            $kegiatan->tanggal_mulai?->format('d M Y') ??
+                                            ($kegiatan->created_at?->format('d M Y') ?? '-');
+                                    @endphp
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="kegiatan-thumb"><i class="bi bi-calendar-event"></i></div>
+                                                <span class="kegiatan-nama">{{ $kegiatan->nama_kegiatan }}</span>
+                                            </div>
+                                        </td>
+                                        <td>{{ $kegiatan->organisasi?->nama_organisasi ?? '-' }}</td>
+                                        <td>{{ $tanggal }}</td>
+                                        <td><span class="status-badge {{ $badgeClass }}">{{ $statusLabel }}</span>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted py-4">Belum ada data
+                                            kegiatan.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- FOOTER -->
-    <footer class="footer-siokas">
+    <footer class="footer-siokas" id="footer">
         <div class="container">
             <div class="row g-4">
                 <div class="col-lg-4 col-md-6">
@@ -901,15 +1084,18 @@
                         untuk mendukung pengelolaan kegiatan yang efektif, transparan, dan terstruktur.
                     </p>
                     <div class="footer-social">
-                        <a href="#"><i class="bi bi-facebook"></i></a>
-                        <a href="#"><i class="bi bi-instagram"></i></a>
-                        <a href="#"><i class="bi bi-youtube"></i></a>
+                        <a href="https://www.facebook.com/sman1paiton/?locale=id_ID" target="_blank"><i
+                                class="bi bi-facebook"></i></a>
+                        <a href="https://www.instagram.com/sman1paiton/" target="_blank"><i
+                                class="bi bi-instagram"></i></a>
+                        <a href="https://www.youtube.com/channel/UC1rcAdV4WtrNldIMMkIeLxQ" target="_blank"><i
+                                class="bi bi-youtube"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-6">
                     <h6 class="footer-title">Menu</h6>
                     <ul class="footer-links">
-                        <li><a href="index.html">Beranda</a></li>
+                        <li><a href="{{ route('home') }}">Beranda</a></li>
                         <li><a href="#tentang">Tentang</a></li>
                         <li><a href="#kegiatan">Kegiatan</a></li>
                         <li><a href="#informasi">Informasi</a></li>
@@ -935,7 +1121,7 @@
                     <p class="footer-desc" style="margin-bottom: 10px;">
                         Ada pertanyaan atau butuh bantuan? Hubungi kami untuk informasi lebih lanjut.
                     </p>
-                    <a href="#kontak" class="btn btn-hubungi">
+                    <a href="https://wa.me/6235771054" target="_blank" class="btn btn-hubungi">
                         <i class="bi bi-headset me-2"></i>Hubungi Kami
                     </a>
                 </div>
@@ -949,4 +1135,5 @@
     <!-- Bootstrap 5.3 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
