@@ -24,7 +24,9 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->nama_organisasi }}</td>
                             <td>{{ \Illuminate\Support\Str::limit($item->deskripsi ?? '-', 80) }}</td>
-                            <td>{{ $item->ketua?->name ?? '-' }}</td>
+                            <td>
+                                <x-user-avatar :user="$item->ketua" :size="34" />
+                            </td>
                         </tr>
                     @empty
                         <tr>

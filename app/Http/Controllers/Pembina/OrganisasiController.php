@@ -11,7 +11,7 @@ class OrganisasiController extends Controller
     public function __invoke(): View
     {
         $organisasi = Organisasi::with([
-            'ketua:id,name',
+            'ketua:id,name,profile_photo_path',
         ])
             ->where('pembina_id', auth()->id())
             ->latest('id')

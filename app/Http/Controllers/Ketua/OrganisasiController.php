@@ -12,7 +12,7 @@ class OrganisasiController extends Controller
         $user = auth()->user();
 
         $organisasi = $user->organisasiSebagaiKetua()
-            ->with('pembina', 'ketua')
+            ->with(['pembina:id,name,email,profile_photo_path', 'ketua:id,name,profile_photo_path'])
             ->first();
 
         return view('ketua.organisasi', compact('organisasi'));

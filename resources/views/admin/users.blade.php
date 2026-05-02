@@ -56,7 +56,9 @@
                         @endphp
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $user->name }}</td>
+                            <td>
+                                <x-user-avatar :user="$user" :size="36" />
+                            </td>
                             <td>{{ $user->email }}</td>
                             <td><span class="badge {{ $roleBadge }}">{{ $roleLabel }}</span></td>
                             <td>{{ $organisasi !== '' ? $organisasi : '-' }}</td>
@@ -89,7 +91,7 @@
                         <h5 class="modal-title">Edit User</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="POST" action="{{ route('admin.users.update', $user) }}">
+                    <form method="POST" action="{{ route('admin.users.update', $user) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="modal-body">
@@ -112,6 +114,16 @@
                                     <option value="ketua" @selected($user->role === 'ketua')>Ketua</option>
                                     <option value="pembina" @selected($user->role === 'pembina')>Pembina</option>
                                 </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Foto Profil</label>
+                                <input type="file" class="form-control @error('profile_photo') is-invalid @enderror"
+                                    name="profile_photo" accept="image/jpeg,image/png,image/webp">
+                                <small class="text-muted">Format: JPG, PNG, atau WEBP. Maksimal 5 MB.</small>
+                                @error('profile_photo')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="mb-1">

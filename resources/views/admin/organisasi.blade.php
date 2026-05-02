@@ -48,8 +48,12 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->nama_organisasi }}</td>
                             <td>{{ \Illuminate\Support\Str::limit($item->deskripsi ?? '-', 40) }}</td>
-                            <td>{{ $item->pembina?->name ?? '-' }}</td>
-                            <td>{{ $item->ketua?->name ?? '-' }}</td>
+                            <td>
+                                <x-user-avatar :user="$item->pembina" :size="34" />
+                            </td>
+                            <td>
+                                <x-user-avatar :user="$item->ketua" :size="34" />
+                            </td>
                             <td>
                                 <button class="btn btn-warning btn-sm" type="button" data-bs-toggle="modal"
                                     data-bs-target="#modalEditOrganisasi{{ $item->id }}">
