@@ -4,80 +4,175 @@
 
 @section('content')
 
+    <!-- STAT CARDS -->
+    <div class="row g-3 mb-4">
+        <!-- Total Pengguna -->
+        <div class="col-md-4 col-lg-2">
+            <div class="card stat-card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-start gap-2 mb-2">
+                        <div class="stat-icon bg-primary-light">
+                            <i class="fas fa-users text-primary"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <p class="text-muted small mb-1">Total Pengguna</p>
+                            <h3 class="mb-0">{{ $stats['total_pengguna'] ?? 0 }}</h3>
+                        </div>
+                    </div>
+                    <small class="text-success d-block text-center"><i class="fas fa-arrow-up"></i> 12% dari bulan
+                        lalu</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Organisasi -->
+        <div class="col-md-4 col-lg-2">
+            <div class="card stat-card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-start gap-2 mb-2">
+                        <div class="stat-icon bg-success-light">
+                            <i class="fas fa-building text-success"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <p class="text-muted small mb-1">Total Organisasi</p>
+                            <h3 class="mb-0">{{ $stats['total_organisasi'] ?? 0 }}</h3>
+                        </div>
+                    </div>
+                    <small class="text-success d-block text-center"><i class="fas fa-arrow-up"></i> 5% dari bulan
+                        lalu</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Kegiatan -->
+        <div class="col-md-4 col-lg-2">
+            <div class="card stat-card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-start gap-2 mb-2">
+                        <div class="stat-icon bg-purple-light">
+                            <i class="fas fa-calendar-alt text-purple"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <p class="text-muted small mb-1">Total Kegiatan</p>
+                            <h3 class="mb-0">{{ $stats['total_kegiatan'] ?? 0 }}</h3>
+                        </div>
+                    </div>
+                    <small class="text-green d-block text-center"><i class="fas fa-arrow-up"></i> 20% dari bulan
+                        lalu</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kegiatan Disetujui -->
+        <div class="col-md-4 col-lg-2">
+            <div class="card stat-card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-start gap-2 mb-2">
+                        <div class="stat-icon bg-warning-light">
+                            <i class="fas fa-check-circle text-warning"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <p class="text-muted small mb-1">Kegiatan Disetujui</p>
+                            <h3 class="mb-0">{{ $stats['kegiatan_disetujui'] ?? 0 }}</h3>
+                        </div>
+                    </div>
+                    <small class="text-warning d-block text-center">60% dari total kegiatan</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kegiatan Ditolak -->
+        <div class="col-md-4 col-lg-2">
+            <div class="card stat-card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-start gap-2 mb-2">
+                        <div class="stat-icon bg-danger-light">
+                            <i class="fas fa-times-circle text-danger"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <p class="text-muted small mb-1">Kegiatan Ditolak</p>
+                            <h3 class="mb-0">{{ $stats['kegiatan_ditolak'] ?? 0 }}</h3>
+                        </div>
+                    </div>
+                    <small class="text-danger d-block text-center">20% dari total kegiatan</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dokumentasi -->
+        <div class="col-md-4 col-lg-2">
+            <div class="card stat-card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-start gap-2 mb-2">
+                        <div class="stat-icon bg-cyan-light">
+                            <i class="fas fa-file-alt text-cyan"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <p class="text-muted small mb-1">Dokumentasi</p>
+                            <h3 class="mb-0">{{ $stats['total_dokumentasi'] ?? 0 }}</h3>
+                        </div>
+                    </div>
+                    <small class="text-cyan d-block text-center"><i class="fas fa-arrow-up"></i> 8% dari bulan
+                        lalu</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHARTS SECTION -->
+    <div class="row g-3 mb-4">
+        <!-- Bar Chart -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center p-3">
+                    <div>
+                        <h6 class="mb-0">Organisasi Paling Aktif (Top 10)</h6>
+                        <small class="text-muted">Berdasarkan jumlah kegiatan yang diajukan</small>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light" type="button" id="chartDropdown" data-bs-toggle="dropdown">
+                            Tahun Ini <i class="fas fa-chevron-down ms-2"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="chartDropdown">
+                            <li><a class="dropdown-item" href="#">6 Bulan</a></li>
+                            <li><a class="dropdown-item" href="#">12 Bulan</a></li>
+                            <li><a class="dropdown-item" href="#">Tahun Ini</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div style="position: relative; height: 300px;">
+                        <canvas id="kegiatanChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pie Chart -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0 p-3">
+                    <h6 class="mb-0">Ringkasan Kegiatan</h6>
+                </div>
+                <div class="card-body">
+                    <div style="position: relative; height: 300px; width: 100%;">
+                        <canvas id="ringkasanChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KEGIATAN TERBARU & PERLU VALIDASI -->
     <div class="row g-3">
-
-        <div class="col-md-4">
-            <div class="card text-center p-3 shadow-sm">
-                <h6>Total Pengguna</h6>
-                <h3>{{ $stats['total_pengguna'] }}</h3>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card text-center p-3 shadow-sm">
-                <h6>Total Organisasi</h6>
-                <h3>{{ $stats['total_organisasi'] }}</h3>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card text-center p-3 shadow-sm">
-                <h6>Total Kegiatan</h6>
-                <h3>{{ $stats['total_kegiatan'] }}</h3>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card text-center p-3 shadow-sm">
-                <h6>Kegiatan Disetujui</h6>
-                <h3>{{ $stats['kegiatan_disetujui'] }}</h3>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card text-center p-3 shadow-sm">
-                <h6>Kegiatan Ditolak</h6>
-                <h3>{{ $stats['kegiatan_ditolak'] }}</h3>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card text-center p-3 shadow-sm">
-                <h6>Dokumentasi</h6>
-                <h3>{{ $stats['total_dokumentasi'] }}</h3>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="card mt-4 shadow-sm">
-        <div class="card-header">
-            <h5 class="mb-0">Grafik Pengajuan Kegiatan per Bulan (12 Bulan Terakhir)</h5>
-        </div>
-        <div class="card-body">
-            <div style="position: relative; height: 300px;">
-                <canvas id="kegiatanChart"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <!-- TABEL KEGIATAN -->
-    <div class="card mt-4 shadow-sm">
-        <div class="card-header">
-            Data Kegiatan Terbaru
-        </div>
-        <div class="card-body">
-
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th class="text-nowrap">No</th>
-                        <th class="text-nowrap">Nama Kegiatan</th>
-                        <th class="text-nowrap">Organisasi</th>
-                        <th class="text-nowrap">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
+        <!-- Kegiatan Terbaru -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0 p-3 d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Kegiatan Terbaru</h6>
+                    <a href="#" class="text-primary small">Lihat Semua <i class="fas fa-arrow-right ms-2"></i></a>
+                </div>
+                <div class="card-body">
                     @forelse($kegiatanTerbaru as $item)
                         @php
                             $badgeClass = match ($item->status) {
@@ -87,54 +182,122 @@
                             };
 
                             $statusLabel = match ($item->status) {
-                                'disetujui admin' => 'Disetujui Admin',
-                                'disetujui pembina' => 'Disetujui Pembina',
-                                'ditolak admin' => 'Ditolak Admin',
-                                'ditolak pembina' => 'Ditolak Pembina',
+                                'disetujui admin' => 'Disetujui',
+                                'disetujui pembina' => 'Disetujui',
+                                'ditolak admin' => 'Ditolak',
+                                'ditolak pembina' => 'Ditolak',
                                 default => 'Pending',
                             };
                         @endphp
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->nama_kegiatan }}</td>
-                            <td>{{ $item->organisasi->nama_organisasi ?? '-' }}</td>
-                            <td><span class="badge {{ $badgeClass }}">{{ $statusLabel }}</span></td>
-                        </tr>
+                        <div class="d-flex align-items-center mb-3 pb-3" style="border-bottom: 1px solid #e9ecef;">
+                            <div class="me-3">
+                                <i class="fas fa-calendar-alt fa-2x text-primary opacity-50"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">{{ $item->nama_kegiatan }}</h6>
+                                <small class="text-muted">{{ $item->organisasi->nama_organisasi ?? '-' }}</small>
+                            </div>
+                            <div class="text-end ms-3" style="min-width: 95px;">
+                                <span class="badge {{ $badgeClass }}">{{ $statusLabel }}</span>
+                            </div>
+                            <div class="text-end ms-3" style="min-width: 120px;">
+                                <small class="text-muted d-block"><i class="far fa-calendar"></i>
+                                    {{ $item->tanggal_mulai ? $item->tanggal_mulai->translatedFormat('d M Y') : '-' }}</small>
+                            </div>
+                        </div>
                     @empty
-                        <tr>
-                            <td colspan="4" class="text-center text-muted">Belum ada data kegiatan.</td>
-                        </tr>
+                        <p class="text-center text-muted">Belum ada data kegiatan.</p>
                     @endforelse
-                </tbody>
-            </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pengajuan Perlu Validasi -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0 p-3 d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Pengajuan Terbaru (Perlu Validasi)</h6>
+                    <a href="#" class="text-primary small">Lihat Semua <i class="fas fa-arrow-right ms-2"></i></a>
+                </div>
+                <div class="card-body">
+                    @forelse($kegiatanTerbaru as $item)
+                        @php
+                            $badgeClass = match ($item->status) {
+                                'disetujui admin', 'disetujui pembina' => 'bg-success',
+                                'ditolak admin', 'ditolak pembina' => 'bg-danger',
+                                default => 'bg-warning text-dark',
+                            };
+
+                            $statusLabel = match ($item->status) {
+                                'disetujui admin' => 'Disetujui',
+                                'disetujui pembina' => 'Disetujui',
+                                'ditolak admin' => 'Ditolak',
+                                'ditolak pembina' => 'Ditolak',
+                                default => 'Pending',
+                            };
+                        @endphp
+                        <div class="d-flex align-items-center mb-3 pb-3" style="border-bottom: 1px solid #e9ecef;">
+                            <div class="me-3">
+                                <i class="fas fa-user-circle fa-2x text-primary opacity-50"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">{{ $item->nama_kegiatan }}</h6>
+                                <small class="text-muted">{{ $item->organisasi->nama_organisasi ?? '-' }}</small>
+                            </div>
+                            <div class="text-end ms-3" style="min-width: 120px;">
+                                <small class="text-muted d-block"><i class="far fa-calendar"></i>
+                                    {{ $item->tanggal_mulai ? $item->tanggal_mulai->translatedFormat('d M Y') : '-' }}</small>
+                            </div>
+                            <div class="text-end ms-3" style="min-width: 95px;">
+                                <span class="badge {{ $badgeClass }}">{{ $statusLabel }}</span>
+                            </div>
+                            <button class="btn btn-sm btn-primary ms-3">Validasi</button>
+                        </div>
+                    @empty
+                        <p class="text-center text-muted">Belum ada pengajuan yang perlu validasi.</p>
+                    @endforelse
+                </div>
+            </div>
         </div>
     </div>
 
 @endsection
 
 @section('scripts')
+    @php
+        $defaultChartLabels = [
+            'PMR',
+            'OSIS',
+            'Pramuka',
+            'Rohis',
+            'KIR',
+            'Basket',
+            'Paskibra',
+            'Seni Musik',
+            'iKlim',
+            'Jurnalistik',
+        ];
+        $chartLabelsSafe = !empty($chartLabels) ? $chartLabels : $defaultChartLabels;
+        $chartDataSafe = !empty($chartData) ? $chartData : [14, 11, 9, 7, 6, 5, 4, 3, 2, 1];
+    @endphp
     <script>
+        // Bar Chart for Top 10 Organizations
         const ctx = document.getElementById('kegiatanChart').getContext('2d');
         const kegiatanChart = new Chart(ctx, {
-            type: 'line',
+            type: 'bar',
             data: {
-                labels: @json($chartLabels),
+                labels: @json($chartLabelsSafe),
                 datasets: [{
-                    label: 'Jumlah Pengajuan Kegiatan',
-                    data: @json($chartData),
+                    label: 'Jumlah Kegiatan',
+                    data: @json($chartDataSafe),
+                    backgroundColor: '#0d6efd',
                     borderColor: '#0d6efd',
-                    backgroundColor: 'rgba(13, 110, 253, 0.1)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#0d6efd',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                    pointHoverRadius: 6,
+                    borderRadius: 6,
+                    borderWidth: 0,
                 }]
             },
             options: {
+                indexAxis: 'x',
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
@@ -144,14 +307,189 @@
                     }
                 },
                 scales: {
+                    x: {
+                        type: 'category',
+                        title: {
+                            display: true,
+                            text: 'Organisasi'
+                        }
+                    },
                     y: {
+                        type: 'linear',
                         beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Jumlah Kegiatan'
+                        },
                         ticks: {
-                            stepSize: 1
+                            stepSize: 2
                         }
                     }
                 }
             }
         });
+
+        // Pie Chart for Ringkasan
+        const ctxPie = document.getElementById('ringkasanChart').getContext('2d');
+
+        // Plugin to draw text in center of doughnut
+        const textCenterPlugin = {
+            id: 'textCenter',
+            afterDatasetsDraw(chart) {
+                const {
+                    data,
+                    ctx,
+                    chartArea
+                } = chart;
+                const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
+
+                // Calculate center of the chart
+                const centerX = (chartArea.left + chartArea.right) / 2;
+                const centerY = (chartArea.top + chartArea.bottom) / 2;
+
+                // Draw total number
+                ctx.save();
+                ctx.font = 'bold 28px Arial';
+                ctx.fillStyle = '#333';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(total, centerX, centerY - 15);
+
+                // Draw "Total" text
+                ctx.font = '14px Arial';
+                ctx.fillStyle = '#999';
+                ctx.fillText('Total', centerX, centerY + 15);
+                ctx.restore();
+            }
+        };
+
+        const ringkasanChart = new Chart(ctxPie, {
+            type: 'doughnut',
+            data: {
+                labels: ['Disetujui', 'Ditolak', 'Pending'],
+                datasets: [{
+                    data: [
+                        {{ $stats['kegiatan_disetujui'] ?? 0 }},
+                        {{ $stats['kegiatan_ditolak'] ?? 0 }},
+                        {{ ($stats['total_kegiatan'] ?? 0) - ($stats['kegiatan_disetujui'] ?? 0) - ($stats['kegiatan_ditolak'] ?? 0) }}
+                    ],
+                    backgroundColor: [
+                        '#28a745',
+                        '#dc3545',
+                        '#ffc107'
+                    ],
+                    borderColor: '#fff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            padding: 20,
+                            boxWidth: 12,
+                            font: {
+                                size: 12
+                            },
+                            generateLabels: function(chart) {
+                                const data = chart.data;
+                                const datasets = data.datasets;
+                                const total = datasets[0].data.reduce((a, b) => a + b, 0);
+                                return data.labels.map((label, i) => {
+                                    const value = datasets[0].data[i];
+                                    const percentage = ((value / total) * 100).toFixed(0);
+                                    return {
+                                        text: `${label} ${value} (${percentage}%)`,
+                                        fillStyle: datasets[0].backgroundColor[i],
+                                        hidden: false,
+                                        index: i
+                                    };
+                                });
+                            }
+                        }
+                    }
+                }
+            },
+            plugins: [textCenterPlugin]
+        });
     </script>
 @endsection
+
+<style>
+    .stat-card {
+        border-radius: 8px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+    }
+
+    .bg-primary-light {
+        background-color: rgba(13, 110, 253, 0.1);
+    }
+
+    .bg-success-light {
+        background-color: rgba(40, 167, 69, 0.1);
+    }
+
+    .bg-warning-light {
+        background-color: rgba(255, 193, 7, 0.1);
+    }
+
+    .bg-purple-light {
+        background-color: rgba(124, 58, 237, 0.12);
+    }
+
+    .bg-info-light {
+        background-color: rgba(23, 162, 184, 0.1);
+    }
+
+    .bg-cyan-light {
+        background-color: rgba(6, 182, 212, 0.12);
+    }
+
+    .bg-danger-light {
+        background-color: rgba(220, 53, 69, 0.1);
+    }
+
+    .card {
+        border-radius: 8px;
+    }
+
+    .card-header {
+        border-bottom: 1px solid #e9ecef;
+        border-radius: 8px 8px 0 0 !important;
+    }
+
+    h3 {
+        font-weight: 700;
+        color: #333;
+    }
+
+    .text-success {
+        color: #28a745 !important;
+    }
+
+    .text-purple {
+        color: #7c3aed !important;
+    }
+
+    .text-cyan {
+        color: #06b6d4 !important;
+    }
+</style>
