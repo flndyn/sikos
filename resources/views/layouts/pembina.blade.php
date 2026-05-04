@@ -63,6 +63,40 @@
             background-color: rgba(59, 130, 246, 0.3) !important;
         }
 
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            gap: 0.75rem;
+        }
+
+        .sidebar-header .logo-icon {
+            font-size: 2rem;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand {
+            text-align: left;
+        }
+
+        .sidebar-brand h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.1;
+        }
+
+        .sidebar-brand small {
+            font-size: 0.65rem;
+            font-weight: 400;
+            opacity: 0.9;
+            display: block;
+            margin-top: 0.15rem;
+            line-height: 1.2;
+        }
+
         /* ===== TOPBAR ===== */
         .topbar {
             background-color: #f5f7fa;
@@ -242,12 +276,13 @@
 
         <!-- SIDEBAR -->
         <div class="app-sidebar text-white p-3 d-flex flex-column" id="appSidebar">
-            <div class="text-center mb-3">
-                <h4 class="mb-0">
-                    <i class="fas fa-home me-2"></i>SIOKAS
-                </h4>
+            <div class="sidebar-header">
+                <i class="fas fa-home logo-icon"></i>
+                <div class="sidebar-brand">
+                    <h4>SIOKAS</h4>
+                    <small>Sistem Informasi<br>Organisasi & Kegiatan</small>
+                </div>
             </div>
-            <hr class="text-white">
 
             <ul class="nav flex-column flex-grow-1">
                 <li class="nav-item">

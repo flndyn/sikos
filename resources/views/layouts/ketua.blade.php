@@ -563,7 +563,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('table').forEach(function(table, index) {
                 const tbody = table.querySelector('tbody');
-                if (!tbody || table.dataset.hasGlobalSearch === '1') return;
+                if (!tbody || table.dataset.hasGlobalSearch === '1' || table.dataset.noSearch === '1')
+                    return;
                 const rows = Array.from(tbody.querySelectorAll('tr'));
                 if (!rows.length) return;
 

@@ -22,7 +22,7 @@
                             <i class="fas fa-building text-primary"></i>
                         </div>
                         <div class="flex-grow-1 min-w-0">
-                            <p class="text-muted small mb-0 text-truncate">Total Organisasi</p>
+                            <p class="text-muted small mb-0 text-truncate fw-bold">Total Organisasi</p>
                             <h3 class="mb-0">{{ $stats['total_organisasi'] ?? 0 }}</h3>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
                             <i class="fas fa-calendar-alt text-success"></i>
                         </div>
                         <div class="flex-grow-1 min-w-0">
-                            <p class="text-muted small mb-0 text-truncate">Total Kegiatan</p>
+                            <p class="text-muted small mb-0 text-truncate fw-bold">Total Kegiatan</p>
                             <h3 class="mb-0">{{ $stats['total_kegiatan'] ?? 0 }}</h3>
                         </div>
                     </div>
@@ -56,7 +56,7 @@
                             <i class="fas fa-hourglass-half text-warning"></i>
                         </div>
                         <div class="flex-grow-1 min-w-0">
-                            <p class="text-muted small mb-0 text-truncate">Pending</p>
+                            <p class="text-muted small mb-0 text-truncate fw-bold">Pending</p>
                             <h3 class="mb-0">{{ $stats['kegiatan_pending'] ?? 0 }}</h3>
                         </div>
                     </div>
@@ -73,7 +73,7 @@
                             <i class="fas fa-check-circle text-success"></i>
                         </div>
                         <div class="flex-grow-1 min-w-0">
-                            <p class="text-muted small mb-0 text-truncate">Disetujui</p>
+                            <p class="text-muted small mb-0 text-truncate fw-bold">Disetujui</p>
                             <h3 class="mb-0">{{ $stats['kegiatan_disetujui_pembina'] ?? 0 }}</h3>
                         </div>
                     </div>
@@ -90,7 +90,7 @@
                             <i class="fas fa-times-circle text-danger"></i>
                         </div>
                         <div class="flex-grow-1 min-w-0">
-                            <p class="text-muted small mb-0 text-truncate">Ditolak</p>
+                            <p class="text-muted small mb-0 text-truncate fw-bold">Ditolak</p>
                             <h3 class="mb-0">{{ $stats['kegiatan_ditolak'] ?? 0 }}</h3>
                         </div>
                     </div>
@@ -107,7 +107,7 @@
                             <i class="fas fa-file-alt text-purple"></i>
                         </div>
                         <div class="flex-grow-1 min-w-0">
-                            <p class="text-muted small mb-0 text-truncate">Dokumentasi</p>
+                            <p class="text-muted small mb-0 text-truncate fw-bold">Dokumentasi</p>
                             <h3 class="mb-0">{{ $stats['total_dokumentasi'] ?? 0 }}</h3>
                         </div>
                     </div>
@@ -178,7 +178,7 @@
                         Kegiatan Pending
                         <span class="text-warning d-none d-sm-inline">(Perlu Validasi)</span>
                     </h6>
-                    <a href="#" class="text-primary small">Lihat Semua</a>
+                    <a href="{{ route('pembina.validasi') }}" class="text-primary small">Lihat Semua Validasi</a>
                 </div>
 
                 <div class="card-body p-0">
@@ -225,8 +225,7 @@
                             </div>
 
                             <!-- Button -->
-                            <a href="{{ route('pembina.kegiatan.show', $item->id) }}"
-                                class="btn btn-primary btn-sm flex-shrink-0">
+                            <a href="{{ route('pembina.validasi') }}" class="btn btn-primary btn-sm flex-shrink-0">
                                 Validasi
                             </a>
 
@@ -239,7 +238,7 @@
                     @endforelse
 
                     <div class="text-center py-2 border-top">
-                        <a href="#" class="text-primary small fw-semibold">
+                        <a href="{{ route('pembina.validasi') }}" class="text-primary small fw-semibold">
                             Lihat Semua Pengajuan <i class="fas fa-arrow-right ms-1"></i>
                         </a>
                     </div>
@@ -256,7 +255,7 @@
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-white border-0 p-3 d-flex justify-content-between align-items-center">
                     <h6 class="mb-0">Kegiatan Terbaru</h6>
-                    <a href="#" class="text-primary small">Lihat Semua</a>
+                    <a href="{{ route('pembina.kegiatan') }}" class="text-primary small">Lihat Semua Kegiatan</a>
                 </div>
 
                 <div class="card-body p-0">
@@ -323,7 +322,7 @@
                     @endforelse
 
                     <div class="text-center py-2 border-top">
-                        <a href="#" class="text-primary small fw-semibold">
+                        <a href="{{ route('pembina.kegiatan') }}" class="text-primary small fw-semibold">
                             Lihat Semua Kegiatan <i class="fas fa-arrow-right ms-1"></i>
                         </a>
                     </div>
@@ -336,7 +335,7 @@
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-white border-0 p-3 d-flex justify-content-between align-items-center">
                     <h6 class="mb-0">Jadwal Kegiatan Mendatang</h6>
-                    <a href="#" class="text-primary small">Lihat Semua</a>
+                    <a href="{{ route('pembina.jadwal') }}" class="text-primary small">Lihat Semua Jadwal</a>
                 </div>
 
                 <div class="card-body p-0">
@@ -382,7 +381,7 @@
                     @endforelse
 
                     <div class="text-center py-2 border-top">
-                        <a href="#" class="text-primary small fw-semibold">
+                        <a href="{{ route('pembina.jadwal') }}" class="text-primary small fw-semibold">
                             Lihat Semua Jadwal <i class="fas fa-arrow-right ms-1"></i>
                         </a>
                     </div>

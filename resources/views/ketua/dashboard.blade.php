@@ -9,65 +9,85 @@
 
         {{-- Total Kegiatan --}}
         <div class="col-6 col-lg-3">
-            <div class="card stat-card border-0 shadow-sm h-100">
-                <div class="card-body d-flex align-items-center gap-3 py-3">
-                    <div class="stat-icon-wrap stat-blue">
-                        <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div>
-                        <div class="stat-label">Total Kegiatan</div>
-                        <div class="stat-value">{{ $stats['total_kegiatan'] ?? 0 }}</div>
-                        <div class="stat-sub">Semua kegiatan</div>
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="p-3 rounded-4 bg-primary bg-opacity-10 text-primary">
+                            <i class="fas fa-calendar-alt fs-4"></i>
+                        </div>
+                        <div>
+                            <div class="text-muted small">Total Kegiatan</div>
+                            <div class="fs-2 fw-bold">{{ $stats['total_kegiatan'] ?? 0 }}</div>
+                            <div class="text-secondary small">Semua kegiatan</div>
+                        </div>
                     </div>
                 </div>
+
+                <div class="border-bottom-primary"></div>
             </div>
         </div>
 
         {{-- Kegiatan Disetujui --}}
         <div class="col-6 col-lg-3">
-            <div class="card stat-card border-0 shadow-sm h-100">
-                <div class="card-body d-flex align-items-center gap-3 py-3">
-                    <div class="stat-icon-wrap stat-green">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <div>
-                        <div class="stat-label">Kegiatan Disetujui</div>
-                        <div class="stat-value">{{ $stats['kegiatan_disetujui_admin'] ?? 0 }}</div>
-                        <div class="stat-sub">Telah disetujui</div>
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="p-3 rounded-4 bg-success bg-opacity-10 text-success">
+                            <i class="fas fa-check-circle fs-4"></i>
+                        </div>
+                        <div>
+                            <div class="text-muted small">Kegiatan Disetujui</div>
+                            <div class="fs-2 fw-bold">{{ $stats['kegiatan_disetujui_admin'] ?? 0 }}</div>
+                            <div class="text-secondary small">Telah disetujui</div>
+                        </div>
                     </div>
                 </div>
+
+                <div class="border-bottom-success"></div>
             </div>
         </div>
 
         {{-- Kegiatan Ditolak --}}
         <div class="col-6 col-lg-3">
-            <div class="card stat-card border-0 shadow-sm h-100">
-                <div class="card-body d-flex align-items-center gap-3 py-3">
-                    <div class="stat-icon-wrap stat-red">
-                        <i class="fas fa-times-circle"></i>
-                    </div>
-                    <div>
-                        <div class="stat-label">Kegiatan Ditolak</div>
-                        <div class="stat-value">{{ $stats['kegiatan_ditolak'] ?? 0 }}</div>
-                        <div class="stat-sub">Ditolak</div>
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="p-3 rounded-4 bg-danger bg-opacity-10 text-danger">
+                            <i class="fas fa-times-circle fs-4"></i>
+                        </div>
+                        <div>
+                            <div class="text-muted small">Kegiatan Ditolak</div>
+                            <div class="fs-2 fw-bold">{{ $stats['kegiatan_ditolak'] ?? 0 }}</div>
+                            <div class="text-secondary small">Ditolak</div>
+                        </div>
                     </div>
                 </div>
+
+                <div class="border-bottom-danger"></div>
             </div>
         </div>
 
         {{-- Menunggu Persetujuan --}}
         <div class="col-6 col-lg-3">
-            <div class="card stat-card border-0 shadow-sm h-100">
-                <div class="card-body d-flex align-items-center gap-3 py-3">
-                    <div class="stat-icon-wrap stat-orange">
-                        <i class="fas fa-hourglass-half"></i>
-                    </div>
-                    <div>
-                        <div class="stat-label">Menunggu Persetujuan</div>
-                        <div class="stat-value">{{ $stats['kegiatan_pending'] ?? 0 }}</div>
-                        <div class="stat-sub">Perlu persetujuan</div>
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="p-3 rounded-4 bg-warning bg-opacity-10 text-warning">
+                            <i class="fas fa-hourglass-half fs-4"></i>
+                        </div>
+                        <div>
+                            <div class="text-muted small">Menunggu Persetujuan</div>
+                            <div class="fs-2 fw-bold">{{ $stats['kegiatan_pending'] ?? 0 }}</div>
+                            <div class="text-secondary small">Perlu persetujuan</div>
+                        </div>
                     </div>
                 </div>
+
+                <div class="border-bottom-warning"></div>
             </div>
         </div>
 
@@ -81,18 +101,18 @@
 
             {{-- TABLE: Daftar Kegiatan Terbaru --}}
             <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center py-3">
+                <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center py-3 px-3">
                     <h6 class="mb-0 fw-semibold">Daftar Kegiatan Terbaru</h6>
-                    <a href="#" class="text-primary small fw-semibold text-decoration-none">
+                    <a href="{{ route('ketua.kegiatan') }}" class="text-primary small fw-semibold text-decoration-none">
                         Lihat Semua <i class="fas fa-arrow-right ms-1" style="font-size:0.7rem;"></i>
                     </a>
                 </div>
 
                 <div class="card-body p-0">
-                    <table class="table table-hover mb-0 align-middle">
+                    <table class="table table-hover mb-0 align-middle" data-no-search="1">
                         <thead class="table-light">
                             <tr>
-                                <th class="ps-3" style="width:40px;">No</th>
+                                <th class="ps-3" style="width:45px;">No</th>
                                 <th>Nama Kegiatan</th>
                                 <th>Tanggal</th>
                                 <th>Status</th>
@@ -101,22 +121,55 @@
                         <tbody>
                             @forelse($kegiatanTerbaru as $item)
                                 <tr>
-                                    <td class="ps-3 text-muted">{{ $loop->iteration }}</td>
+                                    <td class="ps-3 text-muted fw-semibold" style="font-size:0.9rem;">{{ $loop->iteration }}
+                                    </td>
                                     <td>
-                                        <div class="d-flex align-items-center gap-2">
+                                        <div class="d-flex align-items-center gap-3">
                                             {{-- Ikon berwarna sesuai jenis --}}
-                                            <div class="kegiatan-icon-wrap">
-                                                <i class="fas fa-calendar text-primary"></i>
+                                            @php
+                                                $namaKegiatan = strtolower($item->nama_kegiatan ?? '');
+                                                if (strpos($namaKegiatan, 'seminar') !== false) {
+                                                    $icon = 'fa-users';
+                                                    $iconClass = 'kegiatan-icon-blue';
+                                                } elseif (
+                                                    strpos($namaKegiatan, 'pelatihan') !== false ||
+                                                    strpos($namaKegiatan, 'workshop') !== false
+                                                ) {
+                                                    $icon = 'fa-palette';
+                                                    $iconClass = 'kegiatan-icon-warning';
+                                                } elseif (
+                                                    strpos($namaKegiatan, 'bakti') !== false ||
+                                                    strpos($namaKegiatan, 'sosial') !== false
+                                                ) {
+                                                    $icon = 'fa-heart';
+                                                    $iconClass = 'kegiatan-icon-danger';
+                                                } elseif (strpos($namaKegiatan, 'donor') !== false) {
+                                                    $icon = 'fa-heart-pulse';
+                                                    $iconClass = 'kegiatan-icon-danger';
+                                                } elseif (
+                                                    strpos($namaKegiatan, 'speaking') !== false ||
+                                                    strpos($namaKegiatan, 'presentasi') !== false
+                                                ) {
+                                                    $icon = 'fa-microphone';
+                                                    $iconClass = 'kegiatan-icon-info';
+                                                } else {
+                                                    $icon = 'fa-calendar';
+                                                    $iconClass = 'kegiatan-icon-blue';
+                                                }
+                                            @endphp
+                                            <div class="kegiatan-icon-wrap {{ $iconClass }}">
+                                                <i class="fas {{ $icon }}"></i>
                                             </div>
-                                            <div>
-                                                <div class="fw-semibold small">{{ $item->nama_kegiatan }}</div>
-                                                <div class="text-muted" style="font-size:0.75rem;">
+                                            <div class="flex-grow-1">
+                                                <div class="fw-semibold" style="font-size:0.95rem;">
+                                                    {{ $item->nama_kegiatan }}</div>
+                                                <div class="text-muted" style="font-size:0.8rem;">
                                                     {{ $item->organisasi?->nama_organisasi }}</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="text-muted small">
+                                        <span class="text-muted" style="font-size:0.9rem;">
                                             {{ $item->tanggal_mulai?->translatedFormat('d M Y') }}
                                         </span>
                                     </td>
@@ -141,8 +194,9 @@
                         </tbody>
                     </table>
 
-                    <div class="text-center py-2 border-top">
-                        <a href="#" class="text-primary small fw-semibold text-decoration-none">
+                    <div class="text-center py-3 border-top">
+                        <a href="{{ route('ketua.kegiatan') }}"
+                            class="text-primary small fw-semibold text-decoration-none">
                             Lihat Semua Kegiatan <i class="fas fa-arrow-right ms-1" style="font-size:0.7rem;"></i>
                         </a>
                     </div>
@@ -153,81 +207,60 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center py-3">
                     <h6 class="mb-0 fw-semibold">Dokumentasi Terakhir Diunggah</h6>
-                    <a href="#" class="text-primary small fw-semibold text-decoration-none">Lihat Semua</a>
+                    <a href="{{ route('ketua.dokumentasi') }}"
+                        class="text-primary small fw-semibold text-decoration-none">Lihat Semua</a>
                 </div>
 
                 <div class="card-body d-flex gap-3 align-items-start py-3">
+                    @php $dokList = (isset($dokumentasiTerbaru) && is_iterable($dokumentasiTerbaru)) ? $dokumentasiTerbaru : []; @endphp
 
-                    {{-- Empty / Upload CTA --}}
-                    <div class="dokum-empty-box text-center">
-                        <div class="dokum-empty-icon mb-2">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                        </div>
-                        <div class="small fw-semibold mb-1">Belum ada dokumentasi</div>
-                        <div class="text-muted" style="font-size:0.72rem; line-height:1.3;">Upload dokumentasi
-                            kegiatan<br>untuk menampilkan di sini</div>
-                        <a href="#" class="btn btn-primary btn-sm mt-2 px-3">Upload Sekarang</a>
-                    </div>
-
-                    {{-- File List --}}
-                    <div class="flex-grow-1">
-                        @php $dokList = (isset($dokumentasiTerbaru) && is_iterable($dokumentasiTerbaru)) ? $dokumentasiTerbaru : []; @endphp
-                        @forelse($dokList as $dok)
-                            <div class="dokum-file-item">
-                                <div class="dokum-file-icon">
-                                    @php
-                                        $ext = pathinfo($dok->nama_file ?? '', PATHINFO_EXTENSION);
-                                    @endphp
-                                    @if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp']))
-                                        <i class="fas fa-file-image text-primary"></i>
-                                    @elseif($ext === 'pdf')
-                                        <i class="fas fa-file-pdf text-danger"></i>
-                                    @else
-                                        <i class="fas fa-file-word text-info"></i>
-                                    @endif
-                                </div>
-                                <div>
-                                    <div class="small fw-semibold">{{ $dok->nama_file ?? '-' }}</div>
-                                    <div class="text-muted" style="font-size:0.72rem;">
-                                        {{ $dok->created_at?->translatedFormat('d M Y') }}
-                                        @if ($dok->ukuran ?? null)
-                                            • {{ number_format($dok->ukuran / 1024 / 1024, 1) }} MB
+                    @if (count($dokList) > 0)
+                        {{-- File List --}}
+                        <div class="flex-grow-1">
+                            @forelse($dokList as $dok)
+                                <div class="dokum-file-item">
+                                    <div class="dokum-file-icon">
+                                        @php
+                                            $ext = pathinfo($dok->nama_file ?? '', PATHINFO_EXTENSION);
+                                            $type = $dok->type ?? 'dokumentasi';
+                                        @endphp
+                                        @if ($type === 'laporan')
+                                            <i class="fas fa-file-contract text-warning"></i>
+                                        @elseif (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp']))
+                                            <i class="fas fa-file-image text-primary"></i>
+                                        @elseif($ext === 'pdf')
+                                            <i class="fas fa-file-pdf text-danger"></i>
+                                        @else
+                                            <i class="fas fa-file-word text-info"></i>
                                         @endif
                                     </div>
+                                    <div>
+                                        <div class="small fw-semibold">{{ $dok->nama_file ?? '-' }}</div>
+                                        <div class="text-muted" style="font-size:0.72rem;">
+                                            {{ $dok->created_at?->translatedFormat('d M Y') }}
+                                            @if ($dok->ukuran ?? null)
+                                                • {{ number_format($dok->ukuran / 1024 / 1024, 1) }} MB
+                                            @endif
+                                        </div>
+                                    </div>
                                 </div>
+                            @empty
+                                <div class="text-muted small">Tidak ada data</div>
+                            @endforelse
+                        </div>
+                    @else
+                        {{-- Empty / Upload CTA --}}
+                        <div class="dokum-empty-box text-center">
+                            <div class="dokum-empty-icon mb-2">
+                                <i class="fas fa-cloud-upload-alt"></i>
                             </div>
-                        @empty
-                            {{-- Static sample shown when empty (matches screenshot) --}}
-                            <div class="dokum-file-item">
-                                <div class="dokum-file-icon">
-                                    <i class="fas fa-file-image text-primary"></i>
-                                </div>
-                                <div>
-                                    <div class="small fw-semibold">Foto Seminar Kepemimpinan.jpg</div>
-                                    <div class="text-muted" style="font-size:0.72rem;">21 Mei 2025 • 2.4 MB</div>
-                                </div>
-                            </div>
-                            <div class="dokum-file-item">
-                                <div class="dokum-file-icon">
-                                    <i class="fas fa-file-pdf text-danger"></i>
-                                </div>
-                                <div>
-                                    <div class="small fw-semibold">Poster Bakti Sosial Ramadhan.pdf</div>
-                                    <div class="text-muted" style="font-size:0.72rem;">19 Mei 2025 • 1.8 MB</div>
-                                </div>
-                            </div>
-                            <div class="dokum-file-item">
-                                <div class="dokum-file-icon">
-                                    <i class="fas fa-file-word text-info"></i>
-                                </div>
-                                <div>
-                                    <div class="small fw-semibold">Laporan Donor Darah.docx</div>
-                                    <div class="text-muted" style="font-size:0.72rem;">17 Mei 2025 • 856 KB</div>
-                                </div>
-                            </div>
-                        @endforelse
-                    </div>
-
+                            <div class="small fw-semibold mb-1">Belum ada dokumentasi</div>
+                            <div class="text-muted" style="font-size:0.72rem; line-height:1.3;">Upload dokumentasi
+                                kegiatan<br>untuk menampilkan di sini</div>
+                            <a href="{{ route('ketua.dokumentasi') }}" class="btn btn-primary btn-sm mt-2 px-3">Upload
+                                Sekarang</a>
+                        </div>
+                    @endif
                 </div>
             </div>
 
@@ -242,39 +275,45 @@
                     <h6 class="mb-0 fw-semibold">Aksi Cepat</h6>
                 </div>
 
-                <div class="card-body d-flex flex-column gap-2 py-3">
+                <div class="card-body d-flex flex-column gap-2 py-3 px-2">
 
-                    <a href="#" class="btn-aksi btn-aksi-blue">
+                    <a href="{{ route('ketua.kegiatan') }}" class="btn-aksi btn-aksi-blue">
                         <div class="btn-aksi-icon">
                             <i class="fas fa-plus-circle"></i>
                         </div>
-                        <div class="flex-grow-1">
+                        <div class="btn-aksi-text">
                             <div class="fw-semibold small">Ajukan Kegiatan</div>
                             <div style="font-size:0.75rem; opacity:0.85;">Buat pengajuan kegiatan baru</div>
                         </div>
-                        <i class="fas fa-arrow-right ms-auto" style="font-size:0.8rem; opacity:0.7;"></i>
+                        <div class="btn-aksi-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
                     </a>
 
-                    <a href="#" class="btn-aksi btn-aksi-green">
+                    <a href="{{ route('ketua.dokumentasi') }}" class="btn-aksi btn-aksi-green">
                         <div class="btn-aksi-icon">
                             <i class="fas fa-cloud-upload-alt"></i>
                         </div>
-                        <div class="flex-grow-1">
+                        <div class="btn-aksi-text">
                             <div class="fw-semibold small">Upload Dokumentasi</div>
                             <div style="font-size:0.75rem; opacity:0.85;">Upload foto atau dokumen kegiatan</div>
                         </div>
-                        <i class="fas fa-arrow-right ms-auto" style="font-size:0.8rem; opacity:0.7;"></i>
+                        <div class="btn-aksi-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
                     </a>
 
-                    <a href="#" class="btn-aksi btn-aksi-red">
+                    <a href="{{ route('ketua.laporan') }}" class="btn-aksi btn-aksi-red">
                         <div class="btn-aksi-icon">
                             <i class="fas fa-file-upload"></i>
                         </div>
-                        <div class="flex-grow-1">
+                        <div class="btn-aksi-text">
                             <div class="fw-semibold small">Upload Laporan</div>
                             <div style="font-size:0.75rem; opacity:0.85;">Upload laporan kegiatan</div>
                         </div>
-                        <i class="fas fa-arrow-right ms-auto" style="font-size:0.8rem; opacity:0.7;"></i>
+                        <div class="btn-aksi-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
                     </a>
 
                 </div>
@@ -284,7 +323,8 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center py-3">
                     <h6 class="mb-0 fw-semibold">Jadwal Terdekat</h6>
-                    <a href="#" class="text-primary small fw-semibold text-decoration-none">Lihat Semua</a>
+                    <a href="{{ route('ketua.jadwal') }}"
+                        class="text-primary small fw-semibold text-decoration-none">Lihat Semua</a>
                 </div>
 
                 <div class="card-body p-0">
@@ -297,7 +337,7 @@
                             </div>
                             <div class="flex-grow-1 min-w-0">
                                 <div class="fw-semibold small text-truncate">{{ $item->nama_kegiatan }}</div>
-                                <div class="text-muted" style="font-size:0.75rem; text-truncate;">{{ $item->lokasi }}
+                                <div class="text-muted" style="font-size:0.75rem; text-truncate;">{{ $item->tempat }}
                                 </div>
                             </div>
                             <div class="jadwal-time">
@@ -311,7 +351,7 @@
                 </div>
 
                 <div class="card-footer bg-white border-top text-center py-2">
-                    <a href="#" class="text-primary small fw-semibold text-decoration-none">
+                    <a href="{{ route('ketua.jadwal') }}" class="text-primary small fw-semibold text-decoration-none">
                         Lihat Semua Jadwal <i class="fas fa-arrow-right ms-1" style="font-size:0.7rem;"></i>
                     </a>
                 </div>
@@ -325,9 +365,51 @@
 
 <style>
     /* ===== STAT CARDS ===== */
+
+    .border-bottom-primary,
+    .border-bottom-success,
+    .border-bottom-danger,
+    .border-bottom-warning {
+        height: 4px;
+        width: 100%;
+    }
+
+    .border-bottom-primary {
+        background-color: #0d6efd;
+    }
+
+    .border-bottom-success {
+        background-color: #198754;
+    }
+
+    .border-bottom-danger {
+        background-color: #dc3545;
+    }
+
+    .border-bottom-warning {
+        background-color: #ffc107;
+    }
+
     .stat-card {
         border-radius: 12px;
         transition: transform 0.2s, box-shadow 0.2s;
+        border-bottom: 4px solid #ccc;
+    }
+
+    .stat-card.stat-card-blue {
+        border-bottom-color: #2563eb;
+    }
+
+    .stat-card.stat-card-green {
+        border-bottom-color: #059669;
+    }
+
+    .stat-card.stat-card-red {
+        border-bottom-color: #dc2626;
+    }
+
+    .stat-card.stat-card-orange {
+        border-bottom-color: #d97706;
     }
 
     .stat-card:hover {
@@ -336,13 +418,13 @@
     }
 
     .stat-icon-wrap {
-        width: 52px;
-        height: 52px;
-        border-radius: 14px;
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.4rem;
+        font-size: 1.3rem;
         flex-shrink: 0;
     }
 
@@ -370,31 +452,57 @@
         font-size: 0.78rem;
         color: #6b7280;
         margin-bottom: 2px;
+        font-weight: 500;
     }
 
     .stat-value {
-        font-size: 1.6rem;
+        font-size: 1.8rem;
         font-weight: 700;
         color: #111827;
         line-height: 1.1;
     }
 
     .stat-sub {
-        font-size: 0.72rem;
+        font-size: 0.75rem;
         color: #9ca3af;
+        margin-top: 4px;
     }
 
     /* ===== TABLE ===== */
     .kegiatan-icon-wrap {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
-        background: rgba(37, 99, 235, 0.1);
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        font-size: 0.85rem;
+        font-size: 1rem;
+    }
+
+    .kegiatan-icon-wrap.kegiatan-icon-blue {
+        background: rgba(13, 110, 253, 0.15);
+        color: #0d6efd;
+    }
+
+    .kegiatan-icon-wrap.kegiatan-icon-warning {
+        background: rgba(255, 193, 7, 0.15);
+        color: #ff9800;
+    }
+
+    .kegiatan-icon-wrap.kegiatan-icon-danger {
+        background: rgba(220, 53, 69, 0.15);
+        color: #dc3545;
+    }
+
+    .kegiatan-icon-wrap.kegiatan-icon-info {
+        background: rgba(23, 162, 184, 0.15);
+        color: #17a2b8;
+    }
+
+    .kegiatan-icon-wrap i {
+        color: inherit;
     }
 
     /* ===== STATUS BADGES ===== */
@@ -456,8 +564,9 @@
     .btn-aksi {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
-        padding: 0.75rem 1rem;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.9rem 1rem;
         border-radius: 10px;
         text-decoration: none;
         color: #fff;
@@ -471,8 +580,27 @@
     }
 
     .btn-aksi-icon {
-        font-size: 1.1rem;
+        font-size: 1.3rem;
         flex-shrink: 0;
+        width: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-aksi-text {
+        flex-grow: 1;
+        text-align: start;
+    }
+
+    .btn-aksi-arrow {
+        font-size: 0.9rem;
+        flex-shrink: 0;
+        width: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.8;
     }
 
     .btn-aksi-blue {
