@@ -8,69 +8,581 @@
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --primary-blue: #2563eb;
+            --primary-purple: #7c3aed;
+            --gradient-bg: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #6366f1 100%);
+            --gradient-btn: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container-fluid {
+            height: 100vh;
+        }
+
+        /* Left Side Styling */
+        .left-panel {
+            background: var(--gradient-bg);
+            position: relative;
+            overflow: hidden;
+            height: 100vh;
+            padding: 2rem;
+        }
+
+        .left-panel::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .logo-shield {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .left-content h1 {
+            font-size: 2rem;
+            line-height: 1.2;
+        }
+
+        .left-content h2 {
+            font-size: 1.5rem;
+            line-height: 1.3;
+            margin: 1rem 0;
+        }
+
+        .left-content p {
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 0.5rem;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.25rem;
+            font-size: 1.25rem;
+        }
+
+        .feature-item small {
+            font-size: 0.7rem;
+            line-height: 1.2;
+        }
+
+        .quote-box {
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+            color: #374151;
+        }
+
+        .quote-box p {
+            font-size: 0.8rem;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .quote-icon {
+            color: var(--primary-purple);
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Right Side Styling */
+        .right-panel {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            max-width: 420px;
+            width: 100%;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+
+        .shield-icon-large {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: var(--primary-blue);
+            font-size: 1.75rem;
+        }
+
+        .login-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .login-card > p {
+            font-size: 0.875rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .form-control {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 0.625rem 0.875rem;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .input-group-text {
+            background: transparent;
+            border: 2px solid #e5e7eb;
+            border-right: none;
+            border-radius: 8px 0 0 8px;
+            color: #6b7280;
+            padding: 0.625rem 0.75rem;
+        }
+
+        .input-group .form-control {
+            border-left: none;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .input-group > span:last-child .input-group-text {
+            border-left: none;
+            border-right: 2px solid #e5e7eb;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .btn-login {
+            background: var(--gradient-btn);
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+            color: white;
+        }
+
+        .role-btn {
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 0.875rem 0.5rem;
+            background: white;
+            transition: all 0.3s;
+            text-align: center;
+            cursor: pointer;
+            height: 100%;
+        }
+
+        .role-btn:hover {
+            border-color: var(--primary-blue);
+            background: #f9fafb;
+            transform: translateY(-2px);
+        }
+
+        .role-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 0.35rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .role-admin .role-icon {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            color: #2563eb;
+        }
+
+        .role-ketua .role-icon {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            color: #16a34a;
+        }
+
+        .role-pembina .role-icon {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #d97706;
+        }
+
+        .role-btn small {
+            font-size: 0.7rem;
+            line-height: 1.2;
+        }
+
+        .divider-text {
+            position: relative;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .divider-text::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e5e7eb;
+        }
+
+        .divider-text span {
+            background: white;
+            padding: 0 0.75rem;
+            position: relative;
+            color: #6b7280;
+            font-size: 0.75rem;
+        }
+
+        .form-check-label {
+            font-size: 0.8rem;
+        }
+
+        .decoration-dots {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            opacity: 0.3;
+        }
+
+        .decoration-dots i {
+            margin: 0 0.2rem;
+            font-size: 0.4rem;
+        }
+
+        @media (max-width: 992px) {
+            .left-panel {
+                display: none;
+            }
+            
+            .right-panel {
+                padding: 1rem;
+            }
+            
+            .login-card {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-height: 700px) {
+            .login-card {
+                padding: 1.5rem;
+            }
+            
+            .shield-icon-large {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+                margin-bottom: 0.75rem;
+            }
+            
+            .login-card h3 {
+                font-size: 1.25rem;
+            }
+            
+            .mb-3 {
+                margin-bottom: 0.75rem !important;
+            }
+            
+            .role-btn {
+                padding: 0.625rem 0.375rem;
+            }
+            
+            .role-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 1.1rem;
+                margin-bottom: 0.25rem;
+            }
+        }
+    </style>
 </head>
 
-<body class="bg-light">
+<body>
 
     <div class="container-fluid px-0">
-
-        <div class="row g-0 min-vh-100">
+        <div class="row g-0 h-100">
 
             <!-- LEFT SIDE -->
-            <div class="col-md-6 bg-primary text-white d-flex flex-column justify-content-center p-4 p-lg-5">
-                <h3 class="fw-bold">SIOKAS</h3>
-                <p class="mb-2">Sistem Informasi Administrasi</p>
-                <p class="small">
-                    Mengelola kegiatan organisasi siswa secara digital,
-                    transparan, dan terstruktur di SMAN 1 Paiton.
-                </p>
+            <div class="col-lg-6 left-panel d-flex flex-column justify-content-center position-relative">
+                
+                <!-- Decoration Dots -->
+                <div class="decoration-dots d-none d-lg-block">
+                    <i class="bi bi-circle-fill"></i>
+                    <i class="bi bi-circle-fill"></i>
+                    <i class="bi bi-circle-fill"></i>
+                    <br>
+                    <i class="bi bi-circle-fill"></i>
+                    <i class="bi bi-circle-fill"></i>
+                    <i class="bi bi-circle-fill"></i>
+                    <br>
+                    <i class="bi bi-circle-fill"></i>
+                    <i class="bi bi-circle-fill"></i>
+                    <i class="bi bi-circle-fill"></i>
+                </div>
+
+                <div class="left-content position-relative z-1">
+                    <!-- Logo & Title -->
+                    <div class="mb-3">
+                        <div class="logo-shield">
+                            <i class="bi bi-people-fill text-white"></i>
+                        </div>
+                        <h1 class="fw-bold text-white mb-0">SIOKAS</h1>
+                        <p class="text-white-50 mb-0" style="font-size: 0.85rem;">Sistem Informasi Administrasi</p>
+                        <p class="text-white-50 small mb-0">Organisasi & Kegiatan</p>
+                    </div>
+
+                    <!-- Main Content -->
+                    <h2 class="text-white fw-bold mb-2">
+                        Kelola Kegiatan Organisasi<br>
+                        <span class="text-warning">Lebih Mudah</span><br>
+                        dan Terstruktur
+                    </h2>
+                    
+                    <p class="text-white-50 mb-3" style="font-size: 0.85rem;">
+                        SIOKAS membantu sekolah dalam mengelola kegiatan organisasi siswa 
+                        secara digital, transparan, dan terstruktur.
+                    </p>
+
+                    <!-- Features -->
+                    <div class="feature-box d-none d-md-block">
+                        <div class="row g-2">
+                            <div class="col-4">
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="bi bi-shield-check text-white"></i>
+                                    </div>
+                                    <small class="text-white">Aman & Terpercaya</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="bi bi-graph-up text-white"></i>
+                                    </div>
+                                    <small class="text-white">Data Akurat & Transparan</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="bi bi-clock text-white"></i>
+                                    </div>
+                                    <small class="text-white">Efisien & Hemat Waktu</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quote Box -->
+                    <div class="quote-box d-none d-md-block">
+                        <div class="quote-icon">
+                            <i class="bi bi-quote"></i>
+                        </div>
+                        <p class="mb-0">
+                            Bersama SIOKAS, wujudkan organisasi yang 
+                            <strong class="text-primary">aktif</strong>, 
+                            <strong class="text-primary">kreatif</strong>, dan 
+                            <strong class="text-primary">berprestasi</strong>.
+                        </p>
+                    </div>
+                </div>
             </div>
 
             <!-- RIGHT SIDE -->
-            <div class="col-md-6 bg-white d-flex align-items-center justify-content-center p-4 p-lg-5">
-                <div class="w-100" style="max-width: 420px;">
-                    <h5 class="text-center mb-4">Login Sistem</h5>
+            <div class="col-lg-6 right-panel">
+                <div class="login-card">
+                    
+                    <!-- Shield Icon -->
+                    <div class="shield-icon-large">
+                        <i class="bi bi-shield-lock"></i>
+                    </div>
 
+                    <!-- Welcome Text -->
+                    <h3 class="text-center fw-bold mb-1">Selamat Datang!</h3>
+                    <p class="text-center text-muted mb-3">Masuk untuk melanjutkan ke SIOKAS</p>
+
+                    <!-- Error Alert -->
                     @if ($errors->any())
-                        <div class="alert alert-danger py-2" role="alert">
-                            {{ $errors->first() }}
+                        <div class="alert alert-danger py-2 small mb-3" role="alert">
+                            <i class="bi bi-exclamation-circle me-2"></i>{{ $errors->first() }}
                         </div>
                     @endif
 
+                    <!-- Login Form -->
                     <form method="POST" action="{{ route('login.attempt') }}">
                         @csrf
 
                         <div class="mb-3">
-                            <label class="form-label">Email atau Username</label>
-                            <input type="text" name="login" value="{{ old('login') }}" class="form-control"
-                                placeholder="Masukkan email atau username" required>
+                            <label class="form-label small fw-semibold mb-1">Email atau Username</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-person"></i>
+                                </span>
+                                <input type="text" 
+                                       name="login" 
+                                       value="{{ old('login') }}" 
+                                       class="form-control"
+                                       placeholder="Masukkan email atau username" 
+                                       required>
+                            </div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control" placeholder="Masukkan password"
-                                required>
+                            <label class="form-label small fw-semibold mb-1">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-lock"></i>
+                                </span>
+                                <input type="password" 
+                                       name="password" 
+                                       class="form-control" 
+                                       placeholder="Masukkan password"
+                                       required>
+                                <span class="input-group-text" style="cursor: pointer; border-left: none; border-radius: 0 8px 8px 0;">
+                                    <i class="bi bi-eye-slash" id="togglePassword"></i>
+                                </span>
+                            </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-100">
-                            Login
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="rememberMe" style="width: 1rem; height: 1rem;">
+                                <label class="form-check-label ms-1" for="rememberMe">
+                                    Ingat saya
+                                </label>
+                            </div>
+                            <a href="#" class="text-decoration-none" style="font-size: 0.8rem;">Lupa password?</a>
+                        </div>
+
+                        <button type="submit" class="btn btn-login w-100 mb-3">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Login
                         </button>
                     </form>
 
-                    <p class="text-center small mt-3 text-muted">
-                        Akses untuk Admin, Ketua Organisasi, dan Pembina
-                    </p>
+                    <!-- Divider -->
+                    <div class="divider-text">
+                        <span>atau masuk sebagai</span>
+                    </div>
 
-                    <p class="text-center small mb-0">
-                        Belum punya akun Ketua?
-                        <a href="{{ route('register') }}">Daftar di sini</a>
+                    <!-- Role Buttons -->
+                    <div class="row g-2 mb-3">
+                        <div class="col-4">
+                            <div class="role-btn role-admin">
+                                <div class="role-icon">
+                                    <i class="bi bi-person-check"></i>
+                                </div>
+                                <small class="fw-semibold d-block">Admin</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="role-btn role-ketua">
+                                <div class="role-icon">
+                                    <i class="bi bi-people"></i>
+                                </div>
+                                <small class="fw-semibold d-block">Ketua Organisasi</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="role-btn role-pembina">
+                                <div class="role-icon">
+                                    <i class="bi bi-person-badge"></i>
+                                </div>
+                                <small class="fw-semibold d-block">Pembina</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Register Link -->
+                    <p class="text-center small mb-0 text-muted">
+                        Belum punya akun? 
+                        <a href="{{ route('register') }}" class="text-decoration-none fw-semibold">Daftar di sini</a>
                     </p>
                 </div>
             </div>
 
         </div>
-
     </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Toggle Password Visibility -->
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = this.closest('.input-group').querySelector('input[type="password"]');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            this.classList.toggle('bi-eye');
+            this.classList.toggle('bi-eye-slash');
+        });
+    </script>
 
 </body>
 
