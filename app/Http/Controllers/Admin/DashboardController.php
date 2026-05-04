@@ -25,25 +25,26 @@ class DashboardController extends Controller
         $kegiatanTerbaru = Kegiatan::with('organisasi:id,nama_organisasi')
             ->latest('created_at')
             ->take(10)
-            ->get(['id', 'organisasi_id', 'nama_kegiatan', 'status', 'created_at']);
+            ->get(['id', 'organisasi_id', 'nama_kegiatan', 'status', 'tanggal_mulai', 'created_at']);
 
-        // Data pengajuan kegiatan per bulan (12 bulan terakhir)
-        $kegiatanPerBulan = Kegiatan::where('created_at', '>=', now()->subMonths(11)->startOfMonth())
-            ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as bulan, COUNT(*) as jumlah')
-            ->groupByRaw('DATE_FORMAT(created_at, "%Y-%m")')
-            ->orderBy('bulan')
-            ->get()
-            ->pluck('jumlah', 'bulan')
-            ->toArray();
+        // Data chart: organisasi paling aktif berdasarkan jumlah kegiatan
+        $kegiatanPerOrganisasi = Kegiatan::with('organisasi:id,nama_organisasi')
+            ->selectRaw('organisasi_id, COUNT(*) as jumlah')
+            ->whereNotNull('organisasi_id')
+            ->groupBy('organisasi_id')
+            ->orderByDesc('jumlah')
+            ->take(10)
+            ->get();
 
-        // Siapkan data chart untuk 12 bulan
-        $chartLabels = [];
-        $chartData = [];
-        for ($i = 11; $i >= 0; $i--) {
-            $bulan = now()->subMonths($i)->format('Y-m');
-            $chartLabels[] = now()->subMonths($i)->format('M Y');
-            $chartData[] = $kegiatanPerBulan[$bulan] ?? 0;
-        }
+        $chartLabels = $kegiatanPerOrganisasi
+            ->map(fn ($item) => $item->organisasi->nama_organisasi ?? 'Tidak Diketahui')
+            ->values()
+            ->all();
+
+        $chartData = $kegiatanPerOrganisasi
+            ->map(fn ($item) => (int) $item->jumlah)
+            ->values()
+            ->all();
 
         return view('admin.dashboard', compact('stats', 'kegiatanTerbaru', 'chartLabels', 'chartData'));
     }

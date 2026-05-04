@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function (): void {
     Route::post('/notifications/{notificationId}/read', [NotificationController::class, 'readOne'])->name('notifications.read-one');
 });
 
+
 Route::middleware(['auth', 'role:admin'])->group(function (): void {
     Route::get('/admin/dashboard', AdminDashboardController::class)->name('admin.dashboard');
     Route::get('/admin/profil', AdminProfilController::class)->name('admin.profil');
@@ -75,6 +76,7 @@ Route::middleware(['auth', 'role:admin'])->group(function (): void {
     Route::get('/admin/laporan/{laporan}/download', [LaporanController::class, 'download'])->name('admin.laporan.download');
 });
 
+
 Route::middleware(['auth', 'role:ketua'])->group(function (): void {
     Route::get('/ketua/dashboard', KetuaDashboardController::class)->name('ketua.dashboard');
     Route::get('/ketua/profil', KetuaProfilController::class)->name('ketua.profil');
@@ -96,15 +98,20 @@ Route::middleware(['auth', 'role:ketua'])->group(function (): void {
     Route::get('/ketua/laporan/{laporan}/download', [KetuaLaporanController::class, 'download'])->name('ketua.laporan.download');
 });
 
+
 Route::middleware(['auth', 'role:pembina'])->group(function (): void {
     Route::get('/pembina/dashboard', PembinaDashboardController::class)->name('pembina.dashboard');
     Route::get('/pembina/profil', PembinaProfilController::class)->name('pembina.profil');
     Route::put('/pembina/profil', [PembinaProfilController::class, 'update'])->name('pembina.profil.update');
     Route::get('/pembina/organisasi', PembinaOrganisasiController::class)->name('pembina.organisasi');
+
     Route::get('/pembina/kegiatan', PembinaKegiatanController::class)->name('pembina.kegiatan');
+    Route::get('/pembina/kegiatan/{kegiatan}', [PembinaKegiatanController::class, 'show'])->name('pembina.kegiatan.show');
+
     Route::get('/pembina/validasi', PembinaValidasiController::class)->name('pembina.validasi');
     Route::post('/pembina/validasi/{kegiatan}/approve', [PembinaValidasiController::class, 'approve'])->name('pembina.validasi.approve');
     Route::post('/pembina/validasi/{kegiatan}/reject', [PembinaValidasiController::class, 'reject'])->name('pembina.validasi.reject');
+
     Route::get('/pembina/jadwal', PembinaJadwalController::class)->name('pembina.jadwal');
     Route::get('/pembina/dokumentasi', PembinaDokumentasiController::class)->name('pembina.dokumentasi');
     Route::get('/pembina/laporan', PembinaLaporanController::class)->name('pembina.laporan');
