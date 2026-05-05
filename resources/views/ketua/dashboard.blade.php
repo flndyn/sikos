@@ -9,86 +9,94 @@
 
         {{-- Total Kegiatan --}}
         <div class="col-6 col-lg-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+            <a href="{{ route('ketua.kegiatan') }}" class="text-decoration-none">
+                <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden stat-card-link">
 
-                <div class="card-body p-4">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="p-3 rounded-4 bg-primary bg-opacity-10 text-primary">
-                            <i class="fas fa-calendar-alt fs-4"></i>
-                        </div>
-                        <div>
-                            <div class="text-muted small">Total Kegiatan</div>
-                            <div class="fs-2 fw-bold">{{ $stats['total_kegiatan'] ?? 0 }}</div>
-                            <div class="text-secondary small">Semua kegiatan</div>
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="p-3 rounded-4 bg-primary bg-opacity-10 text-primary">
+                                <i class="fas fa-calendar-alt fs-4"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted small">Total Kegiatan</div>
+                                <div class="fs-2 fw-bold">{{ $stats['total_kegiatan'] ?? 0 }}</div>
+                                <div class="text-secondary small">Semua kegiatan</div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="border-bottom-primary"></div>
-            </div>
+                    <div class="border-bottom-primary"></div>
+                </div>
+            </a>
         </div>
 
         {{-- Kegiatan Disetujui --}}
         <div class="col-6 col-lg-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+            <a href="{{ route('ketua.kegiatan') }}?status=disetujui" class="text-decoration-none">
+                <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden stat-card-link">
 
-                <div class="card-body p-4">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="p-3 rounded-4 bg-success bg-opacity-10 text-success">
-                            <i class="fas fa-check-circle fs-4"></i>
-                        </div>
-                        <div>
-                            <div class="text-muted small">Kegiatan Disetujui</div>
-                            <div class="fs-2 fw-bold">{{ $stats['kegiatan_disetujui_admin'] ?? 0 }}</div>
-                            <div class="text-secondary small">Telah disetujui</div>
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="p-3 rounded-4 bg-success bg-opacity-10 text-success">
+                                <i class="fas fa-check-circle fs-4"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted small">Kegiatan Disetujui</div>
+                                <div class="fs-2 fw-bold">{{ $stats['kegiatan_disetujui_admin'] ?? 0 }}</div>
+                                <div class="text-secondary small">Telah disetujui</div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="border-bottom-success"></div>
-            </div>
+                    <div class="border-bottom-success"></div>
+                </div>
+            </a>
         </div>
 
         {{-- Kegiatan Ditolak --}}
         <div class="col-6 col-lg-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+            <a href="{{ route('ketua.kegiatan') }}?status=ditolak" class="text-decoration-none">
+                <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden stat-card-link">
 
-                <div class="card-body p-4">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="p-3 rounded-4 bg-danger bg-opacity-10 text-danger">
-                            <i class="fas fa-times-circle fs-4"></i>
-                        </div>
-                        <div>
-                            <div class="text-muted small">Kegiatan Ditolak</div>
-                            <div class="fs-2 fw-bold">{{ $stats['kegiatan_ditolak'] ?? 0 }}</div>
-                            <div class="text-secondary small">Ditolak</div>
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="p-3 rounded-4 bg-danger bg-opacity-10 text-danger">
+                                <i class="fas fa-times-circle fs-4"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted small">Kegiatan Ditolak</div>
+                                <div class="fs-2 fw-bold">{{ $stats['kegiatan_ditolak'] ?? 0 }}</div>
+                                <div class="text-secondary small">Ditolak</div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="border-bottom-danger"></div>
-            </div>
+                    <div class="border-bottom-danger"></div>
+                </div>
+            </a>
         </div>
 
         {{-- Menunggu Persetujuan --}}
         <div class="col-6 col-lg-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+            <a href="{{ route('ketua.kegiatan') }}?status=pending" class="text-decoration-none">
+                <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden stat-card-link">
 
-                <div class="card-body p-4">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="p-3 rounded-4 bg-warning bg-opacity-10 text-warning">
-                            <i class="fas fa-hourglass-half fs-4"></i>
-                        </div>
-                        <div>
-                            <div class="text-muted small">Menunggu Persetujuan</div>
-                            <div class="fs-2 fw-bold">{{ $stats['kegiatan_pending'] ?? 0 }}</div>
-                            <div class="text-secondary small">Perlu persetujuan</div>
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="p-3 rounded-4 bg-warning bg-opacity-10 text-warning">
+                                <i class="fas fa-hourglass-half fs-4"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted small">Menunggu Persetujuan</div>
+                                <div class="fs-2 fw-bold">{{ $stats['kegiatan_pending'] ?? 0 }}</div>
+                                <div class="text-secondary small">Perlu persetujuan</div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="border-bottom-warning"></div>
-            </div>
+                    <div class="border-bottom-warning"></div>
+                </div>
+            </a>
         </div>
 
     </div>
@@ -390,10 +398,19 @@
         background-color: #ffc107;
     }
 
-    .stat-card {
-        border-radius: 12px;
-        transition: transform 0.2s, box-shadow 0.2s;
-        border-bottom: 4px solid #ccc;
+    .stat-card-link {
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .stat-card-link:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+    }
+
+    .stat-card-link {
+        display: block;
+        color: inherit;
     }
 
     .stat-card.stat-card-blue {

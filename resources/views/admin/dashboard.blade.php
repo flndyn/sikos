@@ -8,126 +8,138 @@
     <div class="row g-3 mb-4">
         <!-- Total Pengguna -->
         <div class="col-md-4 col-lg-2">
-            <div class="card stat-card border-0 shadow-sm h-100">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <div class="d-flex align-items-start gap-2 mb-2">
-                        <div class="stat-icon bg-primary-light">
-                            <i class="fas fa-users text-primary"></i>
-                        </div>
-                        <div class="flex-grow-1">
-                            <p class="text-muted small mb-1">Total Pengguna</p>
-                            <div class="stat-value">
-                                <h3 class="mb-0">{{ $stats['total_pengguna'] ?? 0 }}</h3>
+            <a href="{{ route('admin.users') }}" class="text-decoration-none">
+                <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div class="d-flex align-items-start gap-2 mb-2">
+                            <div class="stat-icon bg-primary-light">
+                                <i class="fas fa-users text-primary"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="text-muted small mb-1">Total Pengguna</p>
+                                <div class="stat-value">
+                                    <h3 class="mb-0">{{ $stats['total_pengguna'] ?? 0 }}</h3>
+                                </div>
                             </div>
                         </div>
+                        <small class="text-success d-block text-center"><i class="fas fa-arrow-up"></i> 12% dari bulan
+                            lalu</small>
                     </div>
-                    <small class="text-success d-block text-center"><i class="fas fa-arrow-up"></i> 12% dari bulan
-                        lalu</small>
                 </div>
-            </div>
+            </a>
         </div>
 
         <!-- Total Organisasi -->
         <div class="col-md-4 col-lg-2">
-            <div class="card stat-card border-0 shadow-sm h-100">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <div class="d-flex align-items-start gap-2 mb-2">
-                        <div class="stat-icon bg-success-light">
-                            <i class="fas fa-building text-success"></i>
-                        </div>
-                        <div class="flex-grow-1">
-                            <p class="text-muted small mb-1">Total Organisasi</p>
-                            <div class="stat-value">
-                                <h3 class="mb-0">{{ $stats['total_organisasi'] ?? 0 }}</h3>
+            <a href="{{ route('admin.organisasi') }}" class="text-decoration-none">
+                <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div class="d-flex align-items-start gap-2 mb-2">
+                            <div class="stat-icon bg-success-light">
+                                <i class="fas fa-building text-success"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="text-muted small mb-1">Total Organisasi</p>
+                                <div class="stat-value">
+                                    <h3 class="mb-0">{{ $stats['total_organisasi'] ?? 0 }}</h3>
+                                </div>
                             </div>
                         </div>
+                        <small class="text-success d-block text-center"><i class="fas fa-arrow-up"></i> 5% dari bulan
+                            lalu</small>
                     </div>
-                    <small class="text-success d-block text-center"><i class="fas fa-arrow-up"></i> 5% dari bulan
-                        lalu</small>
                 </div>
-            </div>
+            </a>
         </div>
 
         <!-- Total Kegiatan -->
         <div class="col-md-4 col-lg-2">
-            <div class="card stat-card border-0 shadow-sm h-100">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <div class="d-flex align-items-start gap-2 mb-2">
-                        <div class="stat-icon bg-purple-light">
-                            <i class="fas fa-calendar-alt text-purple"></i>
-                        </div>
-                        <div class="flex-grow-1">
-                            <p class="text-muted small mb-1">Total Kegiatan</p>
-                            <div class="stat-value">
-                                <h3 class="mb-0">{{ $stats['total_kegiatan'] ?? 0 }}</h3>
+            <a href="{{ route('admin.kegiatan') }}" class="text-decoration-none">
+                <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div class="d-flex align-items-start gap-2 mb-2">
+                            <div class="stat-icon bg-purple-light">
+                                <i class="fas fa-calendar-alt text-purple"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="text-muted small mb-1">Total Kegiatan</p>
+                                <div class="stat-value">
+                                    <h3 class="mb-0">{{ $stats['total_kegiatan'] ?? 0 }}</h3>
+                                </div>
                             </div>
                         </div>
+                        <small class="text-green d-block text-center"><i class="fas fa-arrow-up"></i> 20% dari bulan
+                            lalu</small>
                     </div>
-                    <small class="text-green d-block text-center"><i class="fas fa-arrow-up"></i> 20% dari bulan
-                        lalu</small>
                 </div>
-            </div>
+            </a>
         </div>
 
         <!-- Kegiatan Disetujui -->
         <div class="col-md-4 col-lg-2">
-            <div class="card stat-card border-0 shadow-sm h-100">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <div class="d-flex align-items-start gap-2 mb-2">
-                        <div class="stat-icon bg-warning-light">
-                            <i class="fas fa-check-circle text-warning"></i>
-                        </div>
-                        <div class="flex-grow-1">
-                            <p class="text-muted small mb-1">Kegiatan Disetujui</p>
-                            <div class="stat-value">
-                                <h3 class="mb-0">{{ $stats['kegiatan_disetujui'] ?? 0 }}</h3>
+            <a href="{{ route('admin.kegiatan') }}?status=disetujui" class="text-decoration-none">
+                <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div class="d-flex align-items-start gap-2 mb-2">
+                            <div class="stat-icon bg-warning-light">
+                                <i class="fas fa-check-circle text-warning"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="text-muted small mb-1">Kegiatan Disetujui</p>
+                                <div class="stat-value">
+                                    <h3 class="mb-0">{{ $stats['kegiatan_disetujui'] ?? 0 }}</h3>
+                                </div>
                             </div>
                         </div>
+                        <small class="text-warning d-block text-center">60% dari total kegiatan</small>
                     </div>
-                    <small class="text-warning d-block text-center">60% dari total kegiatan</small>
                 </div>
-            </div>
+            </a>
         </div>
 
         <!-- Kegiatan Ditolak -->
         <div class="col-md-4 col-lg-2">
-            <div class="card stat-card border-0 shadow-sm h-100">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <div class="d-flex align-items-start gap-2 mb-2">
-                        <div class="stat-icon bg-danger-light">
-                            <i class="fas fa-times-circle text-danger"></i>
-                        </div>
-                        <div class="flex-grow-1">
-                            <p class="text-muted small mb-1">Kegiatan Ditolak</p>
-                            <div class="stat-value">
-                                <h3 class="mb-0">{{ $stats['kegiatan_ditolak'] ?? 0 }}</h3>
+            <a href="{{ route('admin.kegiatan') }}?status=ditolak" class="text-decoration-none">
+                <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div class="d-flex align-items-start gap-2 mb-2">
+                            <div class="stat-icon bg-danger-light">
+                                <i class="fas fa-times-circle text-danger"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="text-muted small mb-1">Kegiatan Ditolak</p>
+                                <div class="stat-value">
+                                    <h3 class="mb-0">{{ $stats['kegiatan_ditolak'] ?? 0 }}</h3>
+                                </div>
                             </div>
                         </div>
+                        <small class="text-danger d-block text-center">20% dari total kegiatan</small>
                     </div>
-                    <small class="text-danger d-block text-center">20% dari total kegiatan</small>
                 </div>
-            </div>
+            </a>
         </div>
 
         <!-- Dokumentasi -->
         <div class="col-md-4 col-lg-2">
-            <div class="card stat-card border-0 shadow-sm h-100">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <div class="d-flex align-items-start gap-2 mb-2">
-                        <div class="stat-icon bg-cyan-light">
-                            <i class="fas fa-file-alt text-cyan"></i>
-                        </div>
-                        <div class="flex-grow-1">
-                            <p class="text-muted small mb-1">Dokumentasi</p>
-                            <div class="stat-value">
-                                <h3 class="mb-0">{{ $stats['total_dokumentasi'] ?? 0 }}</h3>
+            <a href="{{ route('admin.dokumentasi') }}" class="text-decoration-none">
+                <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div class="d-flex align-items-start gap-2 mb-2">
+                            <div class="stat-icon bg-cyan-light">
+                                <i class="fas fa-file-alt text-cyan"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="text-muted small mb-1">Dokumentasi</p>
+                                <div class="stat-value">
+                                    <h3 class="mb-0">{{ $stats['total_dokumentasi'] ?? 0 }}</h3>
+                                </div>
                             </div>
                         </div>
+                        <small class="text-cyan d-block text-center"><i class="fas fa-arrow-up"></i> 8% dari bulan
+                            lalu</small>
                     </div>
-                    <small class="text-cyan d-block text-center"><i class="fas fa-arrow-up"></i> 8% dari bulan
-                        lalu</small>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 
@@ -148,7 +160,8 @@
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="chartDropdown">
                             <li><a class="dropdown-item" href="{{ route('admin.dashboard', ['periode' => '6-bulan']) }}">6
                                     Bulan</a></li>
-                            <li><a class="dropdown-item" href="{{ route('admin.dashboard', ['periode' => '12-bulan']) }}">12
+                            <li><a class="dropdown-item"
+                                    href="{{ route('admin.dashboard', ['periode' => '12-bulan']) }}">12
                                     Bulan</a></li>
                             <li><a class="dropdown-item"
                                     href="{{ route('admin.dashboard', ['periode' => 'tahun-ini']) }}">Tahun Ini</a></li>
@@ -441,6 +454,15 @@
     .stat-card {
         border-radius: 8px;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .stat-card-link {
+        cursor: pointer;
+    }
+
+    .stat-card-link:hover .stat-card {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
     }
 
     .stat-card:hover {

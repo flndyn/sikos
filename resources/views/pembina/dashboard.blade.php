@@ -15,7 +15,8 @@
     <div class="row g-2 g-md-3 mb-3 mb-md-4">
 
         <div class="col-6 col-md-4 col-lg-2">
-            <div class="card stat-card border-0 shadow-sm h-100">
+            <a href="{{ route('pembina.organisasi') }}" class="text-decoration-none">
+            <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
                 <div class="card-body p-2 p-md-3">
                     <div class="d-flex align-items-start gap-2 mb-1">
                         <div class="stat-icon bg-primary-light">
@@ -29,10 +30,12 @@
                     <small class="text-muted d-block text-center">Semua Organisasi</small>
                 </div>
             </div>
+            </a>
         </div>
 
         <div class="col-6 col-md-4 col-lg-2">
-            <div class="card stat-card border-0 shadow-sm h-100">
+            <a href="{{ route('pembina.kegiatan') }}" class="text-decoration-none">
+            <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
                 <div class="card-body p-2 p-md-3">
                     <div class="d-flex align-items-start gap-2 mb-1">
                         <div class="stat-icon bg-success-light">
@@ -46,10 +49,12 @@
                     <small class="text-muted d-block text-center">Semua Kegiatan</small>
                 </div>
             </div>
+            </a>
         </div>
 
         <div class="col-6 col-md-4 col-lg-2">
-            <div class="card stat-card border-0 shadow-sm h-100">
+            <a href="{{ route('pembina.validasi') }}" class="text-decoration-none">
+            <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
                 <div class="card-body p-2 p-md-3">
                     <div class="d-flex align-items-start gap-2 mb-1">
                         <div class="stat-icon bg-warning-light">
@@ -63,10 +68,12 @@
                     <small class="text-warning d-block text-center">Perlu Validasi</small>
                 </div>
             </div>
+            </a>
         </div>
 
         <div class="col-6 col-md-4 col-lg-2">
-            <div class="card stat-card border-0 shadow-sm h-100">
+            <a href="{{ route('pembina.kegiatan') }}?status=disetujui" class="text-decoration-none">
+            <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
                 <div class="card-body p-2 p-md-3">
                     <div class="d-flex align-items-start gap-2 mb-1">
                         <div class="stat-icon bg-success-light">
@@ -80,10 +87,12 @@
                     <small class="text-muted d-block text-center">Telah Disetujui</small>
                 </div>
             </div>
+            </a>
         </div>
 
         <div class="col-6 col-md-4 col-lg-2">
-            <div class="card stat-card border-0 shadow-sm h-100">
+            <a href="{{ route('pembina.kegiatan') }}?status=ditolak" class="text-decoration-none">
+            <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
                 <div class="card-body p-2 p-md-3">
                     <div class="d-flex align-items-start gap-2 mb-1">
                         <div class="stat-icon bg-danger-light">
@@ -97,10 +106,12 @@
                     <small class="text-danger d-block text-center">Ditolak</small>
                 </div>
             </div>
+            </a>
         </div>
 
         <div class="col-6 col-md-4 col-lg-2">
-            <div class="card stat-card border-0 shadow-sm h-100">
+            <a href="{{ route('pembina.dokumentasi') }}" class="text-decoration-none">
+            <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
                 <div class="card-body p-2 p-md-3">
                     <div class="d-flex align-items-start gap-2 mb-1">
                         <div class="stat-icon bg-purple-light">
@@ -114,6 +125,7 @@
                     <small class="text-muted d-block text-center">Semua Dokumentasi</small>
                 </div>
             </div>
+            </a>
         </div>
     </div>
 
@@ -434,6 +446,19 @@
     .stat-card {
         border-radius: 10px;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .stat-card-link {
+        cursor: pointer;
+        text-decoration: none;
+        display: block;
+        color: inherit;
+    }
+
+    .stat-card-link:hover .stat-card,
+    .stat-card-link:hover {
+        color: inherit;
+        text-decoration: none;
     }
 
     .stat-card:hover {
