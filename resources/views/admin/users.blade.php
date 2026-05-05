@@ -4,6 +4,10 @@
 
 @section('content')
 
+    @php
+        $organisations = $organisations ?? \App\Models\Organisasi::all();
+    @endphp
+
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
@@ -116,6 +120,37 @@
                                 </select>
                             </div>
 
+                            @php
+                                $pembinaIds = $user->organisasiSebagaiPembina
+                                    ? $user->organisasiSebagaiPembina->pluck('id')->toArray()
+                                    : [];
+                            @endphp
+
+                            <div class="mb-3">
+                                <label class="form-label">Organisasi</label>
+
+                                <select name="organisasi_id"
+                                    class="form-select organisasi-single @if ($user->role !== 'ketua') d-none @endif">
+                                    <option value="">-- Pilih Organisasi --</option>
+                                    @foreach ($organisations as $org)
+                                        <option value="{{ $org->id }}" @selected(optional($user->organisasiSebagaiKetua)->id == $org->id)>
+                                            {{ $org->nama_organisasi }}</option>
+                                    @endforeach
+                                </select>
+
+                                <select name="organisasi_ids[]"
+                                    class="form-select organisasi-multiple @if ($user->role !== 'pembina') d-none @endif"
+                                    multiple>
+                                    @foreach ($organisations as $org)
+                                        <option value="{{ $org->id }}" @selected(in_array($org->id, $pembinaIds))>
+                                            {{ $org->nama_organisasi }}</option>
+                                    @endforeach
+                                </select>
+
+                                <small class="text-muted">Pilih organisasi yang terkait dengan akun. Untuk role "pembina"
+                                    dapat memilih beberapa.</small>
+                            </div>
+
                             <div class="mb-3">
                                 <label class="form-label">Foto Profil</label>
                                 <input type="file" class="form-control @error('profile_photo') is-invalid @enderror"
@@ -195,6 +230,28 @@
                             </select>
                         </div>
 
+                        <div class="mb-3" id="addOrganisasiSelect">
+                            <label class="form-label">Organisasi</label>
+
+                            <select name="organisasi_id" class="form-select organisasi-single">
+                                <option value="">-- Pilih Organisasi --</option>
+                                @foreach ($organisations as $org)
+                                    <option value="{{ $org->id }}" @selected(old('organisasi_id') == $org->id)>
+                                        {{ $org->nama_organisasi }}</option>
+                                @endforeach
+                            </select>
+
+                            <select name="organisasi_ids[]" class="form-select organisasi-multiple d-none" multiple>
+                                @foreach ($organisations as $org)
+                                    <option value="{{ $org->id }}" @selected(collect(old('organisasi_ids', []))->contains($org->id))>
+                                        {{ $org->nama_organisasi }}</option>
+                                @endforeach
+                            </select>
+
+                            <small class="text-muted">Pilih organisasi yang terkait dengan akun. Untuk role "pembina" dapat
+                                memilih beberapa.</small>
+                        </div>
+
                         <div class="mb-1">
                             <label class="form-label">Password</label>
                             <input type="password" name="password" class="form-control" minlength="8" required>
@@ -210,3 +267,59 @@
     </div>
 
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function toggleOrganisasiSelect(container) {
+                var roleSelect = container.querySelector('select[name="role"]');
+                var single = container.querySelector('.organisasi-single');
+                var multiple = container.querySelector('.organisasi-multiple');
+                if (!roleSelect || (!single && !multiple)) return;
+
+                function update() {
+                    var val = roleSelect.value;
+                    if (val === 'ketua') {
+                        if (single) {
+                            single.classList.remove('d-none');
+                            single.disabled = false;
+                        }
+                        if (multiple) {
+                            multiple.classList.add('d-none');
+                            multiple.disabled = true;
+                        }
+                    } else if (val === 'pembina') {
+                        if (single) {
+                            single.classList.add('d-none');
+                            single.disabled = true;
+                        }
+                        if (multiple) {
+                            multiple.classList.remove('d-none');
+                            multiple.disabled = false;
+                        }
+                    } else {
+                        if (single) {
+                            single.classList.add('d-none');
+                            single.disabled = true;
+                        }
+                        if (multiple) {
+                            multiple.classList.add('d-none');
+                            multiple.disabled = true;
+                        }
+                    }
+                }
+                roleSelect.addEventListener('change', update);
+                update();
+            }
+
+            // Initialize for edit modals inside loop
+            document.querySelectorAll('.modal').forEach(function(modal) {
+                toggleOrganisasiSelect(modal);
+            });
+
+            // Ensure add modal toggles on role change
+            var addModal = document.getElementById('modalTambahUser');
+            if (addModal) toggleOrganisasiSelect(addModal);
+        });
+    </script>
+@endpush
