@@ -28,7 +28,32 @@
 
         <!-- HEADER -->
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Data Kegiatan</h5>
+            <div class="d-flex flex-column flex-sm-row gap-2 align-items-sm-center">
+                <h5 class="mb-0">Data Kegiatan</h5>
+
+                <form method="GET" action="{{ url()->current() }}" class="d-flex gap-2 align-items-center"
+                    id="filterStatusForm">
+                    <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                        <option value="" {{ request('status') == '' ? 'selected' : '' }}>Semua Status</option>
+                        <option value="disetujui" {{ request('status') == 'disetujui' ? 'selected' : '' }}>Disetujui (Semua)
+                        </option>
+                        <option value="ditolak" {{ request('status') == 'ditolak' ? 'selected' : '' }}>Ditolak (Semua)
+                        </option>
+                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="disetujui pembina" {{ request('status') == 'disetujui pembina' ? 'selected' : '' }}>
+                            Disetujui Pembina</option>
+                        <option value="disetujui admin" {{ request('status') == 'disetujui admin' ? 'selected' : '' }}>
+                            Disetujui Admin</option>
+                        <option value="ditolak pembina" {{ request('status') == 'ditolak pembina' ? 'selected' : '' }}>
+                            Ditolak Pembina</option>
+                        <option value="ditolak admin" {{ request('status') == 'ditolak admin' ? 'selected' : '' }}>Ditolak
+                            Admin</option>
+                    </select>
+                    <a href="{{ url()->current() }}" class="btn btn-outline-secondary btn-sm"
+                        title="Reset filter">Reset</a>
+                </form>
+            </div>
+
             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                 data-bs-target="#tambahKegiatanModal">
                 <i class="bi bi-plus"></i> Tambah Kegiatan
@@ -170,7 +195,8 @@
 
                         <div class="mb-3">
                             <label for="deskripsi" class="form-label">Deskripsi</label>
-                            <textarea class="form-control @error('deskripsi') is-invalid @enderror" id="deskripsi" name="deskripsi" rows="3">{{ old('deskripsi') }}</textarea>
+                            <textarea class="form-control @error('deskripsi') is-invalid @enderror" id="deskripsi" name="deskripsi"
+                                rows="3">{{ old('deskripsi') }}</textarea>
                             @error('deskripsi')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
