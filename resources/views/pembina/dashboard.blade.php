@@ -16,115 +16,115 @@
 
         <div class="col-6 col-md-4 col-lg-2">
             <a href="{{ route('pembina.organisasi') }}" class="text-decoration-none">
-            <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
-                <div class="card-body p-2 p-md-3">
-                    <div class="d-flex align-items-start gap-2 mb-1">
-                        <div class="stat-icon bg-primary-light">
-                            <i class="fas fa-building text-primary"></i>
+                <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
+                    <div class="card-body p-2 p-md-3">
+                        <div class="d-flex align-items-start gap-2 mb-1">
+                            <div class="stat-icon bg-primary-light">
+                                <i class="fas fa-building text-primary"></i>
+                            </div>
+                            <div class="flex-grow-1 min-w-0">
+                                <p class="text-muted small mb-0 text-truncate fw-bold">Total Organisasi</p>
+                                <h3 class="mb-0">{{ $stats['total_organisasi'] ?? 0 }}</h3>
+                            </div>
                         </div>
-                        <div class="flex-grow-1 min-w-0">
-                            <p class="text-muted small mb-0 text-truncate fw-bold">Total Organisasi</p>
-                            <h3 class="mb-0">{{ $stats['total_organisasi'] ?? 0 }}</h3>
-                        </div>
+                        <small class="text-muted d-block text-center">Semua Organisasi</small>
                     </div>
-                    <small class="text-muted d-block text-center">Semua Organisasi</small>
                 </div>
-            </div>
             </a>
         </div>
 
         <div class="col-6 col-md-4 col-lg-2">
             <a href="{{ route('pembina.kegiatan') }}" class="text-decoration-none">
-            <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
-                <div class="card-body p-2 p-md-3">
-                    <div class="d-flex align-items-start gap-2 mb-1">
-                        <div class="stat-icon bg-success-light">
-                            <i class="fas fa-calendar-alt text-success"></i>
+                <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
+                    <div class="card-body p-2 p-md-3">
+                        <div class="d-flex align-items-start gap-2 mb-1">
+                            <div class="stat-icon bg-success-light">
+                                <i class="fas fa-calendar-alt text-success"></i>
+                            </div>
+                            <div class="flex-grow-1 min-w-0">
+                                <p class="text-muted small mb-0 text-truncate fw-bold">Total Kegiatan</p>
+                                <h3 class="mb-0">{{ $stats['total_kegiatan'] ?? 0 }}</h3>
+                            </div>
                         </div>
-                        <div class="flex-grow-1 min-w-0">
-                            <p class="text-muted small mb-0 text-truncate fw-bold">Total Kegiatan</p>
-                            <h3 class="mb-0">{{ $stats['total_kegiatan'] ?? 0 }}</h3>
-                        </div>
+                        <small class="text-muted d-block text-center">Semua Kegiatan</small>
                     </div>
-                    <small class="text-muted d-block text-center">Semua Kegiatan</small>
                 </div>
-            </div>
             </a>
         </div>
 
         <div class="col-6 col-md-4 col-lg-2">
             <a href="{{ route('pembina.validasi') }}" class="text-decoration-none">
-            <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
-                <div class="card-body p-2 p-md-3">
-                    <div class="d-flex align-items-start gap-2 mb-1">
-                        <div class="stat-icon bg-warning-light">
-                            <i class="fas fa-hourglass-half text-warning"></i>
+                <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
+                    <div class="card-body p-2 p-md-3">
+                        <div class="d-flex align-items-start gap-2 mb-1">
+                            <div class="stat-icon bg-warning-light">
+                                <i class="fas fa-hourglass-half text-warning"></i>
+                            </div>
+                            <div class="flex-grow-1 min-w-0">
+                                <p class="text-muted small mb-0 text-truncate fw-bold">Pending</p>
+                                <h3 class="mb-0">{{ $stats['kegiatan_pending'] ?? 0 }}</h3>
+                            </div>
                         </div>
-                        <div class="flex-grow-1 min-w-0">
-                            <p class="text-muted small mb-0 text-truncate fw-bold">Pending</p>
-                            <h3 class="mb-0">{{ $stats['kegiatan_pending'] ?? 0 }}</h3>
-                        </div>
+                        <small class="text-warning d-block text-center">Perlu Validasi</small>
                     </div>
-                    <small class="text-warning d-block text-center">Perlu Validasi</small>
                 </div>
-            </div>
             </a>
         </div>
 
         <div class="col-6 col-md-4 col-lg-2">
             <a href="{{ route('pembina.kegiatan') }}?status=disetujui" class="text-decoration-none">
-            <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
-                <div class="card-body p-2 p-md-3">
-                    <div class="d-flex align-items-start gap-2 mb-1">
-                        <div class="stat-icon bg-success-light">
-                            <i class="fas fa-check-circle text-success"></i>
+                <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
+                    <div class="card-body p-2 p-md-3">
+                        <div class="d-flex align-items-start gap-2 mb-1">
+                            <div class="stat-icon bg-success-light">
+                                <i class="fas fa-check-circle text-success"></i>
+                            </div>
+                            <div class="flex-grow-1 min-w-0">
+                                <p class="text-muted small mb-0 text-truncate fw-bold">Disetujui</p>
+                                <h3 class="mb-0">{{ $stats['kegiatan_disetujui_pembina'] ?? 0 }}</h3>
+                            </div>
                         </div>
-                        <div class="flex-grow-1 min-w-0">
-                            <p class="text-muted small mb-0 text-truncate fw-bold">Disetujui</p>
-                            <h3 class="mb-0">{{ $stats['kegiatan_disetujui_pembina'] ?? 0 }}</h3>
-                        </div>
+                        <small class="text-muted d-block text-center">Telah Disetujui</small>
                     </div>
-                    <small class="text-muted d-block text-center">Telah Disetujui</small>
                 </div>
-            </div>
             </a>
         </div>
 
         <div class="col-6 col-md-4 col-lg-2">
             <a href="{{ route('pembina.kegiatan') }}?status=ditolak" class="text-decoration-none">
-            <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
-                <div class="card-body p-2 p-md-3">
-                    <div class="d-flex align-items-start gap-2 mb-1">
-                        <div class="stat-icon bg-danger-light">
-                            <i class="fas fa-times-circle text-danger"></i>
+                <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
+                    <div class="card-body p-2 p-md-3">
+                        <div class="d-flex align-items-start gap-2 mb-1">
+                            <div class="stat-icon bg-danger-light">
+                                <i class="fas fa-times-circle text-danger"></i>
+                            </div>
+                            <div class="flex-grow-1 min-w-0">
+                                <p class="text-muted small mb-0 text-truncate fw-bold">Ditolak</p>
+                                <h3 class="mb-0">{{ $stats['kegiatan_ditolak'] ?? 0 }}</h3>
+                            </div>
                         </div>
-                        <div class="flex-grow-1 min-w-0">
-                            <p class="text-muted small mb-0 text-truncate fw-bold">Ditolak</p>
-                            <h3 class="mb-0">{{ $stats['kegiatan_ditolak'] ?? 0 }}</h3>
-                        </div>
+                        <small class="text-danger d-block text-center">Ditolak</small>
                     </div>
-                    <small class="text-danger d-block text-center">Ditolak</small>
                 </div>
-            </div>
             </a>
         </div>
 
         <div class="col-6 col-md-4 col-lg-2">
             <a href="{{ route('pembina.dokumentasi') }}" class="text-decoration-none">
-            <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
-                <div class="card-body p-2 p-md-3">
-                    <div class="d-flex align-items-start gap-2 mb-1">
-                        <div class="stat-icon bg-purple-light">
-                            <i class="fas fa-file-alt text-purple"></i>
+                <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
+                    <div class="card-body p-2 p-md-3">
+                        <div class="d-flex align-items-start gap-2 mb-1">
+                            <div class="stat-icon bg-purple-light">
+                                <i class="fas fa-file-alt text-purple"></i>
+                            </div>
+                            <div class="flex-grow-1 min-w-0">
+                                <p class="text-muted small mb-0 text-truncate fw-bold">Dokumentasi</p>
+                                <h3 class="mb-0">{{ $stats['total_dokumentasi'] ?? 0 }}</h3>
+                            </div>
                         </div>
-                        <div class="flex-grow-1 min-w-0">
-                            <p class="text-muted small mb-0 text-truncate fw-bold">Dokumentasi</p>
-                            <h3 class="mb-0">{{ $stats['total_dokumentasi'] ?? 0 }}</h3>
-                        </div>
+                        <small class="text-muted d-block text-center">Semua Dokumentasi</small>
                     </div>
-                    <small class="text-muted d-block text-center">Semua Dokumentasi</small>
                 </div>
-            </div>
             </a>
         </div>
     </div>
