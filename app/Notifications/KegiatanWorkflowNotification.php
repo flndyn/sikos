@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class KegiatanWorkflowNotification extends Notification
 {
@@ -24,7 +25,23 @@ class KegiatanWorkflowNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['database', 'mail'];
+    }
+
+    /**
+     * Get the mail representation of the notification.
+     */
+    public function toMail(object $notifiable): MailMessage
+    {
+        return (new MailMessage)
+            ->view('emails.kegiatan-workflow', [
+                'notifiable' => $notifiable,
+                'title' => $this->title,
+                'contentMessage' => $this->message,
+                'actionUrl' => $this->actionUrl,
+                'actionLabel' => $this->actionLabel ?? 'Buka',
+            ])
+            ->subject($this->title);
     }
 
     /**
