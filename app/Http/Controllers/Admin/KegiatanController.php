@@ -30,21 +30,33 @@ class KegiatanController extends Controller
 
     public function __invoke(): View
     {
-        $kegiatan = Kegiatan::with([
+        $query = Kegiatan::with([
             'organisasi:id,nama_organisasi',
-        ])
-            ->latest('id')
-            ->get([
-                'id',
-                'organisasi_id',
-                'nama_kegiatan',
-                'deskripsi',
-                'tanggal_mulai',
-                'tempat',
-                'proposal',
-                'status',
-                'keterangan',
-            ]);
+        ])->latest('id');
+
+        $status = request('status');
+
+        if ($status) {
+            if ($status === 'disetujui') {
+                $query->whereIn('status', ['disetujui pembina', 'disetujui admin']);
+            } elseif ($status === 'ditolak') {
+                $query->whereIn('status', ['ditolak pembina', 'ditolak admin']);
+            } elseif (in_array($status, self::ALLOWED_STATUSES, true)) {
+                $query->where('status', $status);
+            }
+        }
+
+        $kegiatan = $query->get([
+            'id',
+            'organisasi_id',
+            'nama_kegiatan',
+            'deskripsi',
+            'tanggal_mulai',
+            'tempat',
+            'proposal',
+            'status',
+            'keterangan',
+        ]);
 
         $organisasiList = Organisasi::orderBy('nama_organisasi')
             ->get(['id', 'nama_organisasi']);

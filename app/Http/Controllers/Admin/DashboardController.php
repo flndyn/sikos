@@ -17,8 +17,8 @@ class DashboardController extends Controller
             'total_pengguna' => User::count(),
             'total_organisasi' => Organisasi::count(),
             'total_kegiatan' => Kegiatan::count(),
-            'kegiatan_disetujui' => Kegiatan::where('status', 'disetujui admin')->count(),
-            'kegiatan_ditolak' => Kegiatan::where('status', 'ditolak admin')->count(),
+            'kegiatan_disetujui' => Kegiatan::whereIn('status', ['disetujui admin', 'disetujui pembina'])->count(),
+            'kegiatan_ditolak' => Kegiatan::whereIn('status', ['ditolak admin', 'ditolak pembina'])->count(),
             'total_dokumentasi' => Dokumentasi::count(),
         ];
 

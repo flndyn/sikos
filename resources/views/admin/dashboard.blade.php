@@ -22,8 +22,6 @@
                                 </div>
                             </div>
                         </div>
-                        <small class="text-success d-block text-center"><i class="fas fa-arrow-up"></i> 12% dari bulan
-                            lalu</small>
                     </div>
                 </div>
             </a>
@@ -45,8 +43,6 @@
                                 </div>
                             </div>
                         </div>
-                        <small class="text-success d-block text-center"><i class="fas fa-arrow-up"></i> 5% dari bulan
-                            lalu</small>
                     </div>
                 </div>
             </a>
@@ -68,8 +64,6 @@
                                 </div>
                             </div>
                         </div>
-                        <small class="text-green d-block text-center"><i class="fas fa-arrow-up"></i> 20% dari bulan
-                            lalu</small>
                     </div>
                 </div>
             </a>
@@ -91,7 +85,6 @@
                                 </div>
                             </div>
                         </div>
-                        <small class="text-warning d-block text-center">60% dari total kegiatan</small>
                     </div>
                 </div>
             </a>
@@ -113,7 +106,6 @@
                                 </div>
                             </div>
                         </div>
-                        <small class="text-danger d-block text-center">20% dari total kegiatan</small>
                     </div>
                 </div>
             </a>
@@ -135,8 +127,6 @@
                                 </div>
                             </div>
                         </div>
-                        <small class="text-cyan d-block text-center"><i class="fas fa-arrow-up"></i> 8% dari bulan
-                            lalu</small>
                     </div>
                 </div>
             </a>
