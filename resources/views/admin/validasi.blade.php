@@ -28,7 +28,6 @@
 
         <!-- BODY -->
         <div class="card-body">
-
             <table class="table table-bordered table-striped">
                 <thead class="table-light">
                     <tr>
@@ -148,7 +147,8 @@
                     <form action="{{ route('admin.validasi.reject', $item->id) }}" method="POST">
                         @csrf
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="rejectModalLabel{{ $item->id }}">Konfirmasi Penolakan</h1>
+                            <h1 class="modal-title fs-5" id="rejectModalLabel{{ $item->id }}">Konfirmasi Penolakan
+                            </h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
@@ -159,7 +159,8 @@
                                 <small>{{ $item->organisasi?->nama_organisasi ?? '-' }}</small>
                             </div>
                             <div class="mb-0">
-                                <label for="keterangan_reject_{{ $item->id }}" class="form-label">Keterangan Penolakan
+                                <label for="keterangan_reject_{{ $item->id }}" class="form-label">Keterangan
+                                    Penolakan
                                     *</label>
                                 <div id="keterangan_reject_{{ $item->id }}" class="d-grid gap-2">
                                     <div class="form-check">

@@ -13,6 +13,7 @@ class DokumentasiController extends Controller
     public function __invoke(Request $request): View
     {
         $filterNamaKegiatan = trim((string) $request->query('nama_kegiatan', ''));
+        $search = trim((string) $request->query('search', ''));
 
         $dokumentasi = Dokumentasi::with([
             'kegiatan:id,organisasi_id,nama_kegiatan',
@@ -24,6 +25,14 @@ class DokumentasiController extends Controller
             ->when($filterNamaKegiatan !== '', function ($query) use ($filterNamaKegiatan) {
                 $query->whereHas('kegiatan', function ($kegiatanQuery) use ($filterNamaKegiatan) {
                     $kegiatanQuery->where('nama_kegiatan', 'like', '%' . $filterNamaKegiatan . '%');
+                });
+            })
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('keterangan', 'like', "%{$search}%")
+                        ->orWhereHas('kegiatan', function ($kegiatanQuery) use ($search) {
+                            $kegiatanQuery->where('nama_kegiatan', 'like', "%{$search}%");
+                        });
                 });
             })
             ->latest('created_at')
@@ -41,6 +50,6 @@ class DokumentasiController extends Controller
             ->orderBy('nama_kegiatan')
             ->get(['id', 'nama_kegiatan']);
 
-        return view('pembina.dokumentasi', compact('dokumentasi', 'kegiatanList', 'filterNamaKegiatan'));
+        return view('pembina.dokumentasi', compact('dokumentasi', 'kegiatanList', 'filterNamaKegiatan', 'search'));
     }
 }

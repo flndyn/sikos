@@ -17,6 +17,12 @@
 
         body {
             background-color: #f5f7fa;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        html {
+            height: 100vh;
         }
 
         /* ===== SIDEBAR ===== */
@@ -24,7 +30,9 @@
             width: 250px;
             min-width: 250px;
             max-width: 250px;
-            min-height: 100vh;
+            height: 100vh;
+            max-height: 100vh;
+            overflow-y: auto;
             background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
             transition: transform 0.3s ease;
             z-index: 1040;
@@ -102,6 +110,23 @@
             background-color: #f5f7fa;
             padding: 1rem 1.5rem !important;
             border-bottom: 1px solid #e9ecef;
+            flex-shrink: 0;
+        }
+
+        .app-content {
+            flex: 1 1 auto;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .app-content-body {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+            padding: 2rem;
         }
 
         .topbar-left h5 {
@@ -438,7 +463,8 @@
             </div>
             <!-- /TOPBAR -->
 
-            <div class="p-4">
+            <!-- ISI HALAMAN -->
+            <div class="app-content-body">
                 @yield('content')
             </div>
         </div>

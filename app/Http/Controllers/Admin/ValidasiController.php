@@ -11,22 +11,31 @@ use Illuminate\View\View;
 
 class ValidasiController extends Controller
 {
-    public function __invoke(): View
+    public function __invoke(Request $request): View
     {
-        $kegiatanMenungguValidasiAdmin = Kegiatan::with('organisasi:id,nama_organisasi')
-            ->where('status', 'disetujui pembina')
-            ->latest('id')
-            ->get([
-                'id',
-                'organisasi_id',
-                'nama_kegiatan',
-                'deskripsi',
-                'tanggal_mulai',
-                'proposal',
-                'status',
-            ]);
+        $search = $request->query('search', '');
+        
+        $query = Kegiatan::with('organisasi:id,nama_organisasi')
+            ->where('status', 'disetujui pembina');
 
-        return view('admin.validasi', compact('kegiatanMenungguValidasiAdmin'));
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_kegiatan', 'like', "%{$search}%")
+                    ->orWhere('deskripsi', 'like', "%{$search}%");
+            });
+        }
+
+        $kegiatanMenungguValidasiAdmin = $query->latest('id')->get([
+            'id',
+            'organisasi_id',
+            'nama_kegiatan',
+            'deskripsi',
+            'tanggal_mulai',
+            'proposal',
+            'status',
+        ]);
+
+        return view('admin.validasi', compact('kegiatanMenungguValidasiAdmin', 'search'));
     }
 
     public function approve(Kegiatan $kegiatan): RedirectResponse

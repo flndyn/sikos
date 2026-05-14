@@ -5,25 +5,37 @@ namespace App\Http\Controllers\Pembina;
 use App\Http\Controllers\Controller;
 use App\Models\LaporanKegiatan;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class LaporanController extends Controller
 {
-    public function __invoke(): View
+    public function __invoke(Request $request): View
     {
-        $laporan = LaporanKegiatan::with([
+        $search = $request->query('search', '');
+
+        $query = LaporanKegiatan::with([
             'kegiatan:id,organisasi_id,nama_kegiatan,tanggal_mulai',
             'kegiatan.organisasi:id,nama_organisasi',
         ])
             ->whereHas('kegiatan.organisasi', function ($query) {
                 $query->where('pembina_id', auth()->id());
-            })
-            ->latest('id')
-            ->get(['id', 'kegiatan_id', 'isi_laporan', 'file_laporan']);
+            });
 
-        return view('pembina.laporan', compact('laporan'));
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('isi_laporan', 'like', "%{$search}%")
+                    ->orWhereHas('kegiatan', function ($kegiatanQuery) use ($search) {
+                        $kegiatanQuery->where('nama_kegiatan', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $laporan = $query->latest('id')->get(['id', 'kegiatan_id', 'isi_laporan', 'file_laporan']);
+
+        return view('pembina.laporan', compact('laporan', 'search'));
     }
 
     public function download(LaporanKegiatan $laporan): StreamedResponse|RedirectResponse

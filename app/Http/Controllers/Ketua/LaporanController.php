@@ -16,7 +16,7 @@ class LaporanController extends Controller
 {
     private const REPORT_DIRECTORY = 'laporan-kegiatan';
 
-    public function __invoke(): View
+    public function __invoke(Request $request): View
     {
         $organisasiId = auth()->user()?->organisasiSebagaiKetua?->id;
 
@@ -27,6 +27,14 @@ class LaporanController extends Controller
             ->whereHas('kegiatan', function ($query) use ($organisasiId) {
                 $query->where('organisasi_id', $organisasiId);
             })
+                        ->when($search !== '', function ($query) use ($search) {
+                            $query->where(function ($q) use ($search) {
+                                $q->where('isi_laporan', 'like', "%{$search}%")
+                                    ->orWhereHas('kegiatan', function ($kegiatanQuery) use ($search) {
+                                        $kegiatanQuery->where('nama_kegiatan', 'like', "%{$search}%");
+                                    });
+                            });
+                        })
             ->latest('id')
             ->get(['id', 'kegiatan_id', 'isi_laporan', 'file_laporan', 'created_at']);
 
@@ -35,7 +43,8 @@ class LaporanController extends Controller
             ->orderByDesc('tanggal_mulai')
             ->get(['id', 'nama_kegiatan', 'tanggal_mulai']);
 
-        return view('ketua.laporan', compact('laporan', 'kegiatanTersedia'));
+        $search = $request->query('search', '');
+        return view('ketua.laporan', compact('laporan', 'kegiatanTersedia', 'search'));
     }
 
     public function store(Request $request): RedirectResponse

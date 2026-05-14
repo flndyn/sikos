@@ -148,7 +148,7 @@
                                 </select>
 
                                 <small class="text-muted">Pilih organisasi yang terkait dengan akun. Untuk role "pembina"
-                                    dapat memilih beberapa.</small>
+                                    dapat memilih beberapa dengan menahan tombol CTRL saat mengklik pilihan.</small>
                             </div>
 
                             <div class="mb-3">

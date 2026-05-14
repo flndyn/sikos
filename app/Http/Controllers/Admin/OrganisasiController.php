@@ -12,14 +12,23 @@ use Illuminate\View\View;
 
 class OrganisasiController extends Controller
 {
-    public function __invoke(): View
+    public function __invoke(Request $request): View
     {
-        $organisasi = Organisasi::with([
+        $search = $request->query('search', '');
+
+        $query = Organisasi::with([
             'pembina:id,name,profile_photo_path',
             'ketua:id,name,profile_photo_path',
-        ])
-            ->latest('id')
-            ->get(['id', 'nama_organisasi', 'deskripsi', 'pembina_id', 'ketua_id']);
+        ]);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_organisasi', 'like', "%{$search}%")
+                    ->orWhere('deskripsi', 'like', "%{$search}%");
+            });
+        }
+
+        $organisasi = $query->latest('id')->get(['id', 'nama_organisasi', 'deskripsi', 'pembina_id', 'ketua_id']);
 
         $pembinaUsers = User::where('role', 'pembina')
             ->orderBy('name')
@@ -29,7 +38,7 @@ class OrganisasiController extends Controller
             ->orderBy('name')
             ->get(['id', 'name']);
 
-        return view('admin.organisasi', compact('organisasi', 'pembinaUsers', 'ketuaUsers'));
+        return view('admin.organisasi', compact('organisasi', 'pembinaUsers', 'ketuaUsers', 'search'));
     }
 
     public function store(Request $request): RedirectResponse

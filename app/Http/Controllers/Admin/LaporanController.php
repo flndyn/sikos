@@ -6,6 +6,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Controller;
 use App\Models\LaporanKegiatan;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -13,11 +14,24 @@ use Illuminate\View\View;
 
 class LaporanController extends Controller
 {
-    public function __invoke(): View
+    public function __invoke(Request $request): View
     {
-        $laporan = $this->baseQuery()->get();
+        $search = $request->query('search', '');
 
-        return view('admin.laporan', compact('laporan'));
+        $query = $this->baseQuery();
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('isi_laporan', 'like', "%{$search}%")
+                    ->orWhereHas('kegiatan', function ($kegiatanQuery) use ($search) {
+                        $kegiatanQuery->where('nama_kegiatan', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $laporan = $query->get();
+
+        return view('admin.laporan', compact('laporan', 'search'));
     }
 
     public function exportPdf()

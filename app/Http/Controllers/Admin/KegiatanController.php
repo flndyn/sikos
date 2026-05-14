@@ -35,6 +35,7 @@ class KegiatanController extends Controller
         ])->latest('id');
 
         $status = request('status');
+        $search = request('search', '');
 
         if ($status) {
             if ($status === 'disetujui') {
@@ -44,6 +45,14 @@ class KegiatanController extends Controller
             } elseif (in_array($status, self::ALLOWED_STATUSES, true)) {
                 $query->where('status', $status);
             }
+        }
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_kegiatan', 'like', "%{$search}%")
+                    ->orWhere('deskripsi', 'like', "%{$search}%")
+                    ->orWhere('tempat', 'like', "%{$search}%");
+            });
         }
 
         $kegiatan = $query->get([
@@ -61,7 +70,7 @@ class KegiatanController extends Controller
         $organisasiList = Organisasi::orderBy('nama_organisasi')
             ->get(['id', 'nama_organisasi']);
 
-        return view('admin.kegiatan', compact('kegiatan', 'organisasiList'));
+        return view('admin.kegiatan', compact('kegiatan', 'organisasiList', 'search', 'status'));
     }
 
     public function store(Request $request): RedirectResponse

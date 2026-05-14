@@ -21,6 +21,7 @@ class DokumentasiController extends Controller
         $organisasi = $user->organisasiSebagaiKetua()->first();
         $organisasiId = $organisasi?->id;
         $filterNamaKegiatan = trim((string) $request->query('nama_kegiatan', ''));
+        $search = trim((string) $request->query('search', ''));
 
         $dokumentasi = Dokumentasi::with('kegiatan:id,nama_kegiatan')
             ->whereHas('kegiatan', function ($query) use ($organisasiId) {
@@ -31,6 +32,14 @@ class DokumentasiController extends Controller
                     $kegiatanQuery->where('nama_kegiatan', 'like', '%' . $filterNamaKegiatan . '%');
                 });
             })
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('keterangan', 'like', "%{$search}%")
+                        ->orWhereHas('kegiatan', function ($kegiatanQuery) use ($search) {
+                            $kegiatanQuery->where('nama_kegiatan', 'like', "%{$search}%");
+                        });
+                });
+            })
             ->latest('id')
             ->get(['id', 'kegiatan_id', 'file_dokumentasi', 'keterangan']);
 
@@ -39,7 +48,7 @@ class DokumentasiController extends Controller
             ->orderBy('nama_kegiatan')
             ->get(['id', 'nama_kegiatan']);
 
-        return view('ketua.dokumentasi', compact('dokumentasi', 'kegiatanList', 'filterNamaKegiatan'));
+        return view('ketua.dokumentasi', compact('dokumentasi', 'kegiatanList', 'filterNamaKegiatan', 'search'));
     }
 
     public function store(Request $request): RedirectResponse

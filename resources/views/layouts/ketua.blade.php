@@ -17,6 +17,12 @@
 
         body {
             background-color: #f5f7fa;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        html {
+            height: 100vh;
         }
 
         /* ===================================================
@@ -26,7 +32,9 @@
             width: 200px;
             min-width: 200px;
             max-width: 200px;
-            min-height: 100vh;
+            height: 100vh;
+            max-height: 100vh;
+            overflow-y: auto;
             background: #1a56db;
             /* solid blue sesuai foto */
             display: flex;
@@ -164,6 +172,7 @@
             background-color: #f5f7fa;
             padding: 1rem 1.5rem !important;
             border-bottom: 1px solid #e9ecef;
+            flex-shrink: 0;
         }
 
         .topbar-left h5 {
@@ -235,6 +244,17 @@
         .app-content {
             flex: 1 1 auto;
             min-width: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .app-content-body {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+            padding: 2rem;
         }
 
         /* ===================================================
@@ -520,7 +540,8 @@
             </div>
             {{-- /TOPBAR --}}
 
-            <div class="p-4">
+            {{-- ISI HALAMAN --}}
+            <div class="app-content-body">
                 @yield('content')
             </div>
 

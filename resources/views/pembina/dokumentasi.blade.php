@@ -53,7 +53,8 @@
 
                     <div class="card-body d-flex flex-column">
                         <h6 class="card-title mb-1">{{ $firstItem->kegiatan?->nama_kegiatan ?? '-' }}</h6>
-                        <p class="text-muted small mb-2">{{ $firstItem->kegiatan?->organisasi?->nama_organisasi ?? '-' }}</p>
+                        <p class="text-muted small mb-2">{{ $firstItem->kegiatan?->organisasi?->nama_organisasi ?? '-' }}
+                        </p>
                         <p class="text-muted small mb-2">Total {{ $items->count() }} gambar</p>
 
                         <p class="card-text mb-3">
@@ -119,7 +120,8 @@
                                             </p>
 
                                             <div class="mt-auto text-muted small">
-                                                <i class="bi bi-calendar-event"></i> {{ $item->created_at?->format('d-m-Y H:i') ?? '-' }}
+                                                <i class="bi bi-calendar-event"></i>
+                                                {{ $item->created_at?->format('d-m-Y H:i') ?? '-' }}
                                             </div>
                                         </div>
                                     </div>

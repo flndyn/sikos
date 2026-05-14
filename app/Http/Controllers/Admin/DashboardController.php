@@ -19,10 +19,18 @@ class DashboardController extends Controller
             'total_kegiatan' => Kegiatan::count(),
             'kegiatan_disetujui' => Kegiatan::whereIn('status', ['disetujui admin', 'disetujui pembina'])->count(),
             'kegiatan_ditolak' => Kegiatan::whereIn('status', ['ditolak admin', 'ditolak pembina'])->count(),
+            'kegiatan_pending' => Kegiatan::where('status', 'pending')->count(),
+            'kegiatan_butuh_validasi' => Kegiatan::where('status', 'disetujui pembina')->count(),
             'total_dokumentasi' => Dokumentasi::count(),
         ];
 
         $kegiatanTerbaru = Kegiatan::with('organisasi:id,nama_organisasi')
+            ->latest('created_at')
+            ->take(10)
+            ->get(['id', 'organisasi_id', 'nama_kegiatan', 'status', 'tanggal_mulai', 'created_at']);
+
+        $pengajuanTerbaru = Kegiatan::with('organisasi:id,nama_organisasi')
+            ->where('status', 'disetujui admin')
             ->latest('created_at')
             ->take(10)
             ->get(['id', 'organisasi_id', 'nama_kegiatan', 'status', 'tanggal_mulai', 'created_at']);
@@ -46,6 +54,6 @@ class DashboardController extends Controller
             ->values()
             ->all();
 
-        return view('admin.dashboard', compact('stats', 'kegiatanTerbaru', 'chartLabels', 'chartData'));
+        return view('admin.dashboard', compact('stats', 'kegiatanTerbaru', 'pengajuanTerbaru', 'chartLabels', 'chartData'));
     }
 }

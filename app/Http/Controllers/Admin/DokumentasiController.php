@@ -18,20 +18,31 @@ class DokumentasiController extends Controller
     public function __invoke(Request $request): View
     {
         $filterNamaKegiatan = trim((string) $request->query('nama_kegiatan', ''));
+        $search = trim((string) $request->query('search', ''));
 
-        $dokumentasi = Dokumentasi::with('kegiatan:id,nama_kegiatan')
-            ->when($filterNamaKegiatan !== '', function ($query) use ($filterNamaKegiatan) {
-                $query->whereHas('kegiatan', function ($kegiatanQuery) use ($filterNamaKegiatan) {
-                    $kegiatanQuery->where('nama_kegiatan', 'like', '%' . $filterNamaKegiatan . '%');
-                });
-            })
-            ->latest('id')
-            ->get(['id', 'kegiatan_id', 'file_dokumentasi', 'keterangan']);
+        $query = Dokumentasi::with('kegiatan:id,nama_kegiatan');
+
+        if ($filterNamaKegiatan !== '') {
+            $query->whereHas('kegiatan', function ($kegiatanQuery) use ($filterNamaKegiatan) {
+                $kegiatanQuery->where('nama_kegiatan', 'like', '%' . $filterNamaKegiatan . '%');
+            });
+        }
+
+        if ($search !== '') {
+            $query->where(function ($q) use ($search) {
+                $q->where('keterangan', 'like', "%{$search}%")
+                    ->orWhereHas('kegiatan', function ($kegiatanQuery) use ($search) {
+                        $kegiatanQuery->where('nama_kegiatan', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $dokumentasi = $query->latest('id')->get(['id', 'kegiatan_id', 'file_dokumentasi', 'keterangan']);
 
         $kegiatanList = Kegiatan::orderBy('nama_kegiatan')
             ->get(['id', 'nama_kegiatan']);
 
-        return view('admin.dokumentasi', compact('dokumentasi', 'kegiatanList', 'filterNamaKegiatan'));
+        return view('admin.dokumentasi', compact('dokumentasi', 'kegiatanList', 'filterNamaKegiatan', 'search'));
     }
 
     public function store(Request $request): RedirectResponse

@@ -62,7 +62,6 @@
 
         <!-- BODY -->
         <div class="card-body">
-
             <table class="table table-bordered table-striped">
                 <thead class="table-light">
                     <tr>
@@ -73,7 +72,6 @@
                         <th class="text-nowrap">Tanggal</th>
                         <th class="text-nowrap">Tempat</th>
                         <th class="text-nowrap">Status</th>
-                        <th class="text-nowrap">Keterangan</th>
                         <th class="text-nowrap text-center">Proposal</th>
                         <th class="text-nowrap">Aksi</th>
                     </tr>
@@ -99,14 +97,15 @@
                             <td>
                                 @php
                                     $badgeClass = match ($item->status) {
-                                        'disetujui admin', 'disetujui pembina' => 'bg-success',
+                                        'disetujui admin' => 'bg-success',
+                                        'disetujui pembina' => 'bg-warning text-dark',
                                         'ditolak admin', 'ditolak pembina' => 'bg-danger',
-                                        default => 'bg-warning text-dark',
+                                        'pending' => 'bg-secondary',
+                                        default => 'bg-light text-dark',
                                     };
                                 @endphp
                                 <span class="badge {{ $badgeClass }}">{{ ucfirst($item->status) }}</span>
                             </td>
-                            <td>{{ \Illuminate\Support\Str::limit($item->keterangan ?? '-', 60) }}</td>
                             <td class="text-center">
                                 @if ($item->proposal)
                                     @php

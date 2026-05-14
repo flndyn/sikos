@@ -29,7 +29,6 @@
 
         <!-- BODY -->
         <div class="card-body">
-
             <table class="table table-bordered table-striped">
                 <thead class="table-light">
                     <tr>

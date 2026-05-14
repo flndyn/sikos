@@ -22,6 +22,12 @@
 
         body {
             background-color: #f5f7fa;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        html {
+            height: 100vh;
         }
 
         .nav-link {
@@ -58,7 +64,9 @@
             min-width: 250px;
             max-width: 250px;
             flex: 0 0 250px;
-            min-height: 100vh;
+            max-height: 100vh;
+            height: 100vh;
+            overflow-y: auto;
             background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
             padding: 1.5rem 1rem !important;
             display: flex;
@@ -121,6 +129,21 @@
         .app-content {
             flex: 1 1 auto;
             min-width: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .topbar {
+            flex-shrink: 0;
+        }
+
+        .app-content-body {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+            padding: 2rem;
         }
 
         .notification-menu {
@@ -140,6 +163,7 @@
         .topbar {
             background-color: #f5f7fa;
             padding: 1rem 2rem !important;
+            border-bottom: 1px solid #e5e7eb;
         }
 
         .topbar-left h5 {
@@ -351,13 +375,6 @@
                             <span>Profil Saya</span>
                         </a>
                     </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link text-white">
-                            <i class="fas fa-cog"></i>
-                            <span>Pengaturan</span>
-                        </a>
-                    </li>
                 </ul>
             </div>
 
@@ -365,7 +382,7 @@
 
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="btn btn-logout w-100 py-2">
+                    <button type="submit" class="btn btn-light text-primary fw-bold w-100">
                         <i class="fas fa-sign-out-alt me-1"></i> Logout
                     </button>
                 </form>
@@ -470,7 +487,7 @@
             </div>
 
             <!-- ISI HALAMAN -->
-            <div class="p-4">
+            <div class="app-content-body">
                 @yield('content')
             </div>
 
@@ -481,58 +498,58 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
-        // Table search handler        const tables = document.querySelectorAll('table');
+        // Table search handler
+        const tables = document.querySelectorAll('table');
         tables.forEach(function(table, index) {
-        const tbody = table.querySelector('tbody');
+            const tbody = table.querySelector('tbody');
 
-        if (!tbody || table.dataset.hasGlobalSearch === '1') {
-            return;
-        }
+            if (!tbody || table.dataset.hasGlobalSearch === '1') {
+                return;
+            }
 
-        const rows = Array.from(tbody.querySelectorAll('tr'));
+            const rows = Array.from(tbody.querySelectorAll('tr'));
 
-        if (!rows.length) {
-            return;
-        }
+            if (!rows.length) {
+                return;
+            }
 
-        table.dataset.hasGlobalSearch = '1';
+            table.dataset.hasGlobalSearch = '1';
 
-        const wrapper = document.createElement('div');
-        wrapper.className = 'd-flex justify-content-end mt-2 mb-2';
+            const wrapper = document.createElement('div');
+            wrapper.className = 'd-flex justify-content-end mt-2 mb-2';
 
-        const searchGroup = document.createElement('div');
-        searchGroup.className = 'input-group input-group-sm';
-        searchGroup.style.maxWidth = '360px';
+            const searchGroup = document.createElement('div');
+            searchGroup.className = 'input-group input-group-sm';
+            searchGroup.style.maxWidth = '360px';
 
-        const span = document.createElement('span');
-        span.className = 'input-group-text';
-        span.innerHTML = '<i class="bi bi-search"></i>';
+            const span = document.createElement('span');
+            span.className = 'input-group-text';
+            span.innerHTML = '<i class="bi bi-search"></i>';
 
-        const input = document.createElement('input');
-        input.type = 'search';
-        input.className = 'form-control';
-        input.placeholder = 'Search semua data tabel';
-        input.setAttribute('aria-label', 'Search semua data tabel');
-        input.id = `table-global-search-${index + 1}`;
+            const input = document.createElement('input');
+            input.type = 'search';
+            input.className = 'form-control';
+            input.placeholder = 'Search semua data tabel';
+            input.setAttribute('aria-label', 'Search semua data tabel');
+            input.id = `table-global-search-${index + 1}`;
 
-        searchGroup.appendChild(span);
-        searchGroup.appendChild(input);
-        wrapper.appendChild(searchGroup);
+            searchGroup.appendChild(span);
+            searchGroup.appendChild(input);
+            wrapper.appendChild(searchGroup);
 
-        const container = table.closest('.table-responsive') || table.parentElement;
-        container.prepend(wrapper);
+            const container = table.closest('.table-responsive') || table.parentElement;
+            container.prepend(wrapper);
 
-        input.addEventListener('input', function(event) {
-            const keyword = (event.target.value || '').toLowerCase().trim();
+            input.addEventListener('input', function(event) {
+                const keyword = (event.target.value || '').toLowerCase().trim();
 
-            rows.forEach(function(row) {
-                const text = row.textContent.toLowerCase().replace(/\s+/g, ' ')
-                    .trim();
-                row.style.display = keyword === '' || text.includes(keyword) ? '' :
-                    'none';
+                rows.forEach(function(row) {
+                    const text = row.textContent.toLowerCase().replace(/\s+/g, ' ')
+                        .trim();
+                    row.style.display = keyword === '' || text.includes(keyword) ? '' :
+                        'none';
+                });
             });
-        });
-        });
         });
     </script>
     @yield('scripts')

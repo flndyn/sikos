@@ -17,16 +17,6 @@
 
         <!-- SEARCH + EXPORT -->
         <div class="card-body">
-
-            <div class="d-flex justify-content-between mb-3">
-
-                <!-- EXPORT -->
-                <a href="{{ route('admin.laporan.export-pdf') }}" class="btn btn-danger">
-                    <i class="bi bi-file-earmark-pdf"></i> Export PDF
-                </a>
-
-            </div>
-
             <!-- TABLE -->
             <table class="table table-bordered table-striped">
                 <thead class="table-light">

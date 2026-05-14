@@ -5,131 +5,156 @@
 @section('content')
 
     <!-- STAT CARDS -->
-    <div class="row g-3 mb-4">
-        <!-- Total Pengguna -->
-        <div class="col-md-4 col-lg-2">
-            <a href="{{ route('admin.users') }}" class="text-decoration-none">
-                <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
-                    <div class="card-body d-flex flex-column justify-content-between">
-                        <div class="d-flex align-items-start gap-2 mb-2">
-                            <div class="stat-icon bg-primary-light">
-                                <i class="fas fa-users text-primary"></i>
-                            </div>
-                            <div class="flex-grow-1">
-                                <p class="text-muted small mb-1">Total Pengguna</p>
-                                <div class="stat-value">
-                                    <h3 class="mb-0">{{ $stats['total_pengguna'] ?? 0 }}</h3>
+    <div class="mb-4">
+        <div class="row g-3 mb-3">
+            <!-- Total Pengguna -->
+            <div class="col-md-6 col-lg-3">
+                <a href="{{ route('admin.users') }}" class="text-decoration-none">
+                    <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div class="d-flex align-items-start gap-2 mb-2">
+                                <div class="stat-icon bg-primary-light">
+                                    <i class="fas fa-users text-primary"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <p class="text-muted small mb-1">Total Pengguna</p>
+                                    <div class="stat-value">
+                                        <h3 class="mb-0">{{ $stats['total_pengguna'] ?? 0 }}</h3>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </a>
+                </a>
+            </div>
+
+            <!-- Total Organisasi -->
+            <div class="col-md-6 col-lg-3">
+                <a href="{{ route('admin.organisasi') }}" class="text-decoration-none">
+                    <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div class="d-flex align-items-start gap-2 mb-2">
+                                <div class="stat-icon bg-success-light">
+                                    <i class="fas fa-building text-success"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <p class="text-muted small mb-1">Total Organisasi</p>
+                                    <div class="stat-value">
+                                        <h3 class="mb-0">{{ $stats['total_organisasi'] ?? 0 }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Total Kegiatan -->
+            <div class="col-md-6 col-lg-3">
+                <a href="{{ route('admin.kegiatan') }}" class="text-decoration-none">
+                    <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div class="d-flex align-items-start gap-2 mb-2">
+                                <div class="stat-icon bg-purple-light">
+                                    <i class="fas fa-calendar-alt text-purple"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <p class="text-muted small mb-1">Total Kegiatan</p>
+                                    <div class="stat-value">
+                                        <h3 class="mb-0">{{ $stats['total_kegiatan'] ?? 0 }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Dokumentasi -->
+            <div class="col-md-6 col-lg-3">
+                <a href="{{ route('admin.dokumentasi') }}" class="text-decoration-none">
+                    <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div class="d-flex align-items-start gap-2 mb-2">
+                                <div class="stat-icon bg-cyan-light">
+                                    <i class="fas fa-file-alt text-cyan"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <p class="text-muted small mb-1">Dokumentasi</p>
+                                    <div class="stat-value">
+                                        <h3 class="mb-0">{{ $stats['total_dokumentasi'] ?? 0 }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
         </div>
 
-        <!-- Total Organisasi -->
-        <div class="col-md-4 col-lg-2">
-            <a href="{{ route('admin.organisasi') }}" class="text-decoration-none">
-                <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
-                    <div class="card-body d-flex flex-column justify-content-between">
-                        <div class="d-flex align-items-start gap-2 mb-2">
-                            <div class="stat-icon bg-success-light">
-                                <i class="fas fa-building text-success"></i>
-                            </div>
-                            <div class="flex-grow-1">
-                                <p class="text-muted small mb-1">Total Organisasi</p>
-                                <div class="stat-value">
-                                    <h3 class="mb-0">{{ $stats['total_organisasi'] ?? 0 }}</h3>
+        <div class="row g-3">
+            <!-- Kegiatan Butuh Validasi -->
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ route('admin.validasi') }}" class="text-decoration-none">
+                    <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div class="d-flex align-items-start gap-2 mb-2">
+                                <div class="stat-icon bg-secondary-light">
+                                    <i class="fas fa-hourglass-half text-secondary"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <p class="text-muted small mb-1">Kegiatan Butuh Validasi</p>
+                                    <div class="stat-value">
+                                        <h3 class="mb-0">{{ $stats['kegiatan_butuh_validasi'] ?? 0 }}</h3>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </a>
-        </div>
+                </a>
+            </div>
 
-        <!-- Total Kegiatan -->
-        <div class="col-md-4 col-lg-2">
-            <a href="{{ route('admin.kegiatan') }}" class="text-decoration-none">
-                <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
-                    <div class="card-body d-flex flex-column justify-content-between">
-                        <div class="d-flex align-items-start gap-2 mb-2">
-                            <div class="stat-icon bg-purple-light">
-                                <i class="fas fa-calendar-alt text-purple"></i>
-                            </div>
-                            <div class="flex-grow-1">
-                                <p class="text-muted small mb-1">Total Kegiatan</p>
-                                <div class="stat-value">
-                                    <h3 class="mb-0">{{ $stats['total_kegiatan'] ?? 0 }}</h3>
+            <!-- Kegiatan Ditolak -->
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ route('admin.kegiatan') }}?status=ditolak" class="text-decoration-none">
+                    <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div class="d-flex align-items-start gap-2 mb-2">
+                                <div class="stat-icon bg-danger-light">
+                                    <i class="fas fa-times-circle text-danger"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <p class="text-muted small mb-1">Kegiatan Ditolak</p>
+                                    <div class="stat-value">
+                                        <h3 class="mb-0">{{ $stats['kegiatan_ditolak'] ?? 0 }}</h3>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </a>
-        </div>
+                </a>
+            </div>
 
-        <!-- Kegiatan Disetujui -->
-        <div class="col-md-4 col-lg-2">
-            <a href="{{ route('admin.kegiatan') }}?status=disetujui" class="text-decoration-none">
-                <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
-                    <div class="card-body d-flex flex-column justify-content-between">
-                        <div class="d-flex align-items-start gap-2 mb-2">
-                            <div class="stat-icon bg-warning-light">
-                                <i class="fas fa-check-circle text-warning"></i>
-                            </div>
-                            <div class="flex-grow-1">
-                                <p class="text-muted small mb-1">Kegiatan Disetujui</p>
-                                <div class="stat-value">
-                                    <h3 class="mb-0">{{ $stats['kegiatan_disetujui'] ?? 0 }}</h3>
+            <!-- Kegiatan Diterima -->
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ route('admin.kegiatan') }}?status=disetujui" class="text-decoration-none">
+                    <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div class="d-flex align-items-start gap-2 mb-2">
+                                <div class="stat-icon bg-warning-light">
+                                    <i class="fas fa-check-circle text-warning"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <p class="text-muted small mb-1">Kegiatan Diterima</p>
+                                    <div class="stat-value">
+                                        <h3 class="mb-0">{{ $stats['kegiatan_disetujui'] ?? 0 }}</h3>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </a>
-        </div>
-
-        <!-- Kegiatan Ditolak -->
-        <div class="col-md-4 col-lg-2">
-            <a href="{{ route('admin.kegiatan') }}?status=ditolak" class="text-decoration-none">
-                <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
-                    <div class="card-body d-flex flex-column justify-content-between">
-                        <div class="d-flex align-items-start gap-2 mb-2">
-                            <div class="stat-icon bg-danger-light">
-                                <i class="fas fa-times-circle text-danger"></i>
-                            </div>
-                            <div class="flex-grow-1">
-                                <p class="text-muted small mb-1">Kegiatan Ditolak</p>
-                                <div class="stat-value">
-                                    <h3 class="mb-0">{{ $stats['kegiatan_ditolak'] ?? 0 }}</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <!-- Dokumentasi -->
-        <div class="col-md-4 col-lg-2">
-            <a href="{{ route('admin.dokumentasi') }}" class="text-decoration-none">
-                <div class="card stat-card border-0 shadow-sm h-100 stat-card-link">
-                    <div class="card-body d-flex flex-column justify-content-between">
-                        <div class="d-flex align-items-start gap-2 mb-2">
-                            <div class="stat-icon bg-cyan-light">
-                                <i class="fas fa-file-alt text-cyan"></i>
-                            </div>
-                            <div class="flex-grow-1">
-                                <p class="text-muted small mb-1">Dokumentasi</p>
-                                <div class="stat-value">
-                                    <h3 class="mb-0">{{ $stats['total_dokumentasi'] ?? 0 }}</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -148,7 +173,8 @@
                             Tahun Ini <i class="fas fa-chevron-down ms-2"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="chartDropdown">
-                            <li><a class="dropdown-item" href="{{ route('admin.dashboard', ['periode' => '6-bulan']) }}">6
+                            <li><a class="dropdown-item"
+                                    href="{{ route('admin.dashboard', ['periode' => '6-bulan']) }}">6
                                     Bulan</a></li>
                             <li><a class="dropdown-item"
                                     href="{{ route('admin.dashboard', ['periode' => '12-bulan']) }}">12
@@ -195,17 +221,20 @@
                     @forelse($kegiatanTerbaru as $item)
                         @php
                             $badgeClass = match ($item->status) {
-                                'disetujui admin', 'disetujui pembina' => 'bg-success',
+                                'disetujui admin' => 'bg-success',
+                                'disetujui pembina' => 'bg-warning text-dark',
                                 'ditolak admin', 'ditolak pembina' => 'bg-danger',
-                                default => 'bg-warning text-dark',
+                                'pending' => 'bg-secondary',
+                                default => 'bg-light text-dark',
                             };
 
                             $statusLabel = match ($item->status) {
-                                'disetujui admin' => 'Disetujui',
-                                'disetujui pembina' => 'Disetujui',
-                                'ditolak admin' => 'Ditolak',
-                                'ditolak pembina' => 'Ditolak',
-                                default => 'Pending',
+                                'disetujui admin' => 'Disetujui Admin',
+                                'disetujui pembina' => 'Disetujui Pembina',
+                                'ditolak admin' => 'Ditolak Admin',
+                                'ditolak pembina' => 'Ditolak Pembina',
+                                'pending' => 'Pending',
+                                default => ucfirst($item->status),
                             };
                         @endphp
                         <div class="d-flex align-items-center mb-3 pb-3" style="border-bottom: 1px solid #e9ecef;">
@@ -240,20 +269,23 @@
                             class="fas fa-arrow-right ms-2"></i></a>
                 </div>
                 <div class="card-body">
-                    @forelse($kegiatanTerbaru as $item)
+                    @forelse($pengajuanTerbaru as $item)
                         @php
                             $badgeClass = match ($item->status) {
-                                'disetujui admin', 'disetujui pembina' => 'bg-success',
+                                'disetujui admin' => 'bg-success',
+                                'disetujui pembina' => 'bg-warning text-dark',
                                 'ditolak admin', 'ditolak pembina' => 'bg-danger',
-                                default => 'bg-warning text-dark',
+                                'pending' => 'bg-secondary',
+                                default => 'bg-light text-dark',
                             };
 
                             $statusLabel = match ($item->status) {
-                                'disetujui admin' => 'Disetujui',
-                                'disetujui pembina' => 'Disetujui',
-                                'ditolak admin' => 'Ditolak',
-                                'ditolak pembina' => 'Ditolak',
-                                default => 'Pending',
+                                'disetujui admin' => 'Disetujui Admin',
+                                'disetujui pembina' => 'Disetujui Pembina',
+                                'ditolak admin' => 'Ditolak Admin',
+                                'ditolak pembina' => 'Ditolak Pembina',
+                                'pending' => 'Pending',
+                                default => ucfirst($item->status),
                             };
                         @endphp
                         <div class="d-flex align-items-center mb-3 pb-3" style="border-bottom: 1px solid #e9ecef;">
@@ -271,12 +303,10 @@
                             <div class="text-end ms-3" style="min-width: 95px;">
                                 <span class="badge {{ $badgeClass }}">{{ $statusLabel }}</span>
                             </div>
-                            @if ($item->status === 'disetujui pembina')
-                                <button class="btn btn-sm btn-primary ms-3">Validasi</button>
-                            @endif
+                            <a href="{{ route('admin.validasi') }}" class="btn btn-sm btn-primary ms-3">Validasi</a>
                         </div>
                     @empty
-                        <p class="text-center text-muted">Belum ada pengajuan yang perlu validasi.</p>
+                        <p class="text-center text-muted">Belum ada pengajuan dengan status Disetujui Admin.</p>
                     @endforelse
                 </div>
             </div>
@@ -393,12 +423,12 @@
                     data: [
                         {{ $stats['kegiatan_disetujui'] ?? 0 }},
                         {{ $stats['kegiatan_ditolak'] ?? 0 }},
-                        {{ ($stats['total_kegiatan'] ?? 0) - ($stats['kegiatan_disetujui'] ?? 0) - ($stats['kegiatan_ditolak'] ?? 0) }}
+                        {{ $stats['kegiatan_pending'] ?? 0 }}
                     ],
                     backgroundColor: [
                         '#28a745',
                         '#dc3545',
-                        '#ffc107'
+                        '#6c757d'
                     ],
                     borderColor: '#fff',
                     borderWidth: 2
@@ -496,6 +526,10 @@
 
     .bg-danger-light {
         background-color: rgba(220, 53, 69, 0.1);
+    }
+
+    .bg-secondary-light {
+        background-color: rgba(108, 117, 125, 0.12);
     }
 
     .card {

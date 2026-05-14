@@ -14,27 +14,37 @@ class KegiatanController extends Controller
 {
     private const PROPOSAL_DIRECTORY = 'proposal-kegiatan';
 
-    public function __invoke(): View
+    public function __invoke(Request $request): View
     {
         $user = auth()->user();
 
         $organisasi = $user->organisasiSebagaiKetua()->first();
         $organisasiId = $organisasi?->id;
 
-        $kegiatan = Kegiatan::where('organisasi_id', $organisasiId)
-            ->latest('id')
-            ->get([
-                'id',
-                'nama_kegiatan',
-                'deskripsi',
-                'tanggal_mulai',
-                'tempat',
-                'proposal',
-                'status',
-                'keterangan',
-            ]);
+        $search = $request->query('search', '');
 
-        return view('ketua.kegiatan', compact('kegiatan'));
+        $query = Kegiatan::where('organisasi_id', $organisasiId);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_kegiatan', 'like', "%{$search}%")
+                    ->orWhere('deskripsi', 'like', "%{$search}%")
+                    ->orWhere('tempat', 'like', "%{$search}%");
+            });
+        }
+
+        $kegiatan = $query->latest('id')->get([
+            'id',
+            'nama_kegiatan',
+            'deskripsi',
+            'tanggal_mulai',
+            'tempat',
+            'proposal',
+            'status',
+            'keterangan',
+        ]);
+
+        return view('ketua.kegiatan', compact('kegiatan', 'search'));
     }
 
     public function store(Request $request): RedirectResponse
