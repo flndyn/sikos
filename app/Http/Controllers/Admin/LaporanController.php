@@ -2,29 +2,32 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Controller;
 use App\Models\LaporanKegiatan;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class LaporanController extends Controller
 {
     public function __invoke(Request $request): View
     {
-        $search = $request->query('search', '');
+        $search = trim((string) $request->query('search', ''));
 
         $query = $this->baseQuery();
 
-        if ($search) {
+        if ($search !== '') {
             $query->where(function ($q) use ($search) {
                 $q->where('isi_laporan', 'like', "%{$search}%")
                     ->orWhereHas('kegiatan', function ($kegiatanQuery) use ($search) {
                         $kegiatanQuery->where('nama_kegiatan', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('kegiatan.organisasi', function ($organisasiQuery) use ($search) {
+                        $organisasiQuery->where('nama_organisasi', 'like', "%{$search}%");
                     });
             });
         }
@@ -42,7 +45,9 @@ class LaporanController extends Controller
             'laporan' => $laporan,
         ])->setPaper('a4', 'landscape');
 
-        return $pdf->download('laporan-kegiatan-' . now()->format('YmdHis') . '.pdf');
+        return $pdf->download(
+            'laporan-kegiatan-' . now()->format('YmdHis') . '.pdf'
+        );
     }
 
     public function download(LaporanKegiatan $laporan): StreamedResponse|RedirectResponse
@@ -53,22 +58,17 @@ class LaporanController extends Controller
             return back()->with('error', 'File laporan tidak tersedia.');
         }
 
+        // kalau link external
         if (str_starts_with($file, 'http')) {
             return redirect()->away($file);
         }
 
-        $candidatePaths = [$file];
-        if (! str_contains($file, '/')) {
-            $candidatePaths[] = 'laporan-kegiatan/' . $file;
+        // cek file di storage
+        if (! Storage::disk('public')->exists($file)) {
+            return back()->with('error', 'File laporan tidak ditemukan di storage.');
         }
 
-        foreach ($candidatePaths as $path) {
-            if (Storage::disk('public')->exists($path)) {
-                return Storage::disk('public')->download($path);
-            }
-        }
-
-        return back()->with('error', 'File laporan tidak ditemukan di storage.');
+        return Storage::disk('public')->download($file);
     }
 
     private function baseQuery(): Builder

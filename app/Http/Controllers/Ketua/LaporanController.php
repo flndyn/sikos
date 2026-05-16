@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -20,7 +21,6 @@ class LaporanController extends Controller
     {
         $organisasiId = auth()->user()?->organisasiSebagaiKetua?->id;
 
-        // FIX SEARCH
         $search = $request->query('search', '');
 
         $laporan = LaporanKegiatan::with([
@@ -142,12 +142,16 @@ class LaporanController extends Controller
                 );
         }
 
+        $organisasi = auth()->user()?->organisasiSebagaiKetua;
+
+        $folder = self::REPORT_DIRECTORY . '/' . Str::slug($organisasi->nama_organisasi);
+
         $file = $request->file('file_laporan');
 
         $filename = time() . '_' . $file->getClientOriginalName();
 
         $validated['file_laporan'] = $file->storeAs(
-            self::REPORT_DIRECTORY,
+            $folder,
             $filename,
             'public'
         );
@@ -214,12 +218,16 @@ class LaporanController extends Controller
                     ->delete($laporan->file_laporan);
             }
 
+            $organisasi = auth()->user()?->organisasiSebagaiKetua;
+
+            $folder = self::REPORT_DIRECTORY . '/' . Str::slug($organisasi->nama_organisasi);
+
             $file = $request->file('file_laporan');
 
             $filename = time() . '_' . $file->getClientOriginalName();
 
             $validated['file_laporan'] = $file->storeAs(
-                self::REPORT_DIRECTORY,
+                $folder,
                 $filename,
                 'public'
             );

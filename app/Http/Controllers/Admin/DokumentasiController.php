@@ -8,58 +8,116 @@ use App\Models\Kegiatan;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class DokumentasiController extends Controller
 {
-    private const DIRECTORY = 'dokumentasi-kegiatan';
-
     public function __invoke(Request $request): View
     {
         $filterNamaKegiatan = trim((string) $request->query('nama_kegiatan', ''));
         $search = trim((string) $request->query('search', ''));
 
-        $query = Dokumentasi::with('kegiatan:id,nama_kegiatan');
+        $query = Dokumentasi::with([
+            'kegiatan:id,nama_kegiatan,organisasi_id'
+        ]);
 
+        // filter nama kegiatan
         if ($filterNamaKegiatan !== '') {
-            $query->whereHas('kegiatan', function ($kegiatanQuery) use ($filterNamaKegiatan) {
-                $kegiatanQuery->where('nama_kegiatan', 'like', '%' . $filterNamaKegiatan . '%');
+
+            $query->whereHas('kegiatan', function ($q) use ($filterNamaKegiatan) {
+
+                $q->where('nama_kegiatan', 'like', '%' . $filterNamaKegiatan . '%');
             });
         }
 
+        // search
         if ($search !== '') {
+
             $query->where(function ($q) use ($search) {
+
                 $q->where('keterangan', 'like', "%{$search}%")
                     ->orWhereHas('kegiatan', function ($kegiatanQuery) use ($search) {
+
                         $kegiatanQuery->where('nama_kegiatan', 'like', "%{$search}%");
                     });
             });
         }
 
-        $dokumentasi = $query->latest('id')->get(['id', 'kegiatan_id', 'file_dokumentasi', 'keterangan']);
+        $dokumentasi = $query->latest('id')->get([
+            'id',
+            'kegiatan_id',
+            'file_dokumentasi',
+            'keterangan',
+        ]);
 
         $kegiatanList = Kegiatan::orderBy('nama_kegiatan')
-            ->get(['id', 'nama_kegiatan']);
+            ->get([
+                'id',
+                'nama_kegiatan'
+            ]);
 
-        return view('admin.dokumentasi', compact('dokumentasi', 'kegiatanList', 'filterNamaKegiatan', 'search'));
+        return view('admin.dokumentasi', compact(
+            'dokumentasi',
+            'kegiatanList',
+            'filterNamaKegiatan',
+            'search'
+        ));
     }
 
     public function store(Request $request): RedirectResponse
     {
         $files = $request->file('file_dokumentasi', []);
-        $totalFiles = count($files);
 
         $validated = $request->validate([
-            'kegiatan_id' => ['required', 'integer', Rule::exists('kegiatan', 'id')],
-            'keterangan' => ['required', 'array', 'size:' . $totalFiles],
-            'keterangan.*' => ['required', 'string'],
-            'file_dokumentasi' => ['required', 'array', 'min:1'],
-            'file_dokumentasi.*' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'kegiatan_id' => [
+                'required',
+                'integer',
+                Rule::exists('kegiatan', 'id')
+            ],
+
+            'keterangan' => [
+                'required',
+                'array'
+            ],
+
+            'keterangan.*' => [
+                'required',
+                'string',
+                'max:255'
+            ],
+
+            'file_dokumentasi' => [
+                'required',
+                'array',
+                'min:1'
+            ],
+
+            'file_dokumentasi.*' => [
+                'required',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:5120'
+            ],
         ]);
 
+        $kegiatan = Kegiatan::with('organisasi')->find($validated['kegiatan_id']);
+
+        $namaOrganisasi = $kegiatan?->organisasi?->nama_organisasi ?? 'umum';
+
+        // folder otomatis
+        $folder = 'dokumentasi/' . Str::slug($namaOrganisasi);
+
         foreach ($files as $index => $file) {
-            $storedPath = $file->store(self::DIRECTORY, 'public');
+
+            $filename = time() . '_' . $index . '_' . $file->getClientOriginalName();
+
+            $storedPath = $file->storeAs(
+                $folder,
+                $filename,
+                'public'
+            );
 
             Dokumentasi::create([
                 'kegiatan_id' => $validated['kegiatan_id'],
@@ -76,18 +134,57 @@ class DokumentasiController extends Controller
     public function update(Request $request, Dokumentasi $dokumentasi): RedirectResponse
     {
         $validated = $request->validate([
-            'kegiatan_id' => ['required', 'integer', Rule::exists('kegiatan', 'id')],
-            'keterangan' => ['nullable', 'string'],
-            'file_dokumentasi' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'kegiatan_id' => [
+                'required',
+                'integer',
+                Rule::exists('kegiatan', 'id')
+            ],
+
+            'keterangan' => [
+                'nullable',
+                'string',
+                'max:255'
+            ],
+
+            'file_dokumentasi' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:5120'
+            ],
         ]);
 
+        // upload file baru
         if ($request->hasFile('file_dokumentasi')) {
-            if ($dokumentasi->file_dokumentasi && ! str_starts_with($dokumentasi->file_dokumentasi, 'http')) {
+
+            // hapus file lama
+            if (
+                $dokumentasi->file_dokumentasi &&
+                !str_starts_with($dokumentasi->file_dokumentasi, 'http')
+            ) {
+
                 Storage::disk('public')->delete($dokumentasi->file_dokumentasi);
             }
 
-            $validated['file_dokumentasi'] = $request->file('file_dokumentasi')->store(self::DIRECTORY, 'public');
+            $kegiatan = Kegiatan::with('organisasi')
+                ->find($validated['kegiatan_id']);
+
+            $namaOrganisasi = $kegiatan?->organisasi?->nama_organisasi ?? 'umum';
+
+            $folder = 'dokumentasi/' . Str::slug($namaOrganisasi);
+
+            $file = $request->file('file_dokumentasi');
+
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            $validated['file_dokumentasi'] = $file->storeAs(
+                $folder,
+                $filename,
+                'public'
+            );
+
         } else {
+
             unset($validated['file_dokumentasi']);
         }
 
@@ -100,7 +197,12 @@ class DokumentasiController extends Controller
 
     public function destroy(Dokumentasi $dokumentasi): RedirectResponse
     {
-        if ($dokumentasi->file_dokumentasi && ! str_starts_with($dokumentasi->file_dokumentasi, 'http')) {
+        // hapus file
+        if (
+            $dokumentasi->file_dokumentasi &&
+            !str_starts_with($dokumentasi->file_dokumentasi, 'http')
+        ) {
+
             Storage::disk('public')->delete($dokumentasi->file_dokumentasi);
         }
 

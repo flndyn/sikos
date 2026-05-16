@@ -15,15 +15,10 @@ use Illuminate\View\View;
 
 class KegiatanController extends Controller
 {
-    private const PROPOSAL_DIRECTORY = 'proposal-kegiatan';
     private const ALLOWED_STATUSES = [
         'pending',
         'disetujui pembina',
         'disetujui admin',
-        'ditolak pembina',
-        'ditolak admin',
-    ];
-    private const REJECTED_STATUSES = [
         'ditolak pembina',
         'ditolak admin',
     ];
@@ -37,18 +32,34 @@ class KegiatanController extends Controller
         $status = request('status');
         $search = request('search', '');
 
+        // filter status
         if ($status) {
+
             if ($status === 'disetujui') {
-                $query->whereIn('status', ['disetujui pembina', 'disetujui admin']);
+
+                $query->whereIn('status', [
+                    'disetujui pembina',
+                    'disetujui admin'
+                ]);
+
             } elseif ($status === 'ditolak') {
-                $query->whereIn('status', ['ditolak pembina', 'ditolak admin']);
+
+                $query->whereIn('status', [
+                    'ditolak pembina',
+                    'ditolak admin'
+                ]);
+
             } elseif (in_array($status, self::ALLOWED_STATUSES, true)) {
+
                 $query->where('status', $status);
             }
         }
 
+        // search
         if ($search) {
+
             $query->where(function ($q) use ($search) {
+
                 $q->where('nama_kegiatan', 'like', "%{$search}%")
                     ->orWhere('deskripsi', 'like', "%{$search}%")
                     ->orWhere('tempat', 'like', "%{$search}%");
@@ -64,54 +75,82 @@ class KegiatanController extends Controller
             'tempat',
             'proposal',
             'status',
-            'keterangan',
         ]);
 
         $organisasiList = Organisasi::orderBy('nama_organisasi')
-            ->get(['id', 'nama_organisasi']);
+            ->get([
+                'id',
+                'nama_organisasi'
+            ]);
 
-        return view('admin.kegiatan', compact('kegiatan', 'organisasiList', 'search', 'status'));
+        return view('admin.kegiatan', compact(
+            'kegiatan',
+            'organisasiList',
+            'search',
+            'status'
+        ));
     }
 
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'organisasi_id' => ['required', 'integer', Rule::exists('organisasi', 'id')],
-            'nama_kegiatan' => ['required', 'string', 'max:150'],
-            'deskripsi' => ['nullable', 'string'],
-            'tanggal_mulai' => ['nullable', 'date'],
-            'tempat' => ['nullable', 'string', 'max:150'],
-            'proposal' => ['required'],
-            'status' => ['required', Rule::in(self::ALLOWED_STATUSES)],
-            'keterangan' => ['nullable', 'string'],
+            'organisasi_id' => [
+                'required',
+                'integer',
+                Rule::exists('organisasi', 'id')
+            ],
+
+            'nama_kegiatan' => [
+                'required',
+                'string',
+                'max:150'
+            ],
+
+            'deskripsi' => [
+                'nullable',
+                'string'
+            ],
+
+            'tanggal_mulai' => [
+                'nullable',
+                'date'
+            ],
+
+            'tempat' => [
+                'nullable',
+                'string',
+                'max:150'
+            ],
+
+            'proposal' => [
+                'required',
+                'file',
+                'mimes:pdf,doc,docx',
+                'max:5120'
+            ],
+
+            'status' => [
+                'required',
+                Rule::in(self::ALLOWED_STATUSES)
+            ],
         ]);
 
-        if (in_array($validated['status'], self::REJECTED_STATUSES, true) && blank($validated['keterangan'] ?? null)) {
-            return back()
-                ->withErrors(['keterangan' => 'Keterangan wajib diisi jika status ditolak.'])
-                ->withInput();
-        }
+        // upload proposal
+        if ($request->hasFile('proposal')) {
 
-        if (! $request->hasFile('proposal')) {
-            return back()
-                ->withErrors(['proposal' => 'File proposal wajib diunggah.'])
-                ->withInput();
-        }
+            $organisasi = Organisasi::find($validated['organisasi_id']);
 
-        $proposalFile = $request->file('proposal');
+            $folder = 'proposal/' . Str::slug($organisasi->nama_organisasi);
 
-        if (! $proposalFile->isValid()) {
-            return back()
-                ->withErrors(['proposal' => 'File proposal gagal diunggah.'])
-                ->withInput();
-        }
+            $file = $request->file('proposal');
 
-        $validated['proposal'] = $this->storeProposalFile($proposalFile);
+            $filename = time() . '_' . $file->getClientOriginalName();
 
-        if (! $validated['proposal']) {
-            return back()
-                ->withErrors(['proposal' => 'File proposal gagal disimpan ke storage.'])
-                ->withInput();
+            $validated['proposal'] = $file->storeAs(
+                $folder,
+                $filename,
+                'public'
+            );
         }
 
         Kegiatan::create($validated);
@@ -124,50 +163,72 @@ class KegiatanController extends Controller
     public function update(Request $request, Kegiatan $kegiatan): RedirectResponse
     {
         $validated = $request->validate([
-            'organisasi_id' => ['required', 'integer', Rule::exists('organisasi', 'id')],
-            'nama_kegiatan' => ['required', 'string', 'max:150'],
-            'deskripsi' => ['nullable', 'string'],
-            'tanggal_mulai' => ['nullable', 'date'],
-            'tempat' => ['nullable', 'string', 'max:150'],
-            'status' => ['required', Rule::in(self::ALLOWED_STATUSES)],
-            'keterangan' => ['nullable', 'string'],
+            'organisasi_id' => [
+                'required',
+                'integer',
+                Rule::exists('organisasi', 'id')
+            ],
+
+            'nama_kegiatan' => [
+                'required',
+                'string',
+                'max:150'
+            ],
+
+            'deskripsi' => [
+                'nullable',
+                'string'
+            ],
+
+            'tanggal_mulai' => [
+                'nullable',
+                'date'
+            ],
+
+            'tempat' => [
+                'nullable',
+                'string',
+                'max:150'
+            ],
+
+            'proposal' => [
+                'nullable',
+                'file',
+                'mimes:pdf,doc,docx',
+                'max:5120'
+            ],
+
+            'status' => [
+                'required',
+                Rule::in(self::ALLOWED_STATUSES)
+            ],
         ]);
 
-        if (in_array($validated['status'], self::REJECTED_STATUSES, true) && blank($validated['keterangan'] ?? null)) {
-            return back()
-                ->withErrors(['keterangan' => 'Keterangan wajib diisi jika status ditolak.'])
-                ->withInput();
-        }
-
+        // upload proposal baru
         if ($request->hasFile('proposal')) {
-            $proposalFile = $request->file('proposal');
 
-            if (! $proposalFile->isValid()) {
-                return back()
-                    ->withErrors(['proposal' => 'File proposal gagal diunggah.'])
-                    ->withInput();
+            // hapus file lama
+            if ($kegiatan->proposal && !str_starts_with($kegiatan->proposal, 'http')) {
+
+                Storage::disk('public')->delete($kegiatan->proposal);
             }
 
-            $extension = strtolower($proposalFile->getClientOriginalExtension());
-            if (! in_array($extension, ['pdf', 'doc', 'docx'], true)) {
-                return back()
-                    ->withErrors(['proposal' => 'Format proposal harus PDF, DOC, atau DOCX.'])
-                    ->withInput();
-            }
+            $organisasi = Organisasi::find($validated['organisasi_id']);
 
-            $existingProposalPath = $this->getProposalStoragePath($kegiatan->proposal);
-            if ($existingProposalPath) {
-                Storage::disk('public')->delete($existingProposalPath);
-            }
+            $folder = 'proposal/' . Str::slug($organisasi->nama_organisasi);
 
-            $validated['proposal'] = $this->storeProposalFile($proposalFile);
+            $file = $request->file('proposal');
 
-            if (! $validated['proposal']) {
-                return back()
-                    ->withErrors(['proposal' => 'File proposal gagal disimpan ke storage.'])
-                    ->withInput();
-            }
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            $validated['proposal'] = $file->storeAs(
+                $folder,
+                $filename,
+                'public'
+            );
+
         } else {
+
             unset($validated['proposal']);
         }
 
@@ -180,9 +241,10 @@ class KegiatanController extends Controller
 
     public function destroy(Kegiatan $kegiatan): RedirectResponse
     {
-        $existingProposalPath = $this->getProposalStoragePath($kegiatan->proposal);
-        if ($existingProposalPath) {
-            Storage::disk('public')->delete($existingProposalPath);
+        // hapus proposal
+        if ($kegiatan->proposal && !str_starts_with($kegiatan->proposal, 'http')) {
+
+            Storage::disk('public')->delete($kegiatan->proposal);
         }
 
         $kegiatan->delete();
@@ -190,38 +252,5 @@ class KegiatanController extends Controller
         return redirect()
             ->route('admin.kegiatan')
             ->with('success', 'Kegiatan berhasil dihapus.');
-    }
-
-    private function getProposalStoragePath(?string $proposal): ?string
-    {
-        if (! $proposal) {
-            return null;
-        }
-
-        if (str_starts_with($proposal, 'http')) {
-            return null;
-        }
-
-        if (str_contains($proposal, '/')) {
-            return $proposal;
-        }
-
-        return self::PROPOSAL_DIRECTORY . '/' . $proposal;
-    }
-
-    private function storeProposalFile(UploadedFile $proposalFile): ?string
-    {
-        $extension = strtolower($proposalFile->getClientOriginalExtension());
-        if (! in_array($extension, ['pdf', 'doc', 'docx'], true)) {
-            return null;
-        }
-
-        $originalName = pathinfo($proposalFile->getClientOriginalName(), PATHINFO_FILENAME);
-        $safeName = Str::slug($originalName, '_');
-        $storedFileName = $safeName . '_' . now()->format('YmdHis') . '.' . $extension;
-
-        $storedPath = $proposalFile->storeAs(self::PROPOSAL_DIRECTORY, $storedFileName, 'public');
-
-        return $storedPath ? $storedFileName : null;
     }
 }

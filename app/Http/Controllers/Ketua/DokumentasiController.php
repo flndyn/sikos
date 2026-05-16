@@ -8,6 +8,7 @@ use App\Models\Kegiatan;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -20,6 +21,7 @@ class DokumentasiController extends Controller
         $user = auth()->user();
         $organisasi = $user->organisasiSebagaiKetua()->first();
         $organisasiId = $organisasi?->id;
+
         $filterNamaKegiatan = trim((string) $request->query('nama_kegiatan', ''));
         $search = trim((string) $request->query('search', ''));
 
@@ -27,41 +29,74 @@ class DokumentasiController extends Controller
             ->whereHas('kegiatan', function ($query) use ($organisasiId) {
                 $query->where('organisasi_id', $organisasiId);
             })
+
             ->when($filterNamaKegiatan !== '', function ($query) use ($filterNamaKegiatan) {
                 $query->whereHas('kegiatan', function ($kegiatanQuery) use ($filterNamaKegiatan) {
                     $kegiatanQuery->where('nama_kegiatan', 'like', '%' . $filterNamaKegiatan . '%');
                 });
             })
+
             ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($q) use ($search) {
+
                     $q->where('keterangan', 'like', "%{$search}%")
+
                         ->orWhereHas('kegiatan', function ($kegiatanQuery) use ($search) {
                             $kegiatanQuery->where('nama_kegiatan', 'like', "%{$search}%");
                         });
                 });
             })
+
             ->latest('id')
-            ->get(['id', 'kegiatan_id', 'file_dokumentasi', 'keterangan']);
+
+            ->get([
+                'id',
+                'kegiatan_id',
+                'file_dokumentasi',
+                'keterangan'
+            ]);
 
         $kegiatanList = Kegiatan::where('organisasi_id', $organisasiId)
-            ->where('status', 'disetujui admin')
-            ->orderBy('nama_kegiatan')
-            ->get(['id', 'nama_kegiatan']);
 
-        return view('ketua.dokumentasi', compact('dokumentasi', 'kegiatanList', 'filterNamaKegiatan', 'search'));
+            ->where('status', 'disetujui admin')
+
+            ->orderBy('nama_kegiatan')
+
+            ->get([
+                'id',
+                'nama_kegiatan'
+            ]);
+
+        return view(
+            'ketua.dokumentasi',
+            compact(
+                'dokumentasi',
+                'kegiatanList',
+                'filterNamaKegiatan',
+                'search'
+            )
+        );
     }
 
     public function store(Request $request): RedirectResponse
     {
         $user = auth()->user();
+
         $organisasi = $user->organisasiSebagaiKetua()->first();
+
         $organisasiId = $organisasi?->id;
 
         if (! $organisasiId) {
-            return redirect()->route('ketua.dokumentasi')->with('error', 'Anda belum menjadi ketua di organisasi manapun.');
+            return redirect()
+                ->route('ketua.dokumentasi')
+                ->with(
+                    'error',
+                    'Anda belum menjadi ketua di organisasi manapun.'
+                );
         }
 
         $files = $request->file('file_dokumentasi', []);
+
         $totalFiles = count($files);
 
         $validated = $request->validate([
@@ -74,14 +109,44 @@ class DokumentasiController extends Controller
                         ->where('status', 'disetujui admin')
                 ),
             ],
-            'keterangan' => ['required', 'array', 'size:' . $totalFiles],
-            'keterangan.*' => ['required', 'string'],
-            'file_dokumentasi' => ['required', 'array', 'min:1'],
-            'file_dokumentasi.*' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+
+            'keterangan' => [
+                'required',
+                'array',
+                'size:' . $totalFiles
+            ],
+
+            'keterangan.*' => [
+                'required',
+                'string'
+            ],
+
+            'file_dokumentasi' => [
+                'required',
+                'array',
+                'min:1'
+            ],
+
+            'file_dokumentasi.*' => [
+                'required',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:5120'
+            ],
+
         ]);
 
+        $folder = self::DIRECTORY . '/' . Str::slug($organisasi->nama_organisasi);
+
         foreach ($files as $index => $file) {
-            $storedPath = $file->store(self::DIRECTORY, 'public');
+
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            $storedPath = $file->storeAs(
+                $folder,
+                $filename,
+                'public'
+            );
 
             Dokumentasi::create([
                 'kegiatan_id' => $validated['kegiatan_id'],
@@ -92,13 +157,21 @@ class DokumentasiController extends Controller
 
         return redirect()
             ->route('ketua.dokumentasi')
-            ->with('success', 'Dokumentasi berhasil diunggah.');
+            ->with(
+                'success',
+                'Dokumentasi berhasil diunggah.'
+            );
     }
 
-    public function update(Request $request, Dokumentasi $dokumentasi): RedirectResponse
-    {
+    public function update(
+        Request $request,
+        Dokumentasi $dokumentasi
+    ): RedirectResponse {
+
         $user = auth()->user();
+
         $organisasi = $user->organisasiSebagaiKetua()->first();
+
         $organisasiId = $organisasi?->id;
 
         $isAuthorized = Kegiatan::where('id', $dokumentasi->kegiatan_id)
@@ -106,25 +179,58 @@ class DokumentasiController extends Controller
             ->exists();
 
         if (! $isAuthorized) {
-            return redirect()->route('ketua.dokumentasi')->with('error', 'Anda tidak punya akses ke dokumentasi ini.');
+            return redirect()
+                ->route('ketua.dokumentasi')
+                ->with(
+                    'error',
+                    'Anda tidak punya akses ke dokumentasi ini.'
+                );
         }
 
         $validated = $request->validate([
             'kegiatan_id' => [
                 'required',
                 'integer',
-                Rule::exists('kegiatan', 'id')->where(fn ($query) => $query->where('organisasi_id', $organisasiId)),
+                Rule::exists('kegiatan', 'id')->where(
+                    fn ($query) => $query->where('organisasi_id', $organisasiId)
+                ),
             ],
-            'keterangan' => ['nullable', 'string'],
-            'file_dokumentasi' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+
+            'keterangan' => [
+                'nullable',
+                'string'
+            ],
+
+            'file_dokumentasi' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:5120'
+            ],
+
         ]);
 
         if ($request->hasFile('file_dokumentasi')) {
-            if ($dokumentasi->file_dokumentasi && ! str_starts_with($dokumentasi->file_dokumentasi, 'http')) {
-                Storage::disk('public')->delete($dokumentasi->file_dokumentasi);
+
+            if (
+                $dokumentasi->file_dokumentasi &&
+                ! str_starts_with($dokumentasi->file_dokumentasi, 'http')
+            ) {
+                Storage::disk('public')
+                    ->delete($dokumentasi->file_dokumentasi);
             }
 
-            $validated['file_dokumentasi'] = $request->file('file_dokumentasi')->store(self::DIRECTORY, 'public');
+            $folder = self::DIRECTORY . '/' . Str::slug($organisasi->nama_organisasi);
+
+            $file = $request->file('file_dokumentasi');
+
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            $validated['file_dokumentasi'] = $file->storeAs(
+                $folder,
+                $filename,
+                'public'
+            );
         } else {
             unset($validated['file_dokumentasi']);
         }
@@ -133,13 +239,20 @@ class DokumentasiController extends Controller
 
         return redirect()
             ->route('ketua.dokumentasi')
-            ->with('success', 'Dokumentasi berhasil diperbarui.');
+            ->with(
+                'success',
+                'Dokumentasi berhasil diperbarui.'
+            );
     }
 
-    public function destroy(Dokumentasi $dokumentasi): RedirectResponse
-    {
+    public function destroy(
+        Dokumentasi $dokumentasi
+    ): RedirectResponse {
+
         $user = auth()->user();
+
         $organisasi = $user->organisasiSebagaiKetua()->first();
+
         $organisasiId = $organisasi?->id;
 
         $isAuthorized = Kegiatan::where('id', $dokumentasi->kegiatan_id)
@@ -147,17 +260,29 @@ class DokumentasiController extends Controller
             ->exists();
 
         if (! $isAuthorized) {
-            return redirect()->route('ketua.dokumentasi')->with('error', 'Anda tidak punya akses ke dokumentasi ini.');
+            return redirect()
+                ->route('ketua.dokumentasi')
+                ->with(
+                    'error',
+                    'Anda tidak punya akses ke dokumentasi ini.'
+                );
         }
 
-        if ($dokumentasi->file_dokumentasi && ! str_starts_with($dokumentasi->file_dokumentasi, 'http')) {
-            Storage::disk('public')->delete($dokumentasi->file_dokumentasi);
+        if (
+            $dokumentasi->file_dokumentasi &&
+            ! str_starts_with($dokumentasi->file_dokumentasi, 'http')
+        ) {
+            Storage::disk('public')
+                ->delete($dokumentasi->file_dokumentasi);
         }
 
         $dokumentasi->delete();
 
         return redirect()
             ->route('ketua.dokumentasi')
-            ->with('success', 'Dokumentasi berhasil dihapus.');
+            ->with(
+                'success',
+                'Dokumentasi berhasil dihapus.'
+            );
     }
 }

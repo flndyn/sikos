@@ -8,12 +8,11 @@ use App\Notifications\KegiatanWorkflowNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class KegiatanController extends Controller
 {
-    private const PROPOSAL_DIRECTORY = 'proposal-kegiatan';
-
     public function __invoke(Request $request): View
     {
         $user = auth()->user();
@@ -41,7 +40,6 @@ class KegiatanController extends Controller
             'tempat',
             'proposal',
             'status',
-            'keterangan',
         ]);
 
         return view('ketua.kegiatan', compact('kegiatan', 'search'));
@@ -55,7 +53,8 @@ class KegiatanController extends Controller
         $organisasiId = $organisasi?->id;
 
         if (!$organisasiId) {
-            return redirect()->route('ketua.kegiatan')->with('error', 'Anda belum menjadi ketua di organisasi manapun');
+            return redirect()->route('ketua.kegiatan')
+                ->with('error', 'Anda belum menjadi ketua di organisasi manapun');
         }
 
         $validated = $request->validate([
@@ -66,10 +65,23 @@ class KegiatanController extends Controller
             'proposal' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:5120'],
         ]);
 
+        // upload proposal
         if ($request->hasFile('proposal')) {
+
+            // folder berdasarkan nama organisasi
+            $folder = 'proposal/' . Str::slug($organisasi->nama_organisasi);
+
             $file = $request->file('proposal');
+
+            // nama file unik
             $filename = time() . '_' . $file->getClientOriginalName();
-            $validated['proposal'] = $file->storeAs(self::PROPOSAL_DIRECTORY, $filename, 'public');
+
+            // simpan file
+            $validated['proposal'] = $file->storeAs(
+                $folder,
+                $filename,
+                'public'
+            );
         }
 
         $validated['organisasi_id'] = $organisasiId;
@@ -79,17 +91,20 @@ class KegiatanController extends Controller
 
         $this->notifyPembinaProposalDiajukan($kegiatan);
 
-        return redirect()->route('ketua.kegiatan')->with('success', 'Kegiatan berhasil diajukan');
+        return redirect()->route('ketua.kegiatan')
+            ->with('success', 'Kegiatan berhasil diajukan');
     }
 
     public function update(Request $request, Kegiatan $kegiatan): RedirectResponse
     {
         $user = auth()->user();
+
         $organisasi = $user->organisasiSebagaiKetua()->first();
         $organisasiId = $organisasi?->id;
 
         if ($kegiatan->organisasi_id !== $organisasiId) {
-            return redirect()->route('ketua.kegiatan')->with('error', 'Anda tidak punya akses untuk mengubah kegiatan ini.');
+            return redirect()->route('ketua.kegiatan')
+                ->with('error', 'Anda tidak punya akses untuk mengubah kegiatan ini.');
         }
 
         $validated = $request->validate([
@@ -100,24 +115,42 @@ class KegiatanController extends Controller
             'proposal' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:5120'],
         ]);
 
+        // upload proposal baru
         if ($request->hasFile('proposal')) {
-            if ($kegiatan->proposal && ! str_starts_with($kegiatan->proposal, 'http')) {
+
+            // hapus file lama
+            if ($kegiatan->proposal && !str_starts_with($kegiatan->proposal, 'http')) {
                 Storage::disk('public')->delete($kegiatan->proposal);
             }
 
+            // folder berdasarkan nama organisasi
+            $folder = 'proposal/' . Str::slug($organisasi->nama_organisasi);
+
             $file = $request->file('proposal');
+
+            // nama file unik
             $filename = time() . '_' . $file->getClientOriginalName();
-            $validated['proposal'] = $file->storeAs(self::PROPOSAL_DIRECTORY, $filename, 'public');
+
+            // simpan file baru
+            $validated['proposal'] = $file->storeAs(
+                $folder,
+                $filename,
+                'public'
+            );
+
         } else {
             unset($validated['proposal']);
         }
 
-        // Jika sebelumnya ditolak, saat ketua mengedit status kembali ke proses review.
-        $perluDikirimUlangKePembina = in_array($kegiatan->status, ['ditolak admin', 'ditolak pembina'], true);
+        // jika sebelumnya ditolak
+        $perluDikirimUlangKePembina = in_array(
+            $kegiatan->status,
+            ['ditolak admin', 'ditolak pembina'],
+            true
+        );
 
         if ($perluDikirimUlangKePembina) {
             $validated['status'] = 'pending';
-            $validated['keterangan'] = null;
         }
 
         $kegiatan->update($validated);
@@ -126,42 +159,50 @@ class KegiatanController extends Controller
             $this->notifyPembinaProposalDiajukan($kegiatan->fresh());
         }
 
-        return redirect()->route('ketua.kegiatan')->with('success', 'Kegiatan berhasil diperbarui');
+        return redirect()->route('ketua.kegiatan')
+            ->with('success', 'Kegiatan berhasil diperbarui');
     }
 
     public function destroy(Kegiatan $kegiatan): RedirectResponse
     {
         $user = auth()->user();
+
         $organisasi = $user->organisasiSebagaiKetua()->first();
         $organisasiId = $organisasi?->id;
 
         if ($kegiatan->organisasi_id !== $organisasiId) {
-            return redirect()->route('ketua.kegiatan')->with('error', 'Anda tidak punya akses untuk menghapus kegiatan ini.');
+            return redirect()->route('ketua.kegiatan')
+                ->with('error', 'Anda tidak punya akses untuk menghapus kegiatan ini.');
         }
 
-        if ($kegiatan->proposal && ! str_starts_with($kegiatan->proposal, 'http')) {
+        // hapus file proposal
+        if ($kegiatan->proposal && !str_starts_with($kegiatan->proposal, 'http')) {
             Storage::disk('public')->delete($kegiatan->proposal);
         }
 
         $kegiatan->delete();
 
-        return redirect()->route('ketua.kegiatan')->with('success', 'Kegiatan berhasil dihapus');
+        return redirect()->route('ketua.kegiatan')
+            ->with('success', 'Kegiatan berhasil dihapus');
     }
 
     private function notifyPembinaProposalDiajukan(Kegiatan $kegiatan): void
     {
         $organisasi = $kegiatan->organisasi()->with('pembina')->first();
+
         $pembina = $organisasi?->pembina;
 
-        if (! $pembina) {
+        if (!$pembina) {
             return;
         }
 
         $pembina->notify(new KegiatanWorkflowNotification(
             'Pengajuan Proposal Baru',
-            'Proposal kegiatan "' . $kegiatan->nama_kegiatan . '" dari ' . ($organisasi?->nama_organisasi ?? 'organisasi') . ' menunggu validasi Anda.',
+            'Proposal kegiatan "' . $kegiatan->nama_kegiatan .
+            '" dari ' . ($organisasi?->nama_organisasi ?? 'organisasi') .
+            ' menunggu validasi Anda.',
             route('pembina.validasi'),
-            'Buka validasi'
+            'Buka Validasi'
         ));
     }
 }
