@@ -20,6 +20,9 @@ class LaporanController extends Controller
     {
         $organisasiId = auth()->user()?->organisasiSebagaiKetua?->id;
 
+        // FIX SEARCH
+        $search = $request->query('search', '');
+
         $laporan = LaporanKegiatan::with([
             'kegiatan:id,organisasi_id,nama_kegiatan,tanggal_mulai',
             'kegiatan.organisasi:id,nama_organisasi',
@@ -27,24 +30,55 @@ class LaporanController extends Controller
             ->whereHas('kegiatan', function ($query) use ($organisasiId) {
                 $query->where('organisasi_id', $organisasiId);
             })
-                        ->when($search !== '', function ($query) use ($search) {
-                            $query->where(function ($q) use ($search) {
-                                $q->where('isi_laporan', 'like', "%{$search}%")
-                                    ->orWhereHas('kegiatan', function ($kegiatanQuery) use ($search) {
-                                        $kegiatanQuery->where('nama_kegiatan', 'like', "%{$search}%");
-                                    });
-                            });
-                        })
+
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+
+                    $q->where('isi_laporan', 'like', "%{$search}%")
+
+                        ->orWhereHas('kegiatan', function ($kegiatanQuery) use ($search) {
+                            $kegiatanQuery->where(
+                                'nama_kegiatan',
+                                'like',
+                                "%{$search}%"
+                            );
+                        });
+                });
+            })
+
             ->latest('id')
-            ->get(['id', 'kegiatan_id', 'isi_laporan', 'file_laporan', 'created_at']);
+
+            ->get([
+                'id',
+                'kegiatan_id',
+                'isi_laporan',
+                'file_laporan',
+                'created_at'
+            ]);
 
         $kegiatanTersedia = Kegiatan::where('organisasi_id', $organisasiId)
-            ->whereIn('status', ['disetujui pembina', 'disetujui admin'])
-            ->orderByDesc('tanggal_mulai')
-            ->get(['id', 'nama_kegiatan', 'tanggal_mulai']);
 
-        $search = $request->query('search', '');
-        return view('ketua.laporan', compact('laporan', 'kegiatanTersedia', 'search'));
+            ->whereIn('status', [
+                'disetujui pembina',
+                'disetujui admin'
+            ])
+
+            ->orderByDesc('tanggal_mulai')
+
+            ->get([
+                'id',
+                'nama_kegiatan',
+                'tanggal_mulai'
+            ]);
+
+        return view(
+            'ketua.laporan',
+            compact(
+                'laporan',
+                'kegiatanTersedia',
+                'search'
+            )
+        );
     }
 
     public function store(Request $request): RedirectResponse
@@ -52,29 +86,71 @@ class LaporanController extends Controller
         $organisasiId = auth()->user()?->organisasiSebagaiKetua?->id;
 
         if (! $organisasiId) {
-            return redirect()->route('ketua.laporan')->with('error', 'Anda belum menjadi ketua di organisasi manapun.');
+            return redirect()
+                ->route('ketua.laporan')
+                ->with(
+                    'error',
+                    'Anda belum menjadi ketua di organisasi manapun.'
+                );
         }
 
         $validated = $request->validate([
-            'kegiatan_id' => ['required', 'integer', 'exists:kegiatan,id', Rule::unique('laporan_kegiatan', 'kegiatan_id')],
-            'isi_laporan' => ['required', 'string'],
-            'file_laporan' => ['required', 'file', 'mimes:pdf,doc,docx', 'max:5120'],
+            'kegiatan_id' => [
+                'required',
+                'integer',
+                'exists:kegiatan,id',
+                Rule::unique('laporan_kegiatan', 'kegiatan_id')
+            ],
+
+            'isi_laporan' => [
+                'required',
+                'string'
+            ],
+
+            'file_laporan' => [
+                'required',
+                'file',
+                'mimes:pdf,doc,docx',
+                'max:5120'
+            ],
+
         ], [
-            'kegiatan_id.unique' => 'Kegiatan ini sudah memiliki laporan.',
+            'kegiatan_id.unique' =>
+                'Kegiatan ini sudah memiliki laporan.',
         ]);
 
-        $kegiatanValid = Kegiatan::where('id', $validated['kegiatan_id'])
+        $kegiatanValid = Kegiatan::where(
+            'id',
+            $validated['kegiatan_id']
+        )
+
             ->where('organisasi_id', $organisasiId)
-            ->whereIn('status', ['disetujui pembina', 'disetujui admin'])
+
+            ->whereIn('status', [
+                'disetujui pembina',
+                'disetujui admin'
+            ])
+
             ->exists();
 
         if (! $kegiatanValid) {
-            return redirect()->route('ketua.laporan')->with('error', 'Kegiatan tidak valid untuk unggah laporan.');
+            return redirect()
+                ->route('ketua.laporan')
+                ->with(
+                    'error',
+                    'Kegiatan tidak valid untuk unggah laporan.'
+                );
         }
 
         $file = $request->file('file_laporan');
+
         $filename = time() . '_' . $file->getClientOriginalName();
-        $validated['file_laporan'] = $file->storeAs(self::REPORT_DIRECTORY, $filename, 'public');
+
+        $validated['file_laporan'] = $file->storeAs(
+            self::REPORT_DIRECTORY,
+            $filename,
+            'public'
+        );
 
         LaporanKegiatan::create([
             'kegiatan_id' => $validated['kegiatan_id'],
@@ -82,78 +158,148 @@ class LaporanController extends Controller
             'file_laporan' => $validated['file_laporan'],
         ]);
 
-        return redirect()->route('ketua.laporan')->with('success', 'Laporan kegiatan berhasil diunggah.');
+        return redirect()
+            ->route('ketua.laporan')
+            ->with(
+                'success',
+                'Laporan kegiatan berhasil diunggah.'
+            );
     }
 
-    public function update(Request $request, LaporanKegiatan $laporan): RedirectResponse
-    {
+    public function update(
+        Request $request,
+        LaporanKegiatan $laporan
+    ): RedirectResponse {
+
         $organisasiId = auth()->user()?->organisasiSebagaiKetua?->id;
 
         $isAuthorized = $laporan->kegiatan()
+
             ->where('organisasi_id', $organisasiId)
+
             ->exists();
 
         if (! $isAuthorized) {
-            return redirect()->route('ketua.laporan')->with('error', 'Anda tidak memiliki akses ke laporan ini.');
+            return redirect()
+                ->route('ketua.laporan')
+                ->with(
+                    'error',
+                    'Anda tidak memiliki akses ke laporan ini.'
+                );
         }
 
         $validated = $request->validate([
-            'isi_laporan' => ['required', 'string'],
-            'file_laporan' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:5120'],
+
+            'isi_laporan' => [
+                'required',
+                'string'
+            ],
+
+            'file_laporan' => [
+                'nullable',
+                'file',
+                'mimes:pdf,doc,docx',
+                'max:5120'
+            ],
+
         ]);
 
         if ($request->hasFile('file_laporan')) {
-            if ($laporan->file_laporan && ! str_starts_with($laporan->file_laporan, 'http')) {
-                Storage::disk('public')->delete($laporan->file_laporan);
+
+            if (
+                $laporan->file_laporan &&
+                ! str_starts_with($laporan->file_laporan, 'http')
+            ) {
+                Storage::disk('public')
+                    ->delete($laporan->file_laporan);
             }
 
             $file = $request->file('file_laporan');
+
             $filename = time() . '_' . $file->getClientOriginalName();
-            $validated['file_laporan'] = $file->storeAs(self::REPORT_DIRECTORY, $filename, 'public');
+
+            $validated['file_laporan'] = $file->storeAs(
+                self::REPORT_DIRECTORY,
+                $filename,
+                'public'
+            );
         }
 
         $laporan->update($validated);
 
-        return redirect()->route('ketua.laporan')->with('success', 'Laporan kegiatan berhasil diperbarui.');
+        return redirect()
+            ->route('ketua.laporan')
+            ->with(
+                'success',
+                'Laporan kegiatan berhasil diperbarui.'
+            );
     }
 
-    public function destroy(LaporanKegiatan $laporan): RedirectResponse
-    {
+    public function destroy(
+        LaporanKegiatan $laporan
+    ): RedirectResponse {
+
         $organisasiId = auth()->user()?->organisasiSebagaiKetua?->id;
 
         $isAuthorized = $laporan->kegiatan()
+
             ->where('organisasi_id', $organisasiId)
+
             ->exists();
 
         if (! $isAuthorized) {
-            return redirect()->route('ketua.laporan')->with('error', 'Anda tidak memiliki akses ke laporan ini.');
+            return redirect()
+                ->route('ketua.laporan')
+                ->with(
+                    'error',
+                    'Anda tidak memiliki akses ke laporan ini.'
+                );
         }
 
-        if ($laporan->file_laporan && ! str_starts_with($laporan->file_laporan, 'http')) {
-            Storage::disk('public')->delete($laporan->file_laporan);
+        if (
+            $laporan->file_laporan &&
+            ! str_starts_with($laporan->file_laporan, 'http')
+        ) {
+            Storage::disk('public')
+                ->delete($laporan->file_laporan);
         }
 
         $laporan->delete();
 
-        return redirect()->route('ketua.laporan')->with('success', 'Laporan kegiatan berhasil dihapus.');
+        return redirect()
+            ->route('ketua.laporan')
+            ->with(
+                'success',
+                'Laporan kegiatan berhasil dihapus.'
+            );
     }
 
-    public function download(LaporanKegiatan $laporan): StreamedResponse|RedirectResponse
-    {
+    public function download(
+        LaporanKegiatan $laporan
+    ): StreamedResponse|RedirectResponse {
+
         $organisasiId = auth()->user()?->organisasiSebagaiKetua?->id;
 
         $isAuthorized = $laporan->kegiatan()
+
             ->where('organisasi_id', $organisasiId)
+
             ->exists();
 
         if (! $isAuthorized) {
-            return back()->with('error', 'Anda tidak memiliki akses ke laporan ini.');
+            return back()->with(
+                'error',
+                'Anda tidak memiliki akses ke laporan ini.'
+            );
         }
 
         $file = $laporan->file_laporan;
 
         if (! $file) {
-            return back()->with('error', 'File laporan tidak tersedia.');
+            return back()->with(
+                'error',
+                'File laporan tidak tersedia.'
+            );
         }
 
         if (str_starts_with($file, 'http')) {
@@ -161,16 +307,24 @@ class LaporanController extends Controller
         }
 
         $candidatePaths = [$file];
+
         if (! str_contains($file, '/')) {
-            $candidatePaths[] = self::REPORT_DIRECTORY . '/' . $file;
+            $candidatePaths[] =
+                self::REPORT_DIRECTORY . '/' . $file;
         }
 
         foreach ($candidatePaths as $path) {
+
             if (Storage::disk('public')->exists($path)) {
-                return Storage::disk('public')->download($path);
+
+                return Storage::disk('public')
+                    ->download($path);
             }
         }
 
-        return back()->with('error', 'File laporan tidak ditemukan di storage.');
+        return back()->with(
+            'error',
+            'File laporan tidak ditemukan di storage.'
+        );
     }
 }
