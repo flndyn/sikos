@@ -44,6 +44,7 @@
                         <th class="text-nowrap">Deskripsi</th>
                         <th class="text-nowrap">Tanggal</th>
                         <th class="text-nowrap">Tempat</th>
+                        <th class="text-nowrap">Proposal</th>
                         <th class="text-nowrap">Status</th>
                         <th class="text-nowrap text-center">Aksi</th>
                     </tr>
@@ -72,6 +73,16 @@
                             <td>{{ \Illuminate\Support\Str::limit($item->deskripsi ?? '-', 50) }}</td>
                             <td>{{ $item->tanggal_mulai->format('d-m-Y') }}</td>
                             <td>{{ $item->tempat }}</td>
+                            <td class="text-center">
+                                @if ($item->proposal)
+                                    <a href="{{ route('proposal.download', $item->id) }}" class="btn btn-danger btn-sm"
+                                        target="_blank">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                @else
+                                    -
+                                @endif
+                            </td>
                             <td><span class="badge {{ $badgeClass }}">{{ $statusLabel }}</span></td>
                             <td class="text-nowrap text-center">
                                 @if (!in_array($item->status, ['disetujui pembina', 'disetujui admin']))
@@ -86,7 +97,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center py-4">
+                            <td colspan="8" class="text-center py-4">
                                 <p class="text-muted mb-0">Belum ada kegiatan yang diajukan</p>
                             </td>
                         </tr>
