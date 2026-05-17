@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>SIOKAS</title>
+    <title>SIKOS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Bootstrap -->
@@ -298,7 +298,7 @@
             <div class="sidebar-header">
                 <i class="fas fa-home logo-icon"></i>
                 <div class="sidebar-brand">
-                    <h4>SIOKAS</h4>
+                    <h4>SIKOS</h4>
                     <small>Sistem Informasi<br>Organisasi & Kegiatan</small>
                 </div>
             </div>

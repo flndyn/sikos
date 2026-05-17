@@ -11,7 +11,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use Symfony\Component\HttpFoundation\StreamedResponse;
+
 
 class LaporanController extends Controller
 {
@@ -284,30 +284,26 @@ class LaporanController extends Controller
 
     public function download(
         LaporanKegiatan $laporan
-    ): StreamedResponse|RedirectResponse {
+    ): RedirectResponse|\Symfony\Component\HttpFoundation\StreamedResponse {
 
         $organisasiId = auth()->user()?->organisasiSebagaiKetua?->id;
 
         $isAuthorized = $laporan->kegiatan()
-
             ->where('organisasi_id', $organisasiId)
-
             ->exists();
 
         if (! $isAuthorized) {
-            return back()->with(
-                'error',
-                'Anda tidak memiliki akses ke laporan ini.'
-            );
+            return redirect()
+                ->route('ketua.laporan')
+                ->with('error', 'Anda tidak memiliki akses ke laporan ini.');
         }
 
         $file = $laporan->file_laporan;
 
         if (! $file) {
-            return back()->with(
-                'error',
-                'File laporan tidak tersedia.'
-            );
+            return redirect()
+                ->route('ketua.laporan')
+                ->with('error', 'File laporan tidak tersedia.');
         }
 
         if (str_starts_with($file, 'http')) {
@@ -317,22 +313,42 @@ class LaporanController extends Controller
         $candidatePaths = [$file];
 
         if (! str_contains($file, '/')) {
-            $candidatePaths[] =
-                self::REPORT_DIRECTORY . '/' . $file;
+            $candidatePaths[] = self::REPORT_DIRECTORY . '/' . $file;
         }
 
         foreach ($candidatePaths as $path) {
-
             if (Storage::disk('public')->exists($path)) {
+                $fullPath = realpath(Storage::disk('public')->path($path));
 
-                return Storage::disk('public')
-                    ->download($path);
+                if (! $fullPath || ! is_file($fullPath)) {
+                    continue;
+                }
+
+                $filename = basename($fullPath);
+                $mimeType = mime_content_type($fullPath) ?: 'application/octet-stream';
+                $fileSize = filesize($fullPath);
+
+                return response()->streamDownload(function () use ($fullPath) {
+                    $handle = fopen($fullPath, 'rb');
+                    while (! feof($handle)) {
+                        echo fread($handle, 8192);
+                        ob_flush();
+                        flush();
+                    }
+                    fclose($handle);
+                }, $filename, [
+                    'Content-Type'              => $mimeType,
+                    'Content-Length'            => $fileSize,
+                    'Content-Disposition'       => 'attachment; filename="' . $filename . '"',
+                    'Cache-Control'             => 'no-cache, no-store, must-revalidate',
+                    'Pragma'                    => 'no-cache',
+                    'Expires'                   => '0',
+                ]);
             }
         }
 
-        return back()->with(
-            'error',
-            'File laporan tidak ditemukan di storage.'
-        );
+        return redirect()
+            ->route('ketua.laporan')
+            ->with('error', 'File laporan tidak ditemukan di storage.');
     }
 }

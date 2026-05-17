@@ -64,12 +64,7 @@
                                     @php
                                         $proposalUrl = \Illuminate\Support\Str::startsWith($item->proposal, 'http')
                                             ? $item->proposal
-                                            : (\Illuminate\Support\Str::startsWith(
-                                                $item->proposal,
-                                                'proposal-kegiatan/',
-                                            )
-                                                ? asset('storage/' . $item->proposal)
-                                                : asset('storage/proposal-kegiatan/' . $item->proposal));
+                                            : route('proposal.download', $item);
                                     @endphp
                                     <a href="{{ $proposalUrl }}" class="btn btn-danger btn-sm" target="_blank"
                                         title="Lihat PDF Proposal">

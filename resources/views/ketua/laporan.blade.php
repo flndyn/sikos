@@ -56,8 +56,7 @@
                             <td>{{ \Illuminate\Support\Str::limit($item->isi_laporan ?? '-', 120) }}</td>
                             <td class="text-nowrap text-center">
                                 @if ($item->file_laporan)
-                                    <a href="{{ route('ketua.laporan.download', $item->id) }}"
-                                        class="btn btn-primary btn-sm">
+                                    <a href="{{ route('ketua.laporan.download', $item) }}" class="btn btn-primary btn-sm">
                                         <i class="bi bi-download"></i> Download
                                     </a>
                                 @else

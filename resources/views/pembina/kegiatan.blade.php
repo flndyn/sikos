@@ -47,17 +47,8 @@
                             <td>{{ $item->tempat ?? '-' }}</td>
                             <td class="text-center">
                                 @if ($item->proposal)
-                                    @php
-                                        $proposalUrl = \Illuminate\Support\Str::startsWith($item->proposal, 'http')
-                                            ? $item->proposal
-                                            : (\Illuminate\Support\Str::startsWith(
-                                                $item->proposal,
-                                                'proposal-kegiatan/',
-                                            )
-                                                ? asset('storage/' . $item->proposal)
-                                                : asset('storage/proposal-kegiatan/' . $item->proposal));
-                                    @endphp
-                                    <a href="{{ $proposalUrl }}" class="btn btn-danger btn-sm" target="_blank">
+                                    <a href="{{ route('proposal.download', $item->id) }}" class="btn btn-danger btn-sm"
+                                        target="_blank">
                                         <i class="bi bi-file-earmark-pdf"></i>
                                     </a>
                                 @else

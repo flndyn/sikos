@@ -32,9 +32,8 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h5 class="mb-0">Dokumentasi Kegiatan</h5>
-        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-            data-bs-target="#uploadDokumentasiModal">
-            <i class="bi bi-plus"></i> Upload Dokumentasi
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadDokumentasiModal">
+            <i class="bi bi-cloud-upload"></i> Upload Dokumentasi
         </button>
     </div>
 
@@ -93,8 +92,8 @@
                             {{ \Illuminate\Support\Str::limit($firstItem->keterangan ?? '-', 90) }}
                         </p>
 
-                        <div class="mt-auto d-flex justify-content-end">
-                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                        <div class="mt-auto d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal"
                                 data-bs-target="#detailDokumentasiModal{{ $kegiatanId }}">
                                 <i class="bi bi-images"></i> Detail
                             </button>
@@ -151,14 +150,16 @@
                                                 {{ $item->keterangan ?: '-' }}
                                             </p>
 
-                                            <div class="mt-auto d-flex justify-content-between">
-                                                <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                            <div class="mt-auto d-flex gap-2">
+                                                <button type="button" class="btn btn-outline-primary btn-sm flex-fill"
+                                                    data-bs-toggle="modal"
                                                     data-bs-target="#editDokumentasiModal{{ $item->id }}">
-                                                    <i class="bi bi-pencil"></i>
+                                                    <i class="bi bi-pencil"></i> Edit
                                                 </button>
-                                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                                <button type="button" class="btn btn-outline-danger btn-sm flex-fill"
+                                                    data-bs-toggle="modal"
                                                     data-bs-target="#hapusDokumentasiModal{{ $item->id }}">
-                                                    <i class="bi bi-trash"></i>
+                                                    <i class="bi bi-trash"></i> Hapus
                                                 </button>
                                             </div>
                                         </div>
@@ -225,8 +226,9 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Keterangan per Foto *</label>
-                            <p class="text-muted small mb-2">Keterangan akan muncul sesuai jumlah file yang dipilih.</p>
+                            <label class="form-label">Keterangan per Foto</label>
+                            <p class="text-muted small mb-2">Keterangan bersifat opsional dan boleh dikosongkan. Jika
+                                diisi, akan muncul sesuai jumlah file yang dipilih.</p>
                             <div id="keteranganPerFileContainer" data-old-keterangan='@json(old('keterangan', []))'></div>
                             @error('keterangan')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>

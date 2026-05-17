@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>SIOKAS - @yield('title', 'Dashboard')</title>
+    <title>SIKOS - @yield('title', 'Dashboard')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -304,7 +304,7 @@
             <div class="sidebar-header">
                 <i class="fas fa-home logo-icon"></i>
                 <div class="sidebar-brand">
-                    <h4>SIOKAS</h4>
+                    <h4>SIKOS</h4>
                     <small>Sistem Informasi<br>Organisasi & Kegiatan</small>
                 </div>
             </div>

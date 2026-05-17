@@ -31,24 +31,15 @@
 
                 <tbody>
                     @forelse ($laporan as $item)
-                        @php
-                            $fileUrl = null;
-
-                            if ($item->file_laporan) {
-                                $fileUrl = \Illuminate\Support\Str::startsWith($item->file_laporan, 'http')
-                                    ? $item->file_laporan
-                                    : asset('storage/' . $item->file_laporan);
-                            }
-                        @endphp
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->kegiatan?->nama_kegiatan ?? '-' }}</td>
                             <td>{{ $item->kegiatan?->organisasi?->nama_organisasi ?? '-' }}</td>
                             <td>{{ $item->kegiatan?->tanggal_mulai?->format('Y-m-d') ?? '-' }}</td>
                             <td>
-                                @if ($fileUrl)
-                                    <a href="{{ route('admin.laporan.download', $item->id) }}"
-                                        class="btn btn-primary btn-sm">
+                                @if ($item->file_laporan)
+                                    <a href="{{ route('admin.laporan.download', $item) }}" class="btn btn-primary btn-sm"
+                                        target="_blank" rel="noopener">
                                         <i class="bi bi-download"></i> Download
                                     </a>
                                 @else

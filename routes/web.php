@@ -27,6 +27,7 @@ use App\Http\Controllers\Pembina\OrganisasiController as PembinaOrganisasiContro
 use App\Http\Controllers\Pembina\ProfilController as PembinaProfilController;
 use App\Http\Controllers\Pembina\ValidasiController as PembinaValidasiController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 Route::get('/', HomeController::class)->name('home');
 
@@ -45,8 +46,19 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/dashboard', [AuthController::class, 'redirectDashboard'])->name('dashboard.redirect');
     Route::post('/notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.read-all');
     Route::post('/notifications/{notificationId}/read', [NotificationController::class, 'readOne'])->name('notifications.read-one');
-});
 
+    Route::get('/proposal/{kegiatan}/download', function (\App\Models\Kegiatan $kegiatan) {
+        $path = $kegiatan->proposal;
+
+        if (! $path || ! Storage::disk('public')->exists($path)) {
+            abort(404);
+        }
+
+        $fullPath = Storage::disk('public')->path($path);
+
+        return response()->file($fullPath);
+    })->name('proposal.download');
+});
 
 Route::middleware(['auth', 'role:admin'])->group(function (): void {
     Route::get('/admin/dashboard', AdminDashboardController::class)->name('admin.dashboard');
@@ -114,6 +126,9 @@ Route::middleware(['auth', 'role:pembina'])->group(function (): void {
 
     Route::get('/pembina/jadwal', PembinaJadwalController::class)->name('pembina.jadwal');
     Route::get('/pembina/dokumentasi', PembinaDokumentasiController::class)->name('pembina.dokumentasi');
+    Route::post('/pembina/dokumentasi', [PembinaDokumentasiController::class, 'store'])->name('pembina.dokumentasi.store');
+    Route::put('/pembina/dokumentasi/{dokumentasi}', [PembinaDokumentasiController::class, 'update'])->name('pembina.dokumentasi.update');
+    Route::delete('/pembina/dokumentasi/{dokumentasi}', [PembinaDokumentasiController::class, 'destroy'])->name('pembina.dokumentasi.destroy');
     Route::get('/pembina/laporan', PembinaLaporanController::class)->name('pembina.laporan');
     Route::get('/pembina/laporan/{laporan}/download', [PembinaLaporanController::class, 'download'])->name('pembina.laporan.download');
 });

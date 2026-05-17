@@ -111,12 +111,7 @@
                                     @php
                                         $proposalUrl = \Illuminate\Support\Str::startsWith($item->proposal, 'http')
                                             ? $item->proposal
-                                            : (\Illuminate\Support\Str::startsWith(
-                                                $item->proposal,
-                                                'proposal-kegiatan/',
-                                            )
-                                                ? asset('storage/' . $item->proposal)
-                                                : asset('storage/proposal-kegiatan/' . $item->proposal));
+                                            : route('proposal.download', $item);
                                     @endphp
                                     <a href="{{ $proposalUrl }}" class="btn btn-info btn-sm" target="_blank"
                                         title="Lihat Proposal">
@@ -405,12 +400,7 @@
                                                     'http',
                                                 )
                                                     ? $item->proposal
-                                                    : (\Illuminate\Support\Str::startsWith(
-                                                        $item->proposal,
-                                                        'proposal-kegiatan/',
-                                                    )
-                                                        ? asset('storage/' . $item->proposal)
-                                                        : asset('storage/proposal-kegiatan/' . $item->proposal));
+                                                    : route('proposal.download', $item);
                                             @endphp
                                             <div class="mb-2">
                                                 <a href="{{ $proposalUrl }}" target="_blank" class="small">

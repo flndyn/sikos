@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIOKAS - SMAN 1 Paiton</title>
+    <title>SIKOS - SMAN 1 Paiton</title>
     <!-- Bootstrap 5.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -35,13 +35,13 @@
         }
 
         /* ========== NAVBAR ========== */
-        .navbar-siokas {
+        .navbar-sikos {
             background: #fff;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
             padding: 12px 0;
         }
 
-        .navbar-siokas .navbar-brand {
+        .navbar-sikos .navbar-brand {
             display: flex;
             align-items: center;
             gap: 10px;
@@ -51,7 +51,7 @@
             text-decoration: none;
         }
 
-        .navbar-siokas .navbar-brand small {
+        .navbar-sikos .navbar-brand small {
             display: block;
             font-size: 0.7rem;
             font-weight: 500;
@@ -59,7 +59,7 @@
             line-height: 1.2;
         }
 
-        .navbar-siokas .logo-badge {
+        .navbar-sikos .logo-badge {
             width: 42px;
             height: 42px;
             background: linear-gradient(135deg, #1565c0, #0d47a1);
@@ -74,7 +74,7 @@
             overflow: hidden;
         }
 
-        .navbar-siokas .logo-badge::after {
+        .navbar-sikos .logo-badge::after {
             content: '';
             position: absolute;
             top: 3px;
@@ -87,12 +87,12 @@
             opacity: 0.9;
         }
 
-        .navbar-siokas .logo-badge i {
+        .navbar-sikos .logo-badge i {
             position: relative;
             z-index: 1;
         }
 
-        .nav-link-siokas {
+        .nav-link-sikos {
             color: #555 !important;
             font-weight: 500;
             font-size: 0.9rem;
@@ -102,16 +102,16 @@
             display: inline-block;
         }
 
-        .nav-link-siokas:hover,
-        .nav-link-siokas.active {
+        .nav-link-sikos:hover,
+        .nav-link-sikos.active {
             color: var(--primary-blue) !important;
         }
 
-        .nav-link-siokas.active {
+        .nav-link-sikos.active {
             position: relative;
         }
 
-        .nav-link-siokas.active::after {
+        .nav-link-sikos.active::after {
             content: '';
             position: absolute;
             bottom: 0;
@@ -605,7 +605,7 @@
         }
 
         /*FOOTER*/
-        .footer-siokas {
+        .footer-sikos {
             background: var(--dark-blue);
             color: #ccc;
             padding: 50px 0 0;
@@ -792,7 +792,7 @@
 <body>
 
     <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-siokas sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-sikos sticky-top">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">
                 <div class="logo-badge">
@@ -810,16 +810,16 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav align-items-center gap-1">
                     <li class="nav-item">
-                        <a class="nav-link nav-link-siokas active" href="{{ route('home') }}">Beranda</a>
+                        <a class="nav-link nav-link-sikos active" href="{{ route('home') }}">Beranda</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-link-siokas" href="#fitur">Tentang</a>
+                        <a class="nav-link nav-link-sikos" href="#fitur">Tentang</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-link-siokas" href="#kegiatan">Kegiatan</a>
+                        <a class="nav-link nav-link-sikos" href="#kegiatan">Kegiatan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-link-siokas" href="#footer">Informasi</a>
+                        <a class="nav-link nav-link-sikos" href="#footer">Informasi</a>
                     </li>
                 </ul>
                 @guest
@@ -1068,7 +1068,7 @@
     </section>
 
     <!-- FOOTER -->
-    <footer class="footer-siokas" id="footer">
+    <footer class="footer-sikos" id="footer">
         <div class="container">
             <div class="row g-4">
                 <div class="col-lg-4 col-md-6">

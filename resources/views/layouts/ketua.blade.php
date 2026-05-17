@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>SIOKAS - @yield('title', 'Dashboard')</title>
+    <title>SIKOS - @yield('title', 'Dashboard')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -299,7 +299,7 @@
                 <i class="fas fa-home logo-icon"></i>
 
                 <div class="sidebar-brand">
-                    <h4>SIOKAS</h4>
+                    <h4>SIKOS</h4>
                     <small>Sistem Informasi<br>Organisasi & Kegiatan</small>
                 </div>
             </div>
@@ -386,8 +386,8 @@
 
                     <!-- Notifikasi -->
                     <div class="dropdown">
-                        <button class="btn-notification position-relative" type="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn-notification position-relative" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
 
                             <i class="far fa-bell"></i>
 
@@ -407,8 +407,7 @@
                                 @if ($unreadNotificationsCount > 0)
                                     <form action="{{ route('notifications.read-all') }}" method="POST">
                                         @csrf
-                                        <button type="submit"
-                                            class="btn btn-sm btn-link text-decoration-none p-0">
+                                        <button type="submit" class="btn btn-sm btn-link text-decoration-none p-0">
                                             Tandai semua dibaca
                                         </button>
                                     </form>
@@ -436,19 +435,16 @@
                                     <div class="d-flex gap-2 mt-2">
 
                                         @if (!empty($data['action_url']))
-                                            <a href="{{ $data['action_url'] }}"
-                                                class="btn btn-sm btn-primary">
+                                            <a href="{{ $data['action_url'] }}" class="btn btn-sm btn-primary">
                                                 {{ $data['action_label'] ?? 'Lihat detail' }}
                                             </a>
                                         @endif
 
                                         @if (is_null($notification->read_at))
-                                            <form
-                                                action="{{ route('notifications.read-one', $notification->id) }}"
+                                            <form action="{{ route('notifications.read-one', $notification->id) }}"
                                                 method="POST">
                                                 @csrf
-                                                <button type="submit"
-                                                    class="btn btn-sm btn-outline-secondary">
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary">
                                                     Tandai dibaca
                                                 </button>
                                             </form>
