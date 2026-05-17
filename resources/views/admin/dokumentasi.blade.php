@@ -144,14 +144,16 @@
                                                 {{ $item->keterangan ?: '-' }}
                                             </p>
 
-                                            <div class="mt-auto d-flex justify-content-between">
-                                                <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                            <div class="mt-auto d-flex gap-2">
+                                                <button type="button" class="btn btn-outline-primary btn-sm flex-fill"
+                                                    data-bs-toggle="modal"
                                                     data-bs-target="#editDokumentasiModal{{ $item->id }}">
-                                                    <i class="bi bi-pencil"></i>
+                                                    <i class="bi bi-pencil"></i> Edit
                                                 </button>
-                                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                                <button type="button" class="btn btn-outline-danger btn-sm flex-fill"
+                                                    data-bs-toggle="modal"
                                                     data-bs-target="#hapusDokumentasiModal{{ $item->id }}">
-                                                    <i class="bi bi-trash"></i>
+                                                    <i class="bi bi-trash"></i> Hapus
                                                 </button>
                                             </div>
                                         </div>
@@ -213,8 +215,9 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Keterangan per Foto *</label>
-                            <p class="text-muted small mb-2">Keterangan akan muncul sesuai jumlah file yang dipilih.</p>
+                            <label class="form-label">Keterangan per Foto</label>
+                            <p class="text-muted small mb-2">Keterangan bersifat opsional dan boleh dikosongkan. Jika
+                                diisi, akan muncul sesuai jumlah file yang dipilih.</p>
                             <div id="keteranganPerFileContainer" data-old-keterangan='@json(old('keterangan', []))'></div>
                             @error('keterangan')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -368,7 +371,7 @@
                     textarea.id = `keterangan_${index}`;
                     textarea.name = 'keterangan[]';
                     textarea.rows = 2;
-                    textarea.required = true;
+                    textarea.required = false;
                     textarea.value = oldKeterangan[index] ?? '';
 
                     wrapper.appendChild(label);

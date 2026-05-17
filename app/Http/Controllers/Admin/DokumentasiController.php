@@ -78,12 +78,12 @@ class DokumentasiController extends Controller
             ],
 
             'keterangan' => [
-                'required',
+                'nullable',
                 'array'
             ],
 
             'keterangan.*' => [
-                'required',
+                'nullable',
                 'string',
                 'max:255'
             ],
@@ -121,7 +121,7 @@ class DokumentasiController extends Controller
 
             Dokumentasi::create([
                 'kegiatan_id' => $validated['kegiatan_id'],
-                'keterangan' => $validated['keterangan'][$index],
+                'keterangan' => $validated['keterangan'][$index] ?? null,
                 'file_dokumentasi' => $storedPath,
             ]);
         }
