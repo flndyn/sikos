@@ -14,7 +14,7 @@ class ValidasiController extends Controller
     public function __invoke(Request $request): View
     {
         $search = $request->query('search', '');
-        
+
         $query = Kegiatan::with('organisasi:id,nama_organisasi')
             ->where('status', 'disetujui pembina');
 
@@ -68,15 +68,22 @@ class ValidasiController extends Controller
 
         $validated = $request->validate([
             'keterangan' => [
-                'required',
+                'nullable',
                 'string',
                 'in:Jadwal bentrok dengan kegiatan lain,Melanggar kebijakan sekolah',
             ],
+            'keterangan_custom' => [
+                'nullable',
+                'string',
+                'max:500',
+            ],
         ]);
+
+        $keterangan = trim($validated['keterangan_custom'] ?? '') ?: ($validated['keterangan'] ?? null);
 
         $kegiatan->update([
             'status' => 'ditolak admin',
-            'keterangan' => $validated['keterangan'],
+            'keterangan' => $keterangan,
         ]);
 
         $this->notifyKetuaDanPembinaSetelahDitolakAdmin($kegiatan->fresh());

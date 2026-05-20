@@ -22,15 +22,23 @@ class Kegiatan extends Model
         'proposal',
         'status',
         'keterangan',
+        'penanggung_jawab',
+        'tanggal_berakhir',
     ];
 
     protected $casts = [
         'tanggal_mulai' => 'date',
+        'tanggal_berakhir' => 'date',
     ];
 
     public function organisasi(): BelongsTo
     {
         return $this->belongsTo(Organisasi::class, 'organisasi_id');
+    }
+
+    public function penanggungJawab(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'penanggung_jawab');
     }
 
     public function dokumentasi(): HasMany

@@ -41,6 +41,8 @@
                     <tr>
                         <th class="text-nowrap">No</th>
                         <th class="text-nowrap">Nama Kegiatan</th>
+                        <th class="text-nowrap">Penanggung Jawab</th>
+                        <th class="text-nowrap">Tanggal Terakhir</th>
                         <th class="text-nowrap">Deskripsi</th>
                         <th class="text-nowrap">Tanggal</th>
                         <th class="text-nowrap">Tempat</th>
@@ -70,6 +72,8 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->nama_kegiatan }}</td>
+                            <td>{{ $item->penanggungJawab->name ?? '-' }}</td>
+                            <td>{{ $item->tanggal_berakhir?->format('d-m-Y') ?? '-' }}</td>
                             <td>{{ \Illuminate\Support\Str::limit($item->deskripsi ?? '-', 50) }}</td>
                             <td>{{ $item->tanggal_mulai->format('d-m-Y') }}</td>
                             <td>{{ $item->tempat }}</td>
@@ -93,7 +97,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center py-4">
+                            <td colspan="10" class="text-center py-4">
                                 <p class="text-muted mb-0">Belum ada kegiatan yang diajukan</p>
                             </td>
                         </tr>
@@ -132,6 +136,36 @@
                             @error('deskripsi')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="penanggung_jawab" class="form-label">Penanggung Jawab (Pembina)</label>
+                                    <select class="form-select @error('penanggung_jawab') is-invalid @enderror"
+                                        id="penanggung_jawab" name="penanggung_jawab">
+                                        <option value="">-- Pilih Pembina --</option>
+                                        @if ($pembina)
+                                            <option value="{{ $pembina->id }}" {{ old('penanggung_jawab') == $pembina->id ? 'selected' : '' }}>
+                                                {{ $pembina->name }}
+                                            </option>
+                                        @endif
+                                    </select>
+                                    @error('penanggung_jawab')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="tanggal_berakhir" class="form-label">Tanggal Berakhir</label>
+                                    <input type="date" class="form-control @error('tanggal_berakhir') is-invalid @enderror"
+                                        id="tanggal_berakhir" name="tanggal_berakhir" value="{{ old('tanggal_berakhir') }}">
+                                    @error('tanggal_berakhir')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
 
                         <div class="row">
@@ -204,6 +238,31 @@
                             <div class="mb-3">
                                 <label for="edit_deskripsi_{{ $item->id }}" class="form-label">Deskripsi</label>
                                 <textarea class="form-control" id="edit_deskripsi_{{ $item->id }}" name="deskripsi" rows="3">{{ $item->deskripsi }}</textarea>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="edit_penanggung_jawab_{{ $item->id }}" class="form-label">Penanggung Jawab (Pembina)</label>
+                                        <select class="form-select" id="edit_penanggung_jawab_{{ $item->id }}"
+                                            name="penanggung_jawab">
+                                            <option value="">-- Pilih Pembina --</option>
+                                            @if ($pembina)
+                                                <option value="{{ $pembina->id }}" {{ $item->penanggung_jawab == $pembina->id ? 'selected' : '' }}>
+                                                    {{ $pembina->name }}
+                                                </option>
+                                            @endif
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="edit_tanggal_berakhir_{{ $item->id }}" class="form-label">Tanggal Berakhir</label>
+                                        <input type="date" class="form-control"
+                                            id="edit_tanggal_berakhir_{{ $item->id }}" name="tanggal_berakhir"
+                                            value="{{ $item->tanggal_berakhir?->format('Y-m-d') }}">
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="row">

@@ -7,7 +7,6 @@ use App\Models\Kegiatan;
 use App\Models\Organisasi;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -27,6 +26,7 @@ class KegiatanController extends Controller
     {
         $query = Kegiatan::with([
             'organisasi:id,nama_organisasi',
+            'penanggungJawab:id,name',
         ])->latest('id');
 
         $status = request('status');
@@ -73,6 +73,8 @@ class KegiatanController extends Controller
             'deskripsi',
             'tanggal_mulai',
             'tempat',
+            'penanggung_jawab',
+            'tanggal_berakhir',
             'proposal',
             'status',
         ]);

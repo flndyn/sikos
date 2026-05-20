@@ -65,15 +65,22 @@ class ValidasiController extends Controller
 
         $validated = $request->validate([
             'keterangan' => [
-                'required',
+                'nullable',
                 'string',
                 'in:Proposal belum lengkap,Anggaran tidak sesuai,Deskripsi atau data kegiatan kurang jelas',
             ],
+            'keterangan_custom' => [
+                'nullable',
+                'string',
+                'max:500',
+            ],
         ]);
+
+        $keterangan = trim($validated['keterangan_custom'] ?? '') ?: ($validated['keterangan'] ?? null);
 
         $kegiatan->update([
             'status' => 'ditolak pembina',
-            'keterangan' => $validated['keterangan'],
+            'keterangan' => $keterangan,
         ]);
 
         $this->notifyKetuaSetelahDitolakPembina($kegiatan->fresh());

@@ -68,6 +68,8 @@
                         <th class="text-nowrap">No</th>
                         <th class="text-nowrap">Organisasi</th>
                         <th class="text-nowrap">Nama Kegiatan</th>
+                        <th class="text-nowrap">Penanggung Jawab</th>
+                        <th class="text-nowrap">Tanggal Terakhir</th>
                         <th class="text-nowrap">Deskripsi</th>
                         <th class="text-nowrap">Tanggal</th>
                         <th class="text-nowrap">Tempat</th>
@@ -83,6 +85,10 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->organisasi?->nama_organisasi ?? '-' }}</td>
                             <td>{{ $item->nama_kegiatan }}</td>
+                            <td>{{ $item->penanggungJawab->name ?? '-' }}</td>
+                            <td class="text-nowrap">
+                                {{ $item->tanggal_berakhir?->format('d-m-Y') ?? '-' }}
+                            </td>
                             <td>
                                 {{ \Illuminate\Support\Str::limit($item->deskripsi ?? '-', 40) }}
                             </td>
@@ -136,7 +142,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="10" class="text-center py-4">
+                            <td colspan="11" class="text-center py-4">
                                 <p class="text-muted mb-0">Tidak ada data kegiatan</p>
                             </td>
                         </tr>

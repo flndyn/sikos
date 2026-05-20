@@ -15,6 +15,7 @@ class KegiatanController extends Controller
 
         $query = Kegiatan::with([
             'organisasi:id,nama_organisasi',
+            'penanggungJawab:id,name',
         ])
         ->whereHas('organisasi', function ($query) {
             $query->where('pembina_id', auth()->id());
@@ -48,6 +49,8 @@ class KegiatanController extends Controller
                 'deskripsi',
                 'tanggal_mulai',
                 'tempat',
+                'penanggung_jawab',
+                'tanggal_berakhir',
                 'proposal',
                 'status',
             ]);

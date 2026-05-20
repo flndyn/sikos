@@ -104,7 +104,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="rejectModal{{ $item->id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal fade reject-modal" id="rejectModal{{ $item->id }}" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <form action="{{ route('pembina.validasi.reject', $item->id) }}" method="POST">
@@ -121,16 +121,15 @@
                                 <div id="keterangan_reject_{{ $item->id }}" class="d-grid gap-2">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="keterangan"
-                                            id="pembina_reason_proposal_{{ $item->id }}" value="Proposal belum lengkap"
-                                            required>
+                                            id="pembina_reason_proposal_{{ $item->id }}"
+                                            value="Proposal belum lengkap">
                                         <label class="form-check-label" for="pembina_reason_proposal_{{ $item->id }}">
                                             Proposal belum lengkap
                                         </label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="keterangan"
-                                            id="pembina_reason_anggaran_{{ $item->id }}" value="Anggaran tidak sesuai"
-                                            required>
+                                            id="pembina_reason_anggaran_{{ $item->id }}" value="Anggaran tidak sesuai">
                                         <label class="form-check-label"
                                             for="pembina_reason_anggaran_{{ $item->id }}">
                                             Anggaran tidak sesuai
@@ -139,12 +138,21 @@
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="keterangan"
                                             id="pembina_reason_deskripsi_{{ $item->id }}"
-                                            value="Deskripsi atau data kegiatan kurang jelas" required>
+                                            value="Deskripsi atau data kegiatan kurang jelas">
                                         <label class="form-check-label"
                                             for="pembina_reason_deskripsi_{{ $item->id }}">
                                             Deskripsi atau data kegiatan kurang jelas
                                         </label>
                                     </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="keterangan_custom_{{ $item->id }}" class="form-label">Alasan lain
+                                        (opsional)
+                                    </label>
+                                    <textarea class="form-control" id="keterangan_custom_{{ $item->id }}" name="keterangan_custom" rows="2"
+                                        placeholder="Tuliskan alasan tambahan jika perlu"></textarea>
+                                    <p class="form-text text-muted small mb-0">Opsi di atas bersifat pilihan, dan Anda
+                                        tetap dapat menolak tanpa memilih opsi atau mengisi teks.</p>
                                 </div>
                             </div>
                         </div>
@@ -157,4 +165,19 @@
             </div>
         </div>
     @endforeach
+@endsection
+
+@section('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.modal.reject-modal').forEach(function(modalEl) {
+                modalEl.addEventListener('hidden.bs.modal', function() {
+                    var form = modalEl.querySelector('form');
+                    if (form) {
+                        form.reset();
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

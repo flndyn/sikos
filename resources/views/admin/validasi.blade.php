@@ -135,7 +135,7 @@
 
     <!-- MODAL REJECT (Per Row) -->
     @foreach ($kegiatanMenungguValidasiAdmin as $item)
-        <div class="modal fade" id="rejectModal{{ $item->id }}" tabindex="-1"
+        <div class="modal fade reject-modal" id="rejectModal{{ $item->id }}" tabindex="-1"
             aria-labelledby="rejectModalLabel{{ $item->id }}" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -161,7 +161,7 @@
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="keterangan"
                                             id="admin_reason_jadwal_{{ $item->id }}"
-                                            value="Jadwal bentrok dengan kegiatan lain" required>
+                                            value="Jadwal bentrok dengan kegiatan lain">
                                         <label class="form-check-label" for="admin_reason_jadwal_{{ $item->id }}">
                                             Jadwal bentrok dengan kegiatan lain
                                         </label>
@@ -169,11 +169,20 @@
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="keterangan"
                                             id="admin_reason_kebijakan_{{ $item->id }}"
-                                            value="Melanggar kebijakan sekolah" required>
+                                            value="Melanggar kebijakan sekolah">
                                         <label class="form-check-label" for="admin_reason_kebijakan_{{ $item->id }}">
                                             Melanggar kebijakan sekolah
                                         </label>
                                     </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="keterangan_custom_{{ $item->id }}" class="form-label">Alasan lain
+                                        (opsional)
+                                    </label>
+                                    <textarea class="form-control" id="keterangan_custom_{{ $item->id }}" name="keterangan_custom" rows="2"
+                                        placeholder="Tuliskan alasan tambahan jika perlu"></textarea>
+                                    <p class="form-text text-muted small mb-0">Opsi di atas bersifat pilihan, dan Anda
+                                        tetap dapat menolak tanpa memilih opsi atau mengisi teks.</p>
                                 </div>
                             </div>
                             <p class="text-muted small mb-0">Status akan diubah dari "Disetujui Pembina" menjadi "Ditolak
@@ -189,5 +198,19 @@
             </div>
         </div>
     @endforeach
+@endsection
 
+@section('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.modal.reject-modal').forEach(function(modalEl) {
+                modalEl.addEventListener('hidden.bs.modal', function() {
+                    var form = modalEl.querySelector('form');
+                    if (form) {
+                        form.reset();
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

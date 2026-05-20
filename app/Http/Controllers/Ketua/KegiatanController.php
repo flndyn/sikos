@@ -17,7 +17,7 @@ class KegiatanController extends Controller
     {
         $user = auth()->user();
 
-        $organisasi = $user->organisasiSebagaiKetua()->first();
+        $organisasi = $user->organisasiSebagaiKetua()->with('pembina')->first();
         $organisasiId = $organisasi?->id;
 
         $search = $request->query('search', '');
@@ -32,17 +32,21 @@ class KegiatanController extends Controller
             });
         }
 
-        $kegiatan = $query->latest('id')->get([
+        $kegiatan = $query->with('penanggungJawab:id,name')->latest('id')->get([
             'id',
             'nama_kegiatan',
             'deskripsi',
             'tanggal_mulai',
             'tempat',
+            'penanggung_jawab',
+            'tanggal_berakhir',
             'proposal',
             'status',
         ]);
 
-        return view('ketua.kegiatan', compact('kegiatan', 'search'));
+        $pembina = $organisasi?->pembina;
+
+        return view('ketua.kegiatan', compact('kegiatan', 'search', 'pembina'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -61,6 +65,8 @@ class KegiatanController extends Controller
             'nama_kegiatan' => ['required', 'string', 'max:150'],
             'deskripsi' => ['nullable', 'string'],
             'tanggal_mulai' => ['required', 'date'],
+            'tanggal_berakhir' => ['nullable', 'date', 'after_or_equal:tanggal_mulai'],
+            'penanggung_jawab' => ['nullable', 'integer', 'exists:users,id'],
             'tempat' => ['required', 'string', 'max:150'],
             'proposal' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:5120'],
         ]);
@@ -111,6 +117,8 @@ class KegiatanController extends Controller
             'nama_kegiatan' => ['required', 'string', 'max:150'],
             'deskripsi' => ['nullable', 'string'],
             'tanggal_mulai' => ['required', 'date'],
+            'tanggal_berakhir' => ['nullable', 'date', 'after_or_equal:tanggal_mulai'],
+            'penanggung_jawab' => ['nullable', 'integer', 'exists:users,id'],
             'tempat' => ['required', 'string', 'max:150'],
             'proposal' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:5120'],
         ]);

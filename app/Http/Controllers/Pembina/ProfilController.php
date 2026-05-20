@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pembina;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -28,6 +29,7 @@ class ProfilController extends Controller
             'name' => ['required', 'string', 'max:100'],
             'email' => ['required', 'string', 'email', 'max:100', Rule::unique('users', 'email')->ignore($user->id)],
             'profile_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ]);
 
         if ($request->hasFile('profile_photo')) {
@@ -41,6 +43,12 @@ class ProfilController extends Controller
         }
 
         unset($validated['profile_photo']);
+
+        if (!empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
 
         $user->update($validated);
 

@@ -83,6 +83,27 @@
                                 <input type="text" class="form-control" value="{{ $user?->role ?? '-' }}" readonly>
                             </div>
 
+                            <div class="col-12">
+                                <hr class="my-2">
+                                <p class="text-muted mb-0"><small>Kosongkan password jika tidak ingin mengubahnya.</small></p>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="password" class="form-label">Password Baru</label>
+                                <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                    id="password" name="password" placeholder="Minimal 8 karakter" minlength="8">
+                                @error('password')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
+                                <input type="password" class="form-control"
+                                    id="password_confirmation" name="password_confirmation"
+                                    placeholder="Ulangi password baru">
+                            </div>
+
                             <div class="col-12 d-flex gap-2 justify-content-end mt-2">
                                 <button type="submit" class="btn btn-primary px-4">
                                     Simpan Perubahan
