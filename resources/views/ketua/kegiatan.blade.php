@@ -145,11 +145,11 @@
                                     <select class="form-select @error('penanggung_jawab') is-invalid @enderror"
                                         id="penanggung_jawab" name="penanggung_jawab">
                                         <option value="">-- Pilih Pembina --</option>
-                                        @if ($pembina)
+                                        @foreach ($pembinaUsers as $pembina)
                                             <option value="{{ $pembina->id }}" {{ old('penanggung_jawab') == $pembina->id ? 'selected' : '' }}>
                                                 {{ $pembina->name }}
                                             </option>
-                                        @endif
+                                        @endforeach
                                     </select>
                                     @error('penanggung_jawab')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -247,11 +247,11 @@
                                         <select class="form-select" id="edit_penanggung_jawab_{{ $item->id }}"
                                             name="penanggung_jawab">
                                             <option value="">-- Pilih Pembina --</option>
-                                            @if ($pembina)
+                                            @foreach ($pembinaUsers as $pembina)
                                                 <option value="{{ $pembina->id }}" {{ $item->penanggung_jawab == $pembina->id ? 'selected' : '' }}>
                                                     {{ $pembina->name }}
                                                 </option>
-                                            @endif
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>

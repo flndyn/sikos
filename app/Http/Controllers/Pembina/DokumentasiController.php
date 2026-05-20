@@ -24,8 +24,8 @@ class DokumentasiController extends Controller
             'kegiatan:id,organisasi_id,nama_kegiatan',
             'kegiatan.organisasi:id,nama_organisasi',
         ])
-            ->whereHas('kegiatan.organisasi', function ($query) {
-                $query->where('pembina_id', auth()->id());
+            ->whereHas('kegiatan.organisasi.pembinaUsers', function ($query) {
+                $query->where('users.id', auth()->id());
             })
             ->when($filterNamaKegiatan !== '', function ($query) use ($filterNamaKegiatan) {
                 $query->whereHas('kegiatan', function ($kegiatanQuery) use ($filterNamaKegiatan) {
@@ -50,8 +50,8 @@ class DokumentasiController extends Controller
             ]);
 
         $kegiatanList = Kegiatan::where('status', 'disetujui admin')
-            ->whereHas('organisasi', function ($query) {
-                $query->where('pembina_id', auth()->id());
+            ->whereHas('organisasi.pembinaUsers', function ($query) {
+                $query->where('users.id', auth()->id());
             })
             ->orderBy('nama_kegiatan')
             ->get(['id', 'nama_kegiatan']);
@@ -90,7 +90,7 @@ class DokumentasiController extends Controller
         $kegiatan = Kegiatan::with('organisasi')
             ->where('id', $validated['kegiatan_id'])
             ->where('status', 'disetujui admin')
-            ->whereHas('organisasi', fn ($organisasiQuery) => $organisasiQuery->where('pembina_id', auth()->id()))
+            ->whereHas('organisasi.pembinaUsers', fn ($q) => $q->where('users.id', auth()->id()))
             ->first();
 
         if (! $kegiatan) {
@@ -120,7 +120,7 @@ class DokumentasiController extends Controller
     public function update(Request $request, Dokumentasi $dokumentasi): RedirectResponse
     {
         $isAuthorized = Kegiatan::where('id', $dokumentasi->kegiatan_id)
-            ->whereHas('organisasi', fn ($organisasiQuery) => $organisasiQuery->where('pembina_id', auth()->id()))
+            ->whereHas('organisasi.pembinaUsers', fn ($q) => $q->where('users.id', auth()->id()))
             ->exists();
 
         if (! $isAuthorized) {
@@ -148,7 +148,7 @@ class DokumentasiController extends Controller
 
         $kegiatan = Kegiatan::where('id', $validated['kegiatan_id'])
             ->where('status', 'disetujui admin')
-            ->whereHas('organisasi', fn ($organisasiQuery) => $organisasiQuery->where('pembina_id', auth()->id()))
+            ->whereHas('organisasi.pembinaUsers', fn ($q) => $q->where('users.id', auth()->id()))
             ->first();
 
         if (! $kegiatan) {
@@ -191,7 +191,7 @@ class DokumentasiController extends Controller
     public function destroy(Dokumentasi $dokumentasi): RedirectResponse
     {
         $isAuthorized = Kegiatan::where('id', $dokumentasi->kegiatan_id)
-            ->whereHas('organisasi', fn ($organisasiQuery) => $organisasiQuery->where('pembina_id', auth()->id()))
+            ->whereHas('organisasi.pembinaUsers', fn ($q) => $q->where('users.id', auth()->id()))
             ->exists();
 
         if (! $isAuthorized) {

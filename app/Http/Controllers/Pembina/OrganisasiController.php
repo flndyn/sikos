@@ -11,11 +11,13 @@ class OrganisasiController extends Controller
     public function __invoke(): View
     {
         $organisasi = Organisasi::with([
-            'ketua:id,name,profile_photo_path',
+            'ketuaUsers:id,name,profile_photo_path',
         ])
-            ->where('pembina_id', auth()->id())
+            ->whereHas('pembinaUsers', function ($query) {
+                $query->where('users.id', auth()->id());
+            })
             ->latest('id')
-            ->get(['id', 'nama_organisasi', 'deskripsi', 'ketua_id']);
+            ->get(['id', 'nama_organisasi', 'deskripsi']);
 
         return view('pembina.organisasi', compact('organisasi'));
     }

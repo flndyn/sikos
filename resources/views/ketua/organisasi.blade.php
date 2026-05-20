@@ -19,7 +19,11 @@
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold">Pembina</label>
                         <div class="mt-1">
-                            <x-user-avatar :user="$organisasi->pembina" :size="36" />
+                            @forelse ($organisasi->pembinaUsers as $pembina)
+                                <x-user-avatar :user="$pembina" :size="36" />
+                            @empty
+                                <span class="text-muted">-</span>
+                            @endforelse
                         </div>
                     </div>
                 </div>
@@ -28,12 +32,20 @@
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold">Ketua Organisasi</label>
                         <div class="mt-1">
-                            <x-user-avatar :user="$organisasi->ketua" :size="36" />
+                            @forelse ($organisasi->ketuaUsers as $ketua)
+                                <x-user-avatar :user="$ketua" :size="36" />
+                            @empty
+                                <span class="text-muted">-</span>
+                            @endforelse
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold">Email Pembina</label>
-                        <p class="form-control-plaintext">{{ $organisasi->pembina?->email ?? '-' }}</p>
+                        @forelse ($organisasi->pembinaUsers as $pembina)
+                            <p class="form-control-plaintext mb-0">{{ $pembina->email }}</p>
+                        @empty
+                            <p class="form-control-plaintext">-</p>
+                        @endforelse
                     </div>
                 </div>
 

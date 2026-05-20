@@ -7,7 +7,6 @@ use App\Models\Organisasi;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class OrganisasiController extends Controller
@@ -17,8 +16,8 @@ class OrganisasiController extends Controller
         $search = $request->query('search', '');
 
         $query = Organisasi::with([
-            'pembina:id,name,profile_photo_path',
-            'ketua:id,name,profile_photo_path',
+            'pembinaUsers:id,name,profile_photo_path',
+            'ketuaUsers:id,name,profile_photo_path',
         ]);
 
         if ($search) {
@@ -28,7 +27,7 @@ class OrganisasiController extends Controller
             });
         }
 
-        $organisasi = $query->latest('id')->get(['id', 'nama_organisasi', 'deskripsi', 'pembina_id', 'ketua_id']);
+        $organisasi = $query->latest('id')->get(['id', 'nama_organisasi', 'deskripsi']);
 
         $pembinaUsers = User::where('role', 'pembina')
             ->orderBy('name')
@@ -46,22 +45,30 @@ class OrganisasiController extends Controller
         $validated = $request->validate([
             'nama_organisasi' => ['required', 'string', 'max:100'],
             'deskripsi' => ['nullable', 'string'],
-            'pembina_id' => [
-                'nullable',
-                'integer',
-                Rule::exists('users', 'id')->where(fn ($query) => $query->where('role', 'pembina')),
-            ],
-            'ketua_id' => [
-                'nullable',
-                'integer',
-                Rule::exists('users', 'id')->where(fn ($query) => $query->where('role', 'ketua')),
-                Rule::unique('organisasi', 'ketua_id'),
-            ],
-        ], [
-            'ketua_id.unique' => 'Ketua sudah digunakan oleh organisasi lain.',
+            'pembina_ids' => ['nullable', 'array'],
+            'pembina_ids.*' => ['integer', 'exists:users,id'],
+            'ketua_ids' => ['nullable', 'array'],
+            'ketua_ids.*' => ['integer', 'exists:users,id'],
         ]);
 
-        Organisasi::create($validated);
+        $pembinaIds = $validated['pembina_ids'] ?? [];
+        $ketuaIds = $validated['ketua_ids'] ?? [];
+        unset($validated['pembina_ids'], $validated['ketua_ids']);
+
+        $organisasi = Organisasi::create($validated);
+
+        // Sync pivot with role
+        $pivotData = [];
+        foreach ($pembinaIds as $id) {
+            $pivotData[$id] = ['role' => 'pembina'];
+        }
+        foreach ($ketuaIds as $id) {
+            $pivotData[$id] = ['role' => 'ketua'];
+        }
+
+        // Use manual sync since same user could be in both roles
+        $organisasi->pembinaUsers()->sync($pembinaIds);
+        $organisasi->ketuaUsers()->sync($ketuaIds);
 
         return redirect()
             ->route('admin.organisasi')
@@ -73,22 +80,20 @@ class OrganisasiController extends Controller
         $validated = $request->validate([
             'nama_organisasi' => ['required', 'string', 'max:100'],
             'deskripsi' => ['nullable', 'string'],
-            'pembina_id' => [
-                'nullable',
-                'integer',
-                Rule::exists('users', 'id')->where(fn ($query) => $query->where('role', 'pembina')),
-            ],
-            'ketua_id' => [
-                'nullable',
-                'integer',
-                Rule::exists('users', 'id')->where(fn ($query) => $query->where('role', 'ketua')),
-                Rule::unique('organisasi', 'ketua_id')->ignore($organisasi->id),
-            ],
-        ], [
-            'ketua_id.unique' => 'Ketua sudah digunakan oleh organisasi lain.',
+            'pembina_ids' => ['nullable', 'array'],
+            'pembina_ids.*' => ['integer', 'exists:users,id'],
+            'ketua_ids' => ['nullable', 'array'],
+            'ketua_ids.*' => ['integer', 'exists:users,id'],
         ]);
 
+        $pembinaIds = $validated['pembina_ids'] ?? [];
+        $ketuaIds = $validated['ketua_ids'] ?? [];
+        unset($validated['pembina_ids'], $validated['ketua_ids']);
+
         $organisasi->update($validated);
+
+        $organisasi->pembinaUsers()->sync($pembinaIds);
+        $organisasi->ketuaUsers()->sync($ketuaIds);
 
         return redirect()
             ->route('admin.organisasi')

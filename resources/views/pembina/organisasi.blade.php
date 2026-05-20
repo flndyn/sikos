@@ -25,7 +25,11 @@
                             <td>{{ $item->nama_organisasi }}</td>
                             <td>{{ \Illuminate\Support\Str::limit($item->deskripsi ?? '-', 80) }}</td>
                             <td>
-                                <x-user-avatar :user="$item->ketua" :size="34" />
+                                @forelse ($item->ketuaUsers as $ketua)
+                                    <x-user-avatar :user="$ketua" :size="34" />
+                                @empty
+                                    <span class="text-muted">-</span>
+                                @endforelse
                             </td>
                         </tr>
                     @empty

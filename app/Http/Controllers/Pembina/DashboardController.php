@@ -14,8 +14,9 @@ class DashboardController extends Controller
     {
         $userId = auth()->id();
 
-        $organisasiIds = Organisasi::where('pembina_id', $userId)
-            ->pluck('id');
+        $organisasiIds = Organisasi::whereHas('pembinaUsers', function ($query) use ($userId) {
+            $query->where('users.id', $userId);
+        })->pluck('id');
 
         $stats = [
             'total_organisasi' => $organisasiIds->count(),

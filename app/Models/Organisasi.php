@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Organisasi extends Model
@@ -16,18 +16,20 @@ class Organisasi extends Model
     protected $fillable = [
         'nama_organisasi',
         'deskripsi',
-        'pembina_id',
-        'ketua_id',
     ];
 
-    public function pembina(): BelongsTo
+    public function pembinaUsers(): BelongsToMany
     {
-        return $this->belongsTo(User::class, 'pembina_id');
+        return $this->belongsToMany(User::class, 'organisasi_user')
+            ->wherePivot('role', 'pembina')
+            ->withTimestamps();
     }
 
-    public function ketua(): BelongsTo
+    public function ketuaUsers(): BelongsToMany
     {
-        return $this->belongsTo(User::class, 'ketua_id');
+        return $this->belongsToMany(User::class, 'organisasi_user')
+            ->wherePivot('role', 'ketua')
+            ->withTimestamps();
     }
 
     public function kegiatan(): HasMany

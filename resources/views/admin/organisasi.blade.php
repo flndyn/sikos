@@ -12,10 +12,6 @@
         <div class="alert alert-danger">{{ $errors->first() }}</div>
     @endif
 
-    @php
-        $usedKetuaIds = $organisasi->pluck('ketua_id')->filter()->map(fn($id) => (int) $id)->all();
-    @endphp
-
     <div class="card shadow-sm">
 
         <!-- HEADER -->
@@ -48,10 +44,18 @@
                             <td>{{ $item->nama_organisasi }}</td>
                             <td>{{ \Illuminate\Support\Str::limit($item->deskripsi ?? '-', 40) }}</td>
                             <td>
-                                <x-user-avatar :user="$item->pembina" :size="34" />
+                                @forelse ($item->pembinaUsers as $pembina)
+                                    <x-user-avatar :user="$pembina" :size="34" />
+                                @empty
+                                    <span class="text-muted">-</span>
+                                @endforelse
                             </td>
                             <td>
-                                <x-user-avatar :user="$item->ketua" :size="34" />
+                                @forelse ($item->ketuaUsers as $ketua)
+                                    <x-user-avatar :user="$ketua" :size="34" />
+                                @empty
+                                    <span class="text-muted">-</span>
+                                @endforelse
                             </td>
                             <td>
                                 <button class="btn btn-warning btn-sm" type="button" data-bs-toggle="modal"
@@ -102,34 +106,32 @@
 
                             <div class="mb-3">
                                 <label class="form-label">Pembina</label>
-                                <select name="pembina_id" class="form-select">
-                                    <option value="">- Pilih Pembina -</option>
+                                @php
+                                    $currentPembinaIds = $item->pembinaUsers->pluck('id')->toArray();
+                                @endphp
+                                <select name="pembina_ids[]" class="form-select" multiple>
                                     @foreach ($pembinaUsers as $pembina)
-                                        <option value="{{ $pembina->id }}" @selected((int) $item->pembina_id === (int) $pembina->id)>
+                                        <option value="{{ $pembina->id }}" @selected(in_array($pembina->id, $currentPembinaIds))>
                                             {{ $pembina->name }}
                                         </option>
                                     @endforeach
                                 </select>
+                                <small class="text-muted">Tahan CTRL untuk memilih beberapa pembina.</small>
                             </div>
 
                             <div class="mb-1">
                                 <label class="form-label">Ketua</label>
-                                <select name="ketua_id" class="form-select">
-                                    <option value="">- Pilih Ketua -</option>
+                                @php
+                                    $currentKetuaIds = $item->ketuaUsers->pluck('id')->toArray();
+                                @endphp
+                                <select name="ketua_ids[]" class="form-select" multiple>
                                     @foreach ($ketuaUsers as $ketua)
-                                        @php
-                                            $isUsedByOtherOrganisasi =
-                                                in_array((int) $ketua->id, $usedKetuaIds, true) &&
-                                                (int) $item->ketua_id !== (int) $ketua->id;
-                                        @endphp
-                                        <option value="{{ $ketua->id }}" @selected((int) $item->ketua_id === (int) $ketua->id)
-                                            @disabled($isUsedByOtherOrganisasi)>
+                                        <option value="{{ $ketua->id }}" @selected(in_array($ketua->id, $currentKetuaIds))>
                                             {{ $ketua->name }}
                                         </option>
                                     @endforeach
                                 </select>
-                                <small class="text-muted">Ketua yang sudah dipakai organisasi lain tidak bisa
-                                    dipilih.</small>
+                                <small class="text-muted">Tahan CTRL untuk memilih beberapa ketua.</small>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -187,28 +189,26 @@
 
                         <div class="mb-3">
                             <label class="form-label">Pembina</label>
-                            <select name="pembina_id" class="form-select">
-                                <option value="">- Pilih Pembina -</option>
+                            <select name="pembina_ids[]" class="form-select" multiple>
                                 @foreach ($pembinaUsers as $pembina)
-                                    <option value="{{ $pembina->id }}" @selected((string) old('pembina_id') === (string) $pembina->id)>
+                                    <option value="{{ $pembina->id }}" @selected(collect(old('pembina_ids', []))->contains($pembina->id))>
                                         {{ $pembina->name }}
                                     </option>
                                 @endforeach
                             </select>
+                            <small class="text-muted">Tahan CTRL untuk memilih beberapa pembina.</small>
                         </div>
 
                         <div class="mb-1">
                             <label class="form-label">Ketua</label>
-                            <select name="ketua_id" class="form-select">
-                                <option value="">- Pilih Ketua -</option>
+                            <select name="ketua_ids[]" class="form-select" multiple>
                                 @foreach ($ketuaUsers as $ketua)
-                                    <option value="{{ $ketua->id }}" @selected((string) old('ketua_id') === (string) $ketua->id)
-                                        @disabled(in_array((int) $ketua->id, $usedKetuaIds, true))>
+                                    <option value="{{ $ketua->id }}" @selected(collect(old('ketua_ids', []))->contains($ketua->id))>
                                         {{ $ketua->name }}
                                     </option>
                                 @endforeach
                             </select>
-                            <small class="text-muted">Ketua yang sudah dipakai organisasi lain tidak bisa dipilih.</small>
+                            <small class="text-muted">Tahan CTRL untuk memilih beberapa ketua.</small>
                         </div>
                     </div>
                     <div class="modal-footer">

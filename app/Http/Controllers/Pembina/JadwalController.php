@@ -11,8 +11,8 @@ class JadwalController extends Controller
     public function __invoke(): View
     {
         $jadwalKegiatan = Kegiatan::with('organisasi:id,nama_organisasi')
-            ->whereHas('organisasi', function ($query) {
-                $query->where('pembina_id', auth()->id());
+            ->whereHas('organisasi.pembinaUsers', function ($query) {
+                $query->where('users.id', auth()->id());
             })
             ->whereIn('status', ['disetujui pembina', 'disetujui admin'])
             ->orderBy('tanggal_mulai')

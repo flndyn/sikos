@@ -20,8 +20,8 @@ class LaporanController extends Controller
             'kegiatan:id,organisasi_id,nama_kegiatan,tanggal_mulai',
             'kegiatan.organisasi:id,nama_organisasi',
         ])
-            ->whereHas('kegiatan.organisasi', function ($query) {
-                $query->where('pembina_id', auth()->id());
+            ->whereHas('kegiatan.organisasi.pembinaUsers', function ($query) {
+                $query->where('users.id', auth()->id());
             });
 
         if ($search) {
@@ -41,8 +41,8 @@ class LaporanController extends Controller
     public function download(LaporanKegiatan $laporan): StreamedResponse|RedirectResponse
     {
         $isAuthorized = $laporan->kegiatan()
-            ->whereHas('organisasi', function ($query) {
-                $query->where('pembina_id', auth()->id());
+            ->whereHas('organisasi.pembinaUsers', function ($query) {
+                $query->where('users.id', auth()->id());
             })
             ->exists();
 

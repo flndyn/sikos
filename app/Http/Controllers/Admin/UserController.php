@@ -18,8 +18,8 @@ class UserController extends Controller
         $search = $request->query('search', '');
 
         $query = User::with([
-            'organisasiSebagaiKetua:id,nama_organisasi,ketua_id',
-            'organisasiSebagaiPembina:id,nama_organisasi,pembina_id',
+            'organisasiSebagaiKetua:id,nama_organisasi',
+            'organisasiSebagaiPembina:id,nama_organisasi',
         ]);
 
         if ($search) {
@@ -41,24 +41,26 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:100'],
             'email' => ['required', 'string', 'email', 'max:100', 'unique:users,email'],
             'role' => ['required', Rule::in(['admin', 'ketua', 'pembina'])],
-            'organisasi_id' => ['nullable', 'integer', Rule::exists('organisasi', 'id')],
             'organisasi_ids' => ['nullable', 'array'],
             'organisasi_ids.*' => ['integer', Rule::exists('organisasi', 'id')],
             'password' => ['required', 'string', 'min:8'],
         ]);
 
-        $organisasiId = $validated['organisasi_id'] ?? null;
-        $organisasiIds = collect($validated['organisasi_ids'] ?? [])->map(fn ($id) => (int) $id)->unique()->values();
-        unset($validated['organisasi_id'], $validated['organisasi_ids']);
+        $organisasiIds = $validated['organisasi_ids'] ?? [];
+        unset($validated['organisasi_ids']);
 
         $user = User::create($validated);
 
-        if ($validated['role'] === 'ketua' && !empty($organisasiId)) {
-            Organisasi::where('id', (int) $organisasiId)->update(['ketua_id' => $user->id]);
+        if ($validated['role'] === 'ketua' && !empty($organisasiIds)) {
+            foreach ($organisasiIds as $orgId) {
+                $user->organisasiSebagaiKetua()->attach($orgId, ['role' => 'ketua']);
+            }
         }
 
-        if ($validated['role'] === 'pembina' && $organisasiIds->isNotEmpty()) {
-            Organisasi::whereIn('id', $organisasiIds->all())->update(['pembina_id' => $user->id]);
+        if ($validated['role'] === 'pembina' && !empty($organisasiIds)) {
+            foreach ($organisasiIds as $orgId) {
+                $user->organisasiSebagaiPembina()->attach($orgId, ['role' => 'pembina']);
+            }
         }
 
         return redirect()
@@ -72,7 +74,6 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:100'],
             'email' => ['required', 'string', 'email', 'max:100', Rule::unique('users', 'email')->ignore($user->id)],
             'role' => ['required', Rule::in(['admin', 'ketua', 'pembina'])],
-            'organisasi_id' => ['nullable', 'integer', Rule::exists('organisasi', 'id')],
             'organisasi_ids' => ['nullable', 'array'],
             'organisasi_ids.*' => ['integer', Rule::exists('organisasi', 'id')],
             'password' => ['nullable', 'string', 'min:8'],
@@ -92,35 +93,24 @@ class UserController extends Controller
             $validated['profile_photo_path'] = $path;
         }
 
-        // Remove non-user columns before updating users table.
-        $organisasiId = $validated['organisasi_id'] ?? null;
-        $organisasiIds = collect($validated['organisasi_ids'] ?? [])->map(fn ($id) => (int) $id)->unique()->values();
-        unset($validated['organisasi_id'], $validated['organisasi_ids']);
+        $organisasiIds = $validated['organisasi_ids'] ?? [];
+        unset($validated['organisasi_ids']);
 
         $user->update($validated);
 
-        if ($validated['role'] === 'ketua') {
-            Organisasi::where('ketua_id', $user->id)->update(['ketua_id' => null]);
+        // Detach all existing org relationships first
+        $user->organisasiSebagaiKetua()->detach();
+        $user->organisasiSebagaiPembina()->detach();
 
-            if (!empty($organisasiId)) {
-                Organisasi::where('id', (int) $organisasiId)->update(['ketua_id' => $user->id]);
+        // Re-attach based on role
+        if ($validated['role'] === 'ketua' && !empty($organisasiIds)) {
+            foreach ($organisasiIds as $orgId) {
+                $user->organisasiSebagaiKetua()->attach($orgId, ['role' => 'ketua']);
             }
-
-            // Ketua should not remain as pembina assignment.
-            Organisasi::where('pembina_id', $user->id)->update(['pembina_id' => null]);
-        } elseif ($validated['role'] === 'pembina') {
-            Organisasi::where('ketua_id', $user->id)->update(['ketua_id' => null]);
-
-            Organisasi::where('pembina_id', $user->id)
-                ->whereNotIn('id', $organisasiIds->all())
-                ->update(['pembina_id' => null]);
-
-            if ($organisasiIds->isNotEmpty()) {
-                Organisasi::whereIn('id', $organisasiIds->all())->update(['pembina_id' => $user->id]);
+        } elseif ($validated['role'] === 'pembina' && !empty($organisasiIds)) {
+            foreach ($organisasiIds as $orgId) {
+                $user->organisasiSebagaiPembina()->attach($orgId, ['role' => 'pembina']);
             }
-        } else {
-            Organisasi::where('ketua_id', $user->id)->update(['ketua_id' => null]);
-            Organisasi::where('pembina_id', $user->id)->update(['pembina_id' => null]);
         }
 
         return redirect()

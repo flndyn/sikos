@@ -95,29 +95,29 @@ class ValidasiController extends Controller
 
     private function notifyKetuaSetelahDisetujuiAdmin(Kegiatan $kegiatan): void
     {
-        $organisasi = $kegiatan->organisasi()->with('ketua')->first();
-        $ketua = $organisasi?->ketua;
+        $organisasi = $kegiatan->organisasi()->with('ketuaUsers')->first();
+        $ketuaUsers = $organisasi?->ketuaUsers;
 
-        if (! $ketua) {
+        if (! $ketuaUsers || $ketuaUsers->isEmpty()) {
             return;
         }
 
-        $ketua->notify(new KegiatanWorkflowNotification(
-            'Proposal Disetujui Admin',
-            'Proposal kegiatan "' . $kegiatan->nama_kegiatan . '" telah disetujui admin.',
-            route('ketua.kegiatan'),
-            'Lihat kegiatan'
-        ));
+        foreach ($ketuaUsers as $ketua) {
+            $ketua->notify(new KegiatanWorkflowNotification(
+                'Proposal Disetujui Admin',
+                'Proposal kegiatan "' . $kegiatan->nama_kegiatan . '" telah disetujui admin.',
+                route('ketua.kegiatan'),
+                'Lihat kegiatan'
+            ));
+        }
     }
 
     private function notifyKetuaDanPembinaSetelahDitolakAdmin(Kegiatan $kegiatan): void
     {
-        $organisasi = $kegiatan->organisasi()->with(['ketua', 'pembina'])->first();
-        $ketua = $organisasi?->ketua;
-        $pembina = $organisasi?->pembina;
+        $organisasi = $kegiatan->organisasi()->with(['ketuaUsers', 'pembinaUsers'])->first();
         $keterangan = $kegiatan->keterangan ?: '-';
 
-        if ($ketua) {
+        foreach ($organisasi?->ketuaUsers ?? [] as $ketua) {
             $ketua->notify(new KegiatanWorkflowNotification(
                 'Proposal Ditolak Admin',
                 'Proposal kegiatan "' . $kegiatan->nama_kegiatan . '" ditolak admin. Keterangan: ' . $keterangan,
@@ -126,7 +126,7 @@ class ValidasiController extends Controller
             ));
         }
 
-        if ($pembina) {
+        foreach ($organisasi?->pembinaUsers ?? [] as $pembina) {
             $pembina->notify(new KegiatanWorkflowNotification(
                 'Proposal Binaan Ditolak Admin',
                 'Proposal kegiatan "' . $kegiatan->nama_kegiatan . '" ditolak admin. Keterangan: ' . $keterangan,

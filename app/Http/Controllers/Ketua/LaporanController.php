@@ -19,7 +19,7 @@ class LaporanController extends Controller
 
     public function __invoke(Request $request): View
     {
-        $organisasiId = auth()->user()?->organisasiSebagaiKetua?->id;
+        $organisasiId = auth()->user()?->organisasiSebagaiKetua()->first()?->id;
 
         $search = $request->query('search', '');
 
@@ -83,7 +83,7 @@ class LaporanController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $organisasiId = auth()->user()?->organisasiSebagaiKetua?->id;
+        $organisasiId = auth()->user()?->organisasiSebagaiKetua()->first()?->id;
 
         if (! $organisasiId) {
             return redirect()
@@ -142,7 +142,7 @@ class LaporanController extends Controller
                 );
         }
 
-        $organisasi = auth()->user()?->organisasiSebagaiKetua;
+        $organisasi = auth()->user()?->organisasiSebagaiKetua()->first();
 
         $folder = self::REPORT_DIRECTORY . '/' . Str::slug($organisasi->nama_organisasi);
 
@@ -175,7 +175,7 @@ class LaporanController extends Controller
         LaporanKegiatan $laporan
     ): RedirectResponse {
 
-        $organisasiId = auth()->user()?->organisasiSebagaiKetua?->id;
+        $organisasiId = auth()->user()?->organisasiSebagaiKetua()->first()?->id;
 
         $isAuthorized = $laporan->kegiatan()
 
@@ -218,7 +218,7 @@ class LaporanController extends Controller
                     ->delete($laporan->file_laporan);
             }
 
-            $organisasi = auth()->user()?->organisasiSebagaiKetua;
+            $organisasi = auth()->user()?->organisasiSebagaiKetua()->first();
 
             $folder = self::REPORT_DIRECTORY . '/' . Str::slug($organisasi->nama_organisasi);
 
@@ -247,7 +247,7 @@ class LaporanController extends Controller
         LaporanKegiatan $laporan
     ): RedirectResponse {
 
-        $organisasiId = auth()->user()?->organisasiSebagaiKetua?->id;
+        $organisasiId = auth()->user()?->organisasiSebagaiKetua()->first()?->id;
 
         $isAuthorized = $laporan->kegiatan()
 
@@ -286,7 +286,7 @@ class LaporanController extends Controller
         LaporanKegiatan $laporan
     ): RedirectResponse|\Symfony\Component\HttpFoundation\StreamedResponse {
 
-        $organisasiId = auth()->user()?->organisasiSebagaiKetua?->id;
+        $organisasiId = auth()->user()?->organisasiSebagaiKetua()->first()?->id;
 
         $isAuthorized = $laporan->kegiatan()
             ->where('organisasi_id', $organisasiId)

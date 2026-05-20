@@ -17,7 +17,7 @@ class KegiatanController extends Controller
     {
         $user = auth()->user();
 
-        $organisasi = $user->organisasiSebagaiKetua()->with('pembina')->first();
+        $organisasi = $user->organisasiSebagaiKetua()->with('pembinaUsers')->first();
         $organisasiId = $organisasi?->id;
 
         $search = $request->query('search', '');
@@ -44,9 +44,9 @@ class KegiatanController extends Controller
             'status',
         ]);
 
-        $pembina = $organisasi?->pembina;
+        $pembinaUsers = $organisasi?->pembinaUsers ?? collect();
 
-        return view('ketua.kegiatan', compact('kegiatan', 'search', 'pembina'));
+        return view('ketua.kegiatan', compact('kegiatan', 'search', 'pembinaUsers'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -196,21 +196,23 @@ class KegiatanController extends Controller
 
     private function notifyPembinaProposalDiajukan(Kegiatan $kegiatan): void
     {
-        $organisasi = $kegiatan->organisasi()->with('pembina')->first();
+        $organisasi = $kegiatan->organisasi()->with('pembinaUsers')->first();
 
-        $pembina = $organisasi?->pembina;
+        $pembinaUsers = $organisasi?->pembinaUsers;
 
-        if (!$pembina) {
+        if (!$pembinaUsers || $pembinaUsers->isEmpty()) {
             return;
         }
 
-        $pembina->notify(new KegiatanWorkflowNotification(
-            'Pengajuan Proposal Baru',
-            'Proposal kegiatan "' . $kegiatan->nama_kegiatan .
-            '" dari ' . ($organisasi?->nama_organisasi ?? 'organisasi') .
-            ' menunggu validasi Anda.',
-            route('pembina.validasi'),
-            'Buka Validasi'
-        ));
+        foreach ($pembinaUsers as $pembina) {
+            $pembina->notify(new KegiatanWorkflowNotification(
+                'Pengajuan Proposal Baru',
+                'Proposal kegiatan "' . $kegiatan->nama_kegiatan .
+                '" dari ' . ($organisasi?->nama_organisasi ?? 'organisasi') .
+                ' menunggu validasi Anda.',
+                route('pembina.validasi'),
+                'Buka Validasi'
+            ));
+        }
     }
 }

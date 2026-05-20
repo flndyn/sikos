@@ -17,8 +17,8 @@ class KegiatanController extends Controller
             'organisasi:id,nama_organisasi',
             'penanggungJawab:id,name',
         ])
-        ->whereHas('organisasi', function ($query) {
-            $query->where('pembina_id', auth()->id());
+        ->whereHas('organisasi.pembinaUsers', function ($query) {
+            $query->where('users.id', auth()->id());
         });
 
         // SEARCH

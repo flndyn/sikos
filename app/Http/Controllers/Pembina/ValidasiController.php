@@ -16,8 +16,8 @@ class ValidasiController extends Controller
     {
         $kegiatanMenungguValidasiPembina = Kegiatan::with('organisasi:id,nama_organisasi')
             ->where('status', 'pending')
-            ->whereHas('organisasi', function ($query) {
-                $query->where('pembina_id', auth()->id());
+            ->whereHas('organisasi.pembinaUsers', function ($query) {
+                $query->where('users.id', auth()->id());
             })
             ->latest('id')
             ->get([
@@ -91,7 +91,9 @@ class ValidasiController extends Controller
     private function canValidate(Kegiatan $kegiatan): bool
     {
         return $kegiatan->organisasi()
-            ->where('pembina_id', auth()->id())
+            ->whereHas('pembinaUsers', function ($query) {
+                $query->where('users.id', auth()->id());
+            })
             ->exists();
     }
 
@@ -115,20 +117,22 @@ class ValidasiController extends Controller
 
     private function notifyKetuaSetelahDitolakPembina(Kegiatan $kegiatan): void
     {
-        $organisasi = $kegiatan->organisasi()->with('ketua')->first();
-        $ketua = $organisasi?->ketua;
+        $organisasi = $kegiatan->organisasi()->first();
+        $ketuaUsers = $organisasi?->ketuaUsers;
 
-        if (! $ketua) {
+        if (! $ketuaUsers || $ketuaUsers->isEmpty()) {
             return;
         }
 
         $keterangan = $kegiatan->keterangan ?: '-';
 
-        $ketua->notify(new KegiatanWorkflowNotification(
-            'Proposal Ditolak Pembina',
-            'Proposal kegiatan "' . $kegiatan->nama_kegiatan . '" ditolak pembina. Keterangan: ' . $keterangan,
-            route('ketua.kegiatan'),
-            'Lihat kegiatan'
-        ));
+        foreach ($ketuaUsers as $ketua) {
+            $ketua->notify(new KegiatanWorkflowNotification(
+                'Proposal Ditolak Pembina',
+                'Proposal kegiatan "' . $kegiatan->nama_kegiatan . '" ditolak pembina. Keterangan: ' . $keterangan,
+                route('ketua.kegiatan'),
+                'Lihat kegiatan'
+            ));
+        }
     }
 }
