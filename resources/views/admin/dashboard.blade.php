@@ -166,7 +166,7 @@
                 <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center p-3">
                     <div>
                         <h6 class="mb-0">Organisasi Paling Aktif (Top 10)</h6>
-                        <small class="text-muted">Berdasarkan jumlah kegiatan yang diajukan</small>
+                        <small class="text-muted">Berdasarkan jumlah laporan kegiatan</small>
                     </div>
                     <div class="dropdown">
                         <button class="btn btn-sm btn-light" type="button" id="chartDropdown" data-bs-toggle="dropdown">
@@ -306,7 +306,7 @@
                             <a href="{{ route('admin.validasi') }}" class="btn btn-sm btn-primary ms-3">Validasi</a>
                         </div>
                     @empty
-                        <p class="text-center text-muted">Belum ada pengajuan dengan status Disetujui Admin.</p>
+                        <p class="text-center text-muted">Belum ada pengajuan dengan status Disetujui Pembina.</p>
                     @endforelse
                 </div>
             </div>
@@ -340,7 +340,7 @@
             data: {
                 labels: @json($chartLabelsSafe),
                 datasets: [{
-                    label: 'Jumlah Kegiatan',
+                    label: 'Jumlah Laporan Kegiatan',
                     data: @json($chartDataSafe),
                     backgroundColor: '#0d6efd',
                     borderColor: '#0d6efd',
@@ -371,7 +371,7 @@
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Jumlah Kegiatan'
+                            text: 'Jumlah Laporan Kegiatan'
                         },
                         ticks: {
                             stepSize: 2

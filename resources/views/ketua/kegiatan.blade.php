@@ -85,14 +85,10 @@
                             </td>
                             <td><span class="badge {{ $badgeClass }}">{{ $statusLabel }}</span></td>
                             <td class="text-nowrap text-center">
-                                @if (!in_array($item->status, ['disetujui pembina', 'disetujui admin']))
-                                    <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                        data-bs-target="#editKegiatanModal{{ $item->id }}">
-                                        <i class="bi bi-pencil"></i>
-                                    </button>
-                                @else
-                                    <span class="text-muted">-</span>
-                                @endif
+                                <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#editKegiatanModal{{ $item->id }}">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
                             </td>
                         </tr>
                     @empty
@@ -186,73 +182,68 @@
 
     <!-- MODAL EDIT KEGIATAN -->
     @foreach ($kegiatan as $item)
-        @if (!in_array($item->status, ['disetujui pembina', 'disetujui admin']))
-            <div class="modal fade" id="editKegiatanModal{{ $item->id }}" tabindex="-1">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Edit Kegiatan</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                        <form action="{{ route('ketua.kegiatan.update', $item->id) }}" method="POST"
-                            enctype="multipart/form-data">
-                            @csrf
-                            @method('PUT')
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label for="edit_nama_kegiatan_{{ $item->id }}" class="form-label">Nama Kegiatan
-                                        <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control"
-                                        id="edit_nama_kegiatan_{{ $item->id }}" name="nama_kegiatan"
-                                        value="{{ $item->nama_kegiatan }}" required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="edit_deskripsi_{{ $item->id }}" class="form-label">Deskripsi</label>
-                                    <textarea class="form-control" id="edit_deskripsi_{{ $item->id }}" name="deskripsi" rows="3">{{ $item->deskripsi }}</textarea>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="edit_tanggal_mulai_{{ $item->id }}"
-                                                class="form-label">Tanggal
-                                                Mulai
-                                                <span class="text-danger">*</span></label>
-                                            <input type="date" class="form-control"
-                                                id="edit_tanggal_mulai_{{ $item->id }}" name="tanggal_mulai"
-                                                value="{{ $item->tanggal_mulai?->format('Y-m-d') }}" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="edit_tempat_{{ $item->id }}" class="form-label">Tempat <span
-                                                    class="text-danger">*</span></label>
-                                            <input type="text" class="form-control"
-                                                id="edit_tempat_{{ $item->id }}" name="tempat"
-                                                value="{{ $item->tempat }}" required>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="edit_proposal_{{ $item->id }}" class="form-label">Ganti Proposal
-                                        (Opsional)
-                                    </label>
-                                    <input type="file" class="form-control" id="edit_proposal_{{ $item->id }}"
-                                        name="proposal" accept=".pdf,.doc,.docx">
-                                    <small class="text-muted">Kosongkan jika tidak ingin mengganti file proposal.</small>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                            </div>
-                        </form>
+        <div class="modal fade" id="editKegiatanModal{{ $item->id }}" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Kegiatan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
+                    <form action="{{ route('ketua.kegiatan.update', $item->id) }}" method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="edit_nama_kegiatan_{{ $item->id }}" class="form-label">Nama Kegiatan
+                                    <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="edit_nama_kegiatan_{{ $item->id }}"
+                                    name="nama_kegiatan" value="{{ $item->nama_kegiatan }}" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="edit_deskripsi_{{ $item->id }}" class="form-label">Deskripsi</label>
+                                <textarea class="form-control" id="edit_deskripsi_{{ $item->id }}" name="deskripsi" rows="3">{{ $item->deskripsi }}</textarea>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="edit_tanggal_mulai_{{ $item->id }}" class="form-label">Tanggal
+                                            Mulai
+                                            <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control"
+                                            id="edit_tanggal_mulai_{{ $item->id }}" name="tanggal_mulai"
+                                            value="{{ $item->tanggal_mulai?->format('Y-m-d') }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="edit_tempat_{{ $item->id }}" class="form-label">Tempat <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="edit_tempat_{{ $item->id }}"
+                                            name="tempat" value="{{ $item->tempat }}" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="edit_proposal_{{ $item->id }}" class="form-label">Ganti Proposal
+                                    (Opsional)
+                                </label>
+                                <input type="file" class="form-control" id="edit_proposal_{{ $item->id }}"
+                                    name="proposal" accept=".pdf,.doc,.docx">
+                                <small class="text-muted">Kosongkan jika tidak ingin mengganti file proposal.</small>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                        </div>
+                    </form>
                 </div>
             </div>
-        @endif
+        </div>
     @endforeach
 
 @endsection
