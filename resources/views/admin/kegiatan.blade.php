@@ -202,6 +202,27 @@
                             @enderror
                         </div>
 
+                        <div class="mb-3">
+                            <label for="penanggung_jawab" class="form-label">Penanggung Jawab (Pembina)</label>
+                            <select class="form-select @error('penanggung_jawab') is-invalid @enderror"
+                                id="penanggung_jawab" name="penanggung_jawab">
+                                <option value="">-- Pilih Pembina --</option>
+                                @php
+                                    $oldOrgId = old('organisasi_id');
+                                    $oldOrg = $oldOrgId ? $organisasiList->firstWhere('id', $oldOrgId) : null;
+                                    $oldPembinas = $oldOrg ? $oldOrg->pembinaUsers : collect();
+                                @endphp
+                                @foreach ($oldPembinas as $pembina)
+                                    <option value="{{ $pembina->id }}" {{ old('penanggung_jawab') == $pembina->id ? 'selected' : '' }}>
+                                        {{ $pembina->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('penanggung_jawab')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -217,6 +238,20 @@
 
                             <div class="col-md-6">
                                 <div class="mb-3">
+                                    <label for="tanggal_berakhir" class="form-label">Tanggal Berakhir</label>
+                                    <input type="date"
+                                        class="form-control @error('tanggal_berakhir') is-invalid @enderror"
+                                        id="tanggal_berakhir" name="tanggal_berakhir" value="{{ old('tanggal_berakhir') }}">
+                                    @error('tanggal_berakhir')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
                                     <label for="tempat" class="form-label">Tempat</label>
                                     <input type="text" class="form-control @error('tempat') is-invalid @enderror"
                                         id="tempat" name="tempat" value="{{ old('tempat') }}">
@@ -225,9 +260,7 @@
                                     @enderror
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="status" class="form-label">Status *</label>
@@ -258,30 +291,24 @@
                                     @enderror
                                 </div>
                             </div>
-
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="keterangan" class="form-label">Keterangan</label>
-                                    <textarea class="form-control @error('keterangan') is-invalid @enderror" id="keterangan" name="keterangan"
-                                        rows="2" placeholder="Wajib diisi jika status ditolak">{{ old('keterangan') }}</textarea>
-                                    @error('keterangan')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="proposal" class="form-label">Proposal (File)</label>
-                                    <input type="file" class="form-control @error('proposal') is-invalid @enderror"
-                                        id="proposal" name="proposal" accept=".pdf,.doc,.docx">
-                                    @error('proposal')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
+                        <div class="mb-3">
+                            <label for="keterangan" class="form-label">Keterangan</label>
+                            <textarea class="form-control @error('keterangan') is-invalid @enderror" id="keterangan" name="keterangan"
+                                rows="2" placeholder="Wajib diisi jika status ditolak">{{ old('keterangan') }}</textarea>
+                            @error('keterangan')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="proposal" class="form-label">Proposal (File)</label>
+                            <input type="file" class="form-control @error('proposal') is-invalid @enderror"
+                                id="proposal" name="proposal" accept=".pdf,.doc,.docx">
+                            @error('proposal')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
 
@@ -336,11 +363,26 @@
                                 <textarea class="form-control" id="edit_deskripsi_{{ $item->id }}" name="deskripsi" rows="3">{{ $item->deskripsi }}</textarea>
                             </div>
 
+                            <div class="mb-3">
+                                <label for="edit_penanggung_jawab_{{ $item->id }}" class="form-label">Penanggung Jawab (Pembina)</label>
+                                <select class="form-select" id="edit_penanggung_jawab_{{ $item->id }}" name="penanggung_jawab">
+                                    <option value="">-- Pilih Pembina --</option>
+                                    @php
+                                        $editOrg = $organisasiList->firstWhere('id', $item->organisasi_id);
+                                        $editPembinas = $editOrg ? $editOrg->pembinaUsers : collect();
+                                    @endphp
+                                    @foreach ($editPembinas as $pembina)
+                                        <option value="{{ $pembina->id }}" {{ $item->penanggung_jawab == $pembina->id ? 'selected' : '' }}>
+                                            {{ $pembina->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="edit_tanggal_mulai_{{ $item->id }}" class="form-label">Tanggal
-                                            Mulai</label>
+                                        <label for="edit_tanggal_mulai_{{ $item->id }}" class="form-label">Tanggal Mulai</label>
                                         <input type="date" class="form-control"
                                             id="edit_tanggal_mulai_{{ $item->id }}" name="tanggal_mulai"
                                             value="{{ $item->tanggal_mulai?->format('Y-m-d') }}">
@@ -349,14 +391,23 @@
 
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="edit_tempat_{{ $item->id }}" class="form-label">Tempat</label>
-                                        <input type="text" class="form-control" id="edit_tempat_{{ $item->id }}"
-                                            name="tempat" value="{{ $item->tempat }}">
+                                        <label for="edit_tanggal_berakhir_{{ $item->id }}" class="form-label">Tanggal Berakhir</label>
+                                        <input type="date" class="form-control"
+                                            id="edit_tanggal_berakhir_{{ $item->id }}" name="tanggal_berakhir"
+                                            value="{{ $item->tanggal_berakhir?->format('Y-m-d') }}">
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="edit_tempat_{{ $item->id }}" class="form-label">Tempat</label>
+                                        <input type="text" class="form-control" id="edit_tempat_{{ $item->id }}"
+                                            name="tempat" value="{{ $item->tempat }}">
+                                    </div>
+                                </div>
+
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="edit_status_{{ $item->id }}" class="form-label">Status *</label>
@@ -383,43 +434,37 @@
                                         </select>
                                     </div>
                                 </div>
-
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="edit_keterangan_{{ $item->id }}"
-                                            class="form-label">Keterangan</label>
-                                        <textarea class="form-control" id="edit_keterangan_{{ $item->id }}" name="keterangan" rows="2"
-                                            placeholder="Wajib diisi jika status ditolak">{{ $item->keterangan }}</textarea>
-                                    </div>
-                                </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="edit_proposal_{{ $item->id }}" class="form-label">Proposal
-                                            (File)</label>
-                                        @if ($item->proposal)
-                                            @php
-                                                $proposalUrl = \Illuminate\Support\Str::startsWith(
-                                                    $item->proposal,
-                                                    'http',
-                                                )
-                                                    ? $item->proposal
-                                                    : route('proposal.download', $item);
-                                            @endphp
-                                            <div class="mb-2">
-                                                <a href="{{ $proposalUrl }}" target="_blank" class="small">
-                                                    Lihat file proposal saat ini
-                                                </a>
-                                            </div>
-                                        @endif
-                                        <input type="file" class="form-control"
-                                            id="edit_proposal_{{ $item->id }}" name="proposal"
-                                            accept=".pdf,.doc,.docx">
-                                        <div class="form-text">Kosongkan jika tidak ingin mengganti file proposal.</div>
+                            <div class="mb-3">
+                                <label for="edit_keterangan_{{ $item->id }}"
+                                    class="form-label">Keterangan</label>
+                                <textarea class="form-control" id="edit_keterangan_{{ $item->id }}" name="keterangan" rows="2"
+                                    placeholder="Wajib diisi jika status ditolak">{{ $item->keterangan }}</textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="edit_proposal_{{ $item->id }}" class="form-label">Proposal
+                                    (File)</label>
+                                @if ($item->proposal)
+                                    @php
+                                        $proposalUrl = \Illuminate\Support\Str::startsWith(
+                                            $item->proposal,
+                                            'http',
+                                        )
+                                            ? $item->proposal
+                                            : route('proposal.download', $item);
+                                    @endphp
+                                    <div class="mb-2">
+                                        <a href="{{ $proposalUrl }}" target="_blank" class="small">
+                                            Lihat file proposal saat ini
+                                        </a>
                                     </div>
-                                </div>
+                                @endif
+                                <input type="file" class="form-control"
+                                    id="edit_proposal_{{ $item->id }}" name="proposal"
+                                    accept=".pdf,.doc,.docx">
+                                <div class="form-text">Kosongkan jika tidak ingin mengganti file proposal.</div>
                             </div>
                         </div>
 
@@ -463,7 +508,6 @@
         </div>
     @endforeach
 
-    <!-- Auto-open modal if validation error -->
     @if ($errors->any())
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -472,5 +516,50 @@
             });
         </script>
     @endif
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Build the map of organisasi to pembina
+            const orgMap = {
+                @foreach ($organisasiList as $org)
+                    "{{ $org->id }}": [
+                        @foreach ($org->pembinaUsers as $pembina)
+                            { id: "{{ $pembina->id }}", name: "{{ $pembina->name }}" },
+                        @endforeach
+                    ],
+                @endforeach
+            };
+
+            function updatePembinaDropdown(orgSelectId, pembinaSelectId) {
+                const orgSelect = document.getElementById(orgSelectId);
+                const pembinaSelect = document.getElementById(pembinaSelectId);
+                
+                if (!orgSelect || !pembinaSelect) return;
+
+                orgSelect.addEventListener('change', function() {
+                    const orgId = this.value;
+                    const pembinas = orgMap[orgId] || [];
+
+                    // Keep the first option
+                    pembinaSelect.innerHTML = '<option value="">-- Pilih Pembina --</option>';
+
+                    pembinas.forEach(function(pembina) {
+                        const option = document.createElement('option');
+                        option.value = pembina.id;
+                        option.textContent = pembina.name;
+                        pembinaSelect.appendChild(option);
+                    });
+                });
+            }
+
+            // For Tambah form
+            updatePembinaDropdown('organisasi_id', 'penanggung_jawab');
+
+            // For Edit forms
+            @foreach ($kegiatan as $item)
+                updatePembinaDropdown('edit_organisasi_id_{{ $item->id }}', 'edit_penanggung_jawab_{{ $item->id }}');
+            @endforeach
+        });
+    </script>
 
 @endsection

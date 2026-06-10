@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Kegiatan;
 use App\Models\Organisasi;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -79,7 +80,7 @@ class KegiatanController extends Controller
             'status',
         ]);
 
-        $organisasiList = Organisasi::orderBy('nama_organisasi')
+        $organisasiList = Organisasi::with('pembinaUsers:id,name')->orderBy('nama_organisasi')
             ->get([
                 'id',
                 'nama_organisasi'
@@ -113,9 +114,21 @@ class KegiatanController extends Controller
                 'string'
             ],
 
+            'penanggung_jawab' => [
+                'nullable',
+                'integer',
+                Rule::exists('users', 'id')
+            ],
+
             'tanggal_mulai' => [
                 'nullable',
                 'date'
+            ],
+
+            'tanggal_berakhir' => [
+                'nullable',
+                'date',
+                'after_or_equal:tanggal_mulai'
             ],
 
             'tempat' => [
@@ -182,9 +195,21 @@ class KegiatanController extends Controller
                 'string'
             ],
 
+            'penanggung_jawab' => [
+                'nullable',
+                'integer',
+                Rule::exists('users', 'id')
+            ],
+
             'tanggal_mulai' => [
                 'nullable',
                 'date'
+            ],
+
+            'tanggal_berakhir' => [
+                'nullable',
+                'date',
+                'after_or_equal:tanggal_mulai'
             ],
 
             'tempat' => [
