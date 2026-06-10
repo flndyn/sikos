@@ -117,7 +117,7 @@
                 </div>
 
                 <div class="card-body p-0">
-                    <table class="table table-hover mb-0 align-middle" data-no-search="1">
+                    <table class="table table-hover mb-0 align-middle" data-has-global-search="1">
                         <thead class="table-light">
                             <tr>
                                 <th class="ps-3" style="width:45px;">No</th>
@@ -183,15 +183,22 @@
                                     </td>
                                     <td>
                                         @php
-                                            $status = $item->status ?? 'pending';
+                                            $status = strtolower($item->status ?? 'pending');
+                                            $badgeClass = match ($status) {
+                                                'disetujui admin' => 'badge-disetujui',
+                                                'disetujui pembina' => 'badge-info',
+                                                'ditolak admin', 'ditolak pembina' => 'badge-ditolak',
+                                                default => 'badge-menunggu',
+                                            };
+                                            $statusLabel = match ($status) {
+                                                'disetujui admin' => 'Disetujui Admin',
+                                                'disetujui pembina' => 'Menunggu Admin',
+                                                'ditolak admin' => 'Ditolak Admin',
+                                                'ditolak pembina' => 'Ditolak Pembina',
+                                                default => 'Di Proses',
+                                            };
                                         @endphp
-                                        @if ($status === 'disetujui' || $status === 'approved')
-                                            <span class="badge-status badge-disetujui">Disetujui</span>
-                                        @elseif($status === 'ditolak' || $status === 'rejected')
-                                            <span class="badge-status badge-ditolak">Ditolak</span>
-                                        @else
-                                            <span class="badge-status badge-menunggu">Menunggu</span>
-                                        @endif
+                                        <span class="badge-status {{ $badgeClass }}">{{ $statusLabel }}</span>
                                     </td>
                                 </tr>
                             @empty
@@ -544,6 +551,11 @@
     .badge-menunggu {
         background: rgba(245, 158, 11, 0.12);
         color: #d97706;
+    }
+
+    .badge-info {
+        background: rgba(13, 202, 240, 0.15);
+        color: #08a0bf;
     }
 
     /* ===== DOKUMENTASI ===== */
