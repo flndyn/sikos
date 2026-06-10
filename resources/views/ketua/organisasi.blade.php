@@ -18,7 +18,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold">Pembina</label>
-                        <div class="mt-1">
+                        <div class="mt-1 d-flex flex-column gap-2">
                             @forelse ($organisasi->pembinaUsers as $pembina)
                                 <x-user-avatar :user="$pembina" :size="36" />
                             @empty
@@ -31,7 +31,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold">Ketua Organisasi</label>
-                        <div class="mt-1">
+                        <div class="mt-1 d-flex flex-column gap-2">
                             @forelse ($organisasi->ketuaUsers as $ketua)
                                 <x-user-avatar :user="$ketua" :size="36" />
                             @empty

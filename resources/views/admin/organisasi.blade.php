@@ -44,18 +44,22 @@
                             <td>{{ $item->nama_organisasi }}</td>
                             <td>{{ \Illuminate\Support\Str::limit($item->deskripsi ?? '-', 40) }}</td>
                             <td>
-                                @forelse ($item->pembinaUsers as $pembina)
-                                    <x-user-avatar :user="$pembina" :size="34" />
-                                @empty
-                                    <span class="text-muted">-</span>
-                                @endforelse
+                                <div class="d-flex flex-column gap-2">
+                                    @forelse ($item->pembinaUsers as $pembina)
+                                        <x-user-avatar :user="$pembina" :size="34" />
+                                    @empty
+                                        <span class="text-muted">-</span>
+                                    @endforelse
+                                </div>
                             </td>
                             <td>
-                                @forelse ($item->ketuaUsers as $ketua)
-                                    <x-user-avatar :user="$ketua" :size="34" />
-                                @empty
-                                    <span class="text-muted">-</span>
-                                @endforelse
+                                <div class="d-flex flex-column gap-2">
+                                    @forelse ($item->ketuaUsers as $ketua)
+                                        <x-user-avatar :user="$ketua" :size="34" />
+                                    @empty
+                                        <span class="text-muted">-</span>
+                                    @endforelse
+                                </div>
                             </td>
                             <td>
                                 <button class="btn btn-warning btn-sm" type="button" data-bs-toggle="modal"

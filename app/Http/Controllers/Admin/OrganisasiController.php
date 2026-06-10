@@ -57,18 +57,17 @@ class OrganisasiController extends Controller
 
         $organisasi = Organisasi::create($validated);
 
-        // Sync pivot with role
-        $pivotData = [];
+        $pembinaPivot = [];
         foreach ($pembinaIds as $id) {
-            $pivotData[$id] = ['role' => 'pembina'];
+            $pembinaPivot[$id] = ['role' => 'pembina'];
         }
-        foreach ($ketuaIds as $id) {
-            $pivotData[$id] = ['role' => 'ketua'];
-        }
+        $organisasi->pembinaUsers()->sync($pembinaPivot);
 
-        // Use manual sync since same user could be in both roles
-        $organisasi->pembinaUsers()->sync($pembinaIds);
-        $organisasi->ketuaUsers()->sync($ketuaIds);
+        $ketuaPivot = [];
+        foreach ($ketuaIds as $id) {
+            $ketuaPivot[$id] = ['role' => 'ketua'];
+        }
+        $organisasi->ketuaUsers()->sync($ketuaPivot);
 
         return redirect()
             ->route('admin.organisasi')
@@ -92,8 +91,17 @@ class OrganisasiController extends Controller
 
         $organisasi->update($validated);
 
-        $organisasi->pembinaUsers()->sync($pembinaIds);
-        $organisasi->ketuaUsers()->sync($ketuaIds);
+        $pembinaPivot = [];
+        foreach ($pembinaIds as $id) {
+            $pembinaPivot[$id] = ['role' => 'pembina'];
+        }
+        $organisasi->pembinaUsers()->sync($pembinaPivot);
+
+        $ketuaPivot = [];
+        foreach ($ketuaIds as $id) {
+            $ketuaPivot[$id] = ['role' => 'ketua'];
+        }
+        $organisasi->ketuaUsers()->sync($ketuaPivot);
 
         return redirect()
             ->route('admin.organisasi')
