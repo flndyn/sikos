@@ -43,6 +43,7 @@
                         <th class="text-nowrap">Nama Kegiatan</th>
                         <th class="text-nowrap">Tanggal</th>
                         <th class="text-nowrap">Isi Laporan</th>
+                        <th class="text-nowrap text-center">Status</th>
                         <th class="text-nowrap text-center">File</th>
                         <th class="text-nowrap text-center">Aksi</th>
                     </tr>
@@ -54,6 +55,22 @@
                             <td>{{ $item->kegiatan?->nama_kegiatan ?? '-' }}</td>
                             <td>{{ $item->kegiatan?->tanggal_mulai?->format('d-m-Y') ?? '-' }}</td>
                             <td>{{ \Illuminate\Support\Str::limit($item->isi_laporan ?? '-', 120) }}</td>
+                            <td class="text-center text-nowrap">
+                                @if ($item->status === 'pending')
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                @elseif ($item->status === 'disetujui pembina')
+                                    <span class="badge bg-success">Disetujui Pembina</span>
+                                @elseif ($item->status === 'ditolak pembina')
+                                    <span class="badge bg-danger d-block mb-1">Ditolak Pembina</span>
+                                    @if ($item->keterangan)
+                                        <small class="text-danger d-block text-wrap mx-auto" style="max-width: 150px;">
+                                            Alasan: {{ $item->keterangan }}
+                                        </small>
+                                    @endif
+                                @else
+                                    <span class="badge bg-secondary">{{ $item->status ?? 'Pending' }}</span>
+                                @endif
+                            </td>
                             <td class="text-nowrap text-center">
                                 @if ($item->file_laporan)
                                     <a href="{{ route('ketua.laporan.download', $item) }}" class="btn btn-primary btn-sm">
@@ -77,7 +94,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center text-muted">Belum ada laporan kegiatan.</td>
+                             <td colspan="7" class="text-center text-muted">Belum ada laporan kegiatan.</td>
                         </tr>
                     @endforelse
                 </tbody>

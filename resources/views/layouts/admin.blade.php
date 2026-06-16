@@ -362,6 +362,14 @@
                         </a>
                     </li>
 
+                    <li class="nav-item">
+                        <a href="{{ route('admin.absensi-ekskul') }}"
+                            class="nav-link {{ request()->routeIs('admin.absensi-ekskul*') ? 'active bg-white' : 'text-white' }}">
+                            <i class="fas fa-clipboard-list"></i>
+                            <span>Absensi Ekskul</span>
+                        </a>
+                    </li>
+
                 </ul>
                 <hr class="text-white my-3" style="opacity: 0.2;">
 

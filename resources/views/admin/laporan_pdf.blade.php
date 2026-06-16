@@ -6,7 +6,7 @@
     <title>Laporan Kegiatan</title>
     <style>
         body {
-            font-family: DejaVu Sans, sans-serif;
+            font-family: 'Helvetica', 'Arial', sans-serif;
             font-size: 12px;
             color: #111827;
         }
@@ -55,6 +55,7 @@
                 <th class="text-nowrap">Nama Kegiatan</th>
                 <th class="text-nowrap">Organisasi</th>
                 <th class="text-nowrap" style="width: 100px;">Tanggal</th>
+                <th class="text-nowrap" style="width: 120px;">Status</th>
                 <th class="text-nowrap">Laporan</th>
             </tr>
         </thead>
@@ -68,6 +69,20 @@
                     <td>{{ $item->kegiatan?->nama_kegiatan ?? '-' }}</td>
                     <td>{{ $item->kegiatan?->organisasi?->nama_organisasi ?? '-' }}</td>
                     <td>{{ $item->kegiatan?->tanggal_mulai?->format('Y-m-d') ?? '-' }}</td>
+                    <td class="text-center">
+                        @if ($item->status === 'pending')
+                            Pending
+                        @elseif ($item->status === 'disetujui pembina')
+                            Disetujui Pembina
+                        @elseif ($item->status === 'ditolak pembina')
+                            Ditolak Pembina
+                            @if ($item->keterangan)
+                                (Alasan: {{ $item->keterangan }})
+                            @endif
+                        @else
+                            {{ ucfirst($item->status ?? 'pending') }}
+                        @endif
+                    </td>
                     <td>
                         @if ($item->file_laporan)
                             <a href="{{ $downloadUrl }}">Download laporan</a>
@@ -78,7 +93,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5" class="text-center">Belum ada data laporan kegiatan.</td>
+                    <td colspan="6" class="text-center">Belum ada data laporan kegiatan.</td>
                 </tr>
             @endforelse
         </tbody>

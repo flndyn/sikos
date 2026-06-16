@@ -83,6 +83,8 @@ class LaporanController extends Controller
                 'kegiatan_id',
                 'isi_laporan',
                 'file_laporan',
+                'status',
+                'keterangan',
             ]);
     }
 }

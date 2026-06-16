@@ -6,22 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class LaporanKegiatan extends Model
+class FotoPertemuanEkskul extends Model
 {
     use HasFactory;
 
-    protected $table = 'laporan_kegiatan';
+    protected $table = 'foto_pertemuan_ekskul';
 
     protected $fillable = [
-        'kegiatan_id',
-        'isi_laporan',
-        'file_laporan',
-        'status',
+        'pertemuan_id',
+        'file_path',
         'keterangan',
     ];
 
-    public function kegiatan(): BelongsTo
+    public function pertemuan(): BelongsTo
     {
-        return $this->belongsTo(Kegiatan::class, 'kegiatan_id');
+        return $this->belongsTo(PertemuanEkskul::class, 'pertemuan_id');
     }
 }

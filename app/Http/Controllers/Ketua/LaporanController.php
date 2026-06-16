@@ -53,6 +53,8 @@ class LaporanController extends Controller
                 'kegiatan_id',
                 'isi_laporan',
                 'file_laporan',
+                'status',
+                'keterangan',
                 'created_at'
             ]);
 
@@ -233,6 +235,8 @@ class LaporanController extends Controller
             );
         }
 
+        $validated['status'] = 'pending';
+        $validated['keterangan'] = null;
         $laporan->update($validated);
 
         return redirect()

@@ -36,4 +36,14 @@ class Organisasi extends Model
     {
         return $this->hasMany(Kegiatan::class, 'organisasi_id');
     }
+
+    public function anggota(): HasMany
+    {
+        return $this->hasMany(AnggotaOrganisasi::class, 'organisasi_id');
+    }
+
+    public function pertemuanEkskul(): HasMany
+    {
+        return $this->hasMany(PertemuanEkskul::class, 'organisasi_id');
+    }
 }

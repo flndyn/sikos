@@ -321,6 +321,13 @@
                 </li>
 
                 <li class="nav-item">
+                    <a href="{{ route('ketua.anggota') }}"
+                        class="nav-link {{ request()->routeIs('ketua.anggota') ? 'active bg-white' : 'text-white' }}">
+                        <i class="fas fa-users"></i> Anggota Ekskul
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="{{ route('ketua.kegiatan') }}"
                         class="nav-link {{ request()->routeIs('ketua.kegiatan') ? 'active bg-white' : 'text-white' }}">
                         <i class="fas fa-calendar-alt"></i> Manajemen Kegiatan

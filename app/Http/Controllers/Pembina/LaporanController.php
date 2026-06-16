@@ -33,7 +33,7 @@ class LaporanController extends Controller
             });
         }
 
-        $laporan = $query->latest('id')->get(['id', 'kegiatan_id', 'isi_laporan', 'file_laporan']);
+        $laporan = $query->latest('id')->get(['id', 'kegiatan_id', 'isi_laporan', 'file_laporan', 'status', 'keterangan']);
 
         return view('pembina.laporan', compact('laporan', 'search'));
     }
@@ -72,5 +72,68 @@ class LaporanController extends Controller
         }
 
         return back()->with('error', 'File laporan tidak ditemukan di storage.');
+    }
+
+    public function approve(LaporanKegiatan $laporan): RedirectResponse
+    {
+        $isAuthorized = $laporan->kegiatan()
+            ->whereHas('organisasi.pembinaUsers', function ($query) {
+                $query->where('users.id', auth()->id());
+            })
+            ->exists();
+
+        if (! $isAuthorized) {
+            return back()->with('error', 'Anda tidak memiliki akses ke laporan ini.');
+        }
+
+        if ($laporan->status !== 'pending') {
+            return back()->with('error', 'Laporan sudah divalidasi sebelumnya.');
+        }
+
+        $laporan->update([
+            'status' => 'disetujui pembina',
+            'keterangan' => null,
+        ]);
+
+        return back()->with('success', 'Laporan kegiatan telah disetujui.');
+    }
+
+    public function reject(Request $request, LaporanKegiatan $laporan): RedirectResponse
+    {
+        $isAuthorized = $laporan->kegiatan()
+            ->whereHas('organisasi.pembinaUsers', function ($query) {
+                $query->where('users.id', auth()->id());
+            })
+            ->exists();
+
+        if (! $isAuthorized) {
+            return back()->with('error', 'Anda tidak memiliki akses ke laporan ini.');
+        }
+
+        if ($laporan->status !== 'pending') {
+            return back()->with('error', 'Laporan sudah divalidasi sebelumnya.');
+        }
+
+        $validated = $request->validate([
+            'keterangan' => [
+                'nullable',
+                'string',
+                'in:Laporan belum lengkap,Format file tidak sesuai,Data dokumentasi kurang jelas',
+            ],
+            'keterangan_custom' => [
+                'nullable',
+                'string',
+                'max:500',
+            ],
+        ]);
+
+        $keterangan = trim($validated['keterangan_custom'] ?? '') ?: ($validated['keterangan'] ?? null);
+
+        $laporan->update([
+            'status' => 'ditolak pembina',
+            'keterangan' => $keterangan,
+        ]);
+
+        return back()->with('success', 'Laporan kegiatan telah ditolak.');
     }
 }

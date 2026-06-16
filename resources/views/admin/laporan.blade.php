@@ -25,6 +25,7 @@
                         <th class="text-nowrap">Nama Kegiatan</th>
                         <th class="text-nowrap">Organisasi</th>
                         <th class="text-nowrap">Tanggal</th>
+                        <th class="text-nowrap text-center">Status</th>
                         <th class="text-nowrap">Laporan</th>
                     </tr>
                 </thead>
@@ -36,6 +37,22 @@
                             <td>{{ $item->kegiatan?->nama_kegiatan ?? '-' }}</td>
                             <td>{{ $item->kegiatan?->organisasi?->nama_organisasi ?? '-' }}</td>
                             <td>{{ $item->kegiatan?->tanggal_mulai?->format('Y-m-d') ?? '-' }}</td>
+                            <td class="text-center text-nowrap">
+                                @if ($item->status === 'pending')
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                @elseif ($item->status === 'disetujui pembina')
+                                    <span class="badge bg-success">Disetujui Pembina</span>
+                                @elseif ($item->status === 'ditolak pembina')
+                                    <span class="badge bg-danger d-block mb-1">Ditolak Pembina</span>
+                                    @if ($item->keterangan)
+                                        <small class="text-danger d-block text-wrap mx-auto" style="max-width: 150px;">
+                                            Alasan: {{ $item->keterangan }}
+                                        </small>
+                                    @endif
+                                @else
+                                    <span class="badge bg-secondary">{{ $item->status ?? 'Pending' }}</span>
+                                @endif
+                            </td>
                             <td>
                                 @if ($item->file_laporan)
                                     <a href="{{ route('admin.laporan.download', $item) }}" class="btn btn-primary btn-sm"
@@ -49,7 +66,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center text-muted">Belum ada laporan kegiatan.</td>
+                            <td colspan="6" class="text-center text-muted">Belum ada laporan kegiatan.</td>
                         </tr>
                     @endforelse
 

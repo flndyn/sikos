@@ -352,6 +352,12 @@
                         <i class="fas fa-file-alt"></i> Laporan Kegiatan
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('pembina.absensi-ekskul') }}"
+                        class="nav-link {{ request()->routeIs('pembina.absensi-ekskul*') ? 'active bg-white' : 'text-white' }}">
+                        <i class="fas fa-clipboard-check"></i> Absensi Ekskul
+                    </a>
+                </li>
             </ul>
 
             <hr class="text-white">

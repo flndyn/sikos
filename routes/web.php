@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\OrganisasiController as AdminOrganisasiController
 use App\Http\Controllers\Admin\ProfilController as AdminProfilController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\ValidasiController;
+use App\Http\Controllers\Admin\AbsensiEkskulController as AdminAbsensiEkskulController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Ketua\DashboardController as KetuaDashboardController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\Ketua\LaporanController as KetuaLaporanController;
 use App\Http\Controllers\Ketua\ProfilController as KetuaProfilController;
 use App\Http\Controllers\Ketua\OrganisasiController as KetuaOrganisasiController;
 use App\Http\Controllers\Ketua\KegiatanController as KetuaKegiatanController;
+use App\Http\Controllers\Ketua\AnggotaController as KetuaAnggotaController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Pembina\DashboardController as PembinaDashboardController;
 use App\Http\Controllers\Pembina\DokumentasiController as PembinaDokumentasiController;
@@ -26,6 +28,7 @@ use App\Http\Controllers\Pembina\LaporanController as PembinaLaporanController;
 use App\Http\Controllers\Pembina\OrganisasiController as PembinaOrganisasiController;
 use App\Http\Controllers\Pembina\ProfilController as PembinaProfilController;
 use App\Http\Controllers\Pembina\ValidasiController as PembinaValidasiController;
+use App\Http\Controllers\Pembina\AbsensiEkskulController as PembinaAbsensiEkskulController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -86,6 +89,13 @@ Route::middleware(['auth', 'role:admin'])->group(function (): void {
     Route::get('/admin/laporan', LaporanController::class)->name('admin.laporan');
     Route::get('/admin/laporan/export-pdf', [LaporanController::class, 'exportPdf'])->name('admin.laporan.export-pdf');
     Route::get('/admin/laporan/{laporan}/download', [LaporanController::class, 'download'])->name('admin.laporan.download');
+
+    // Absensi Ekstrakurikuler
+    Route::get('/admin/absensi-ekskul', AdminAbsensiEkskulController::class)->name('admin.absensi-ekskul');
+    Route::get('/admin/absensi-ekskul/{organisasi}', [AdminAbsensiEkskulController::class, 'show'])->name('admin.absensi-ekskul.show');
+    Route::get('/admin/absensi-ekskul/{organisasi}/detail/{pertemuan}', [AdminAbsensiEkskulController::class, 'detail'])->name('admin.absensi-ekskul.detail');
+    Route::get('/admin/absensi-ekskul/{organisasi}/export-pdf', [AdminAbsensiEkskulController::class, 'exportPdf'])->name('admin.absensi-ekskul.export-pdf');
+    Route::get('/admin/absensi-ekskul/{organisasi}/pertemuan/{pertemuan}/export-pdf', [AdminAbsensiEkskulController::class, 'exportPertemuanPdf'])->name('admin.absensi-ekskul.export-pertemuan-pdf');
 });
 
 
@@ -108,6 +118,12 @@ Route::middleware(['auth', 'role:ketua'])->group(function (): void {
     Route::put('/ketua/laporan/{laporan}', [KetuaLaporanController::class, 'update'])->name('ketua.laporan.update');
     Route::delete('/ketua/laporan/{laporan}', [KetuaLaporanController::class, 'destroy'])->name('ketua.laporan.destroy');
     Route::get('/ketua/laporan/{laporan}/download', [KetuaLaporanController::class, 'download'])->name('ketua.laporan.download');
+
+    // Anggota Ekstrakurikuler
+    Route::get('/ketua/anggota', KetuaAnggotaController::class)->name('ketua.anggota');
+    Route::post('/ketua/anggota', [KetuaAnggotaController::class, 'store'])->name('ketua.anggota.store');
+    Route::put('/ketua/anggota/{anggota}', [KetuaAnggotaController::class, 'update'])->name('ketua.anggota.update');
+    Route::delete('/ketua/anggota/{anggota}', [KetuaAnggotaController::class, 'destroy'])->name('ketua.anggota.destroy');
 });
 
 
@@ -131,4 +147,17 @@ Route::middleware(['auth', 'role:pembina'])->group(function (): void {
     Route::delete('/pembina/dokumentasi/{dokumentasi}', [PembinaDokumentasiController::class, 'destroy'])->name('pembina.dokumentasi.destroy');
     Route::get('/pembina/laporan', PembinaLaporanController::class)->name('pembina.laporan');
     Route::get('/pembina/laporan/{laporan}/download', [PembinaLaporanController::class, 'download'])->name('pembina.laporan.download');
+    Route::post('/pembina/laporan/{laporan}/approve', [PembinaLaporanController::class, 'approve'])->name('pembina.laporan.approve');
+    Route::post('/pembina/laporan/{laporan}/reject', [PembinaLaporanController::class, 'reject'])->name('pembina.laporan.reject');
+
+    // Absensi Ekstrakurikuler
+    Route::get('/pembina/absensi-ekskul', PembinaAbsensiEkskulController::class)->name('pembina.absensi-ekskul');
+    Route::get('/pembina/absensi-ekskul/create', [PembinaAbsensiEkskulController::class, 'create'])->name('pembina.absensi-ekskul.create');
+    Route::post('/pembina/absensi-ekskul', [PembinaAbsensiEkskulController::class, 'store'])->name('pembina.absensi-ekskul.store');
+    Route::get('/pembina/absensi-ekskul/rekap', [PembinaAbsensiEkskulController::class, 'rekap'])->name('pembina.absensi-ekskul.rekap');
+    Route::get('/pembina/absensi-ekskul/{pertemuan}', [PembinaAbsensiEkskulController::class, 'show'])->name('pembina.absensi-ekskul.show');
+    Route::get('/pembina/absensi-ekskul/{pertemuan}/edit', [PembinaAbsensiEkskulController::class, 'edit'])->name('pembina.absensi-ekskul.edit');
+    Route::put('/pembina/absensi-ekskul/{pertemuan}', [PembinaAbsensiEkskulController::class, 'update'])->name('pembina.absensi-ekskul.update');
+    Route::delete('/pembina/absensi-ekskul/{pertemuan}', [PembinaAbsensiEkskulController::class, 'destroy'])->name('pembina.absensi-ekskul.destroy');
+    Route::get('/pembina/absensi-ekskul/{pertemuan}/export-pdf', [PembinaAbsensiEkskulController::class, 'exportPertemuanPdf'])->name('pembina.absensi-ekskul.export-pertemuan-pdf');
 });
