@@ -350,27 +350,4 @@ class AbsensiEkskulController extends Controller
         ));
     }
 
-    /**
-     * Export absensi pertemuan spesifik ke PDF.
-     */
-    public function exportPertemuanPdf(PertemuanEkskul $pertemuan)
-    {
-        $user = auth()->user();
-        $organisasi = $user->organisasiSebagaiPembina()->firstWhere('organisasi.id', $pertemuan->organisasi_id);
-
-        if (!$organisasi) {
-            abort(403);
-        }
-
-        $pertemuan->load(['absensi.anggota', 'pembina']);
-
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pembina.absensi-ekskul.pertemuan_pdf', [
-            'organisasi' => $organisasi,
-            'pertemuan' => $pertemuan,
-        ]);
-
-        $filename = 'absensi-pertemuan-' . $pertemuan->pertemuan_ke . '-' . \Illuminate\Support\Str::slug($organisasi->nama_organisasi) . '-' . $pertemuan->tanggal->format('Ymd') . '.pdf';
-
-        return $pdf->download($filename);
-    }
 }

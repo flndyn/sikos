@@ -22,9 +22,7 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Pertemuan {{ $pertemuan->pertemuan_ke }}</h5>
             <div class="d-flex gap-2">
-                <a href="{{ route('pembina.absensi-ekskul.export-pertemuan-pdf', $pertemuan) }}" class="btn btn-danger btn-sm text-white">
-                    <i class="fas fa-file-pdf me-1"></i> Export PDF
-                </a>
+
                 <a href="{{ route('pembina.absensi-ekskul.edit', $pertemuan) }}" class="btn btn-warning btn-sm text-white">
                     <i class="fas fa-edit me-1"></i> Edit
                 </a>

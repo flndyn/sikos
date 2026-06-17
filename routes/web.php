@@ -87,6 +87,9 @@ Route::middleware(['auth', 'role:admin'])->group(function (): void {
     Route::put('/admin/dokumentasi/{dokumentasi}', [DokumentasiController::class, 'update'])->name('admin.dokumentasi.update');
     Route::delete('/admin/dokumentasi/{dokumentasi}', [DokumentasiController::class, 'destroy'])->name('admin.dokumentasi.destroy');
     Route::get('/admin/laporan', LaporanController::class)->name('admin.laporan');
+    Route::post('/admin/laporan', [LaporanController::class, 'store'])->name('admin.laporan.store');
+    Route::put('/admin/laporan/{laporan}', [LaporanController::class, 'update'])->name('admin.laporan.update');
+    Route::delete('/admin/laporan/{laporan}', [LaporanController::class, 'destroy'])->name('admin.laporan.destroy');
     Route::get('/admin/laporan/export-pdf', [LaporanController::class, 'exportPdf'])->name('admin.laporan.export-pdf');
     Route::get('/admin/laporan/{laporan}/download', [LaporanController::class, 'download'])->name('admin.laporan.download');
 
@@ -159,5 +162,4 @@ Route::middleware(['auth', 'role:pembina'])->group(function (): void {
     Route::get('/pembina/absensi-ekskul/{pertemuan}/edit', [PembinaAbsensiEkskulController::class, 'edit'])->name('pembina.absensi-ekskul.edit');
     Route::put('/pembina/absensi-ekskul/{pertemuan}', [PembinaAbsensiEkskulController::class, 'update'])->name('pembina.absensi-ekskul.update');
     Route::delete('/pembina/absensi-ekskul/{pertemuan}', [PembinaAbsensiEkskulController::class, 'destroy'])->name('pembina.absensi-ekskul.destroy');
-    Route::get('/pembina/absensi-ekskul/{pertemuan}/export-pdf', [PembinaAbsensiEkskulController::class, 'exportPertemuanPdf'])->name('pembina.absensi-ekskul.export-pertemuan-pdf');
 });

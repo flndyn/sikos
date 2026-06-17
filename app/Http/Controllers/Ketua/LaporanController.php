@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ketua;
 use App\Http\Controllers\Controller;
 use App\Models\Kegiatan;
 use App\Models\LaporanKegiatan;
+use App\Notifications\LaporanWorkflowNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -158,11 +159,13 @@ class LaporanController extends Controller
             'public'
         );
 
-        LaporanKegiatan::create([
+        $laporan = LaporanKegiatan::create([
             'kegiatan_id' => $validated['kegiatan_id'],
             'isi_laporan' => $validated['isi_laporan'],
             'file_laporan' => $validated['file_laporan'],
         ]);
+
+        $this->notifyPembinaLaporanDiajukan($laporan);
 
         return redirect()
             ->route('ketua.laporan')
@@ -238,6 +241,8 @@ class LaporanController extends Controller
         $validated['status'] = 'pending';
         $validated['keterangan'] = null;
         $laporan->update($validated);
+
+        $this->notifyPembinaLaporanDiajukan($laporan->fresh());
 
         return redirect()
             ->route('ketua.laporan')
@@ -354,5 +359,27 @@ class LaporanController extends Controller
         return redirect()
             ->route('ketua.laporan')
             ->with('error', 'File laporan tidak ditemukan di storage.');
+    }
+
+    private function notifyPembinaLaporanDiajukan(LaporanKegiatan $laporan): void
+    {
+        $kegiatan = $laporan->kegiatan()->with('organisasi.pembinaUsers')->first();
+        $organisasi = $kegiatan?->organisasi;
+        $pembinaUsers = $organisasi?->pembinaUsers;
+
+        if (!$pembinaUsers || $pembinaUsers->isEmpty()) {
+            return;
+        }
+
+        foreach ($pembinaUsers as $pembina) {
+            $pembina->notify(new LaporanWorkflowNotification(
+                'Pengajuan Laporan Kegiatan',
+                'Laporan kegiatan "' . $kegiatan->nama_kegiatan .
+                '" dari ' . ($organisasi?->nama_organisasi ?? 'organisasi') .
+                ' menunggu validasi Anda.',
+                route('pembina.laporan'),
+                'Buka Laporan'
+            ));
+        }
     }
 }

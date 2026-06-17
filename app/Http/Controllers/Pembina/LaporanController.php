@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Pembina;
 
 use App\Http\Controllers\Controller;
 use App\Models\LaporanKegiatan;
+use App\Notifications\LaporanWorkflowNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -95,6 +96,8 @@ class LaporanController extends Controller
             'keterangan' => null,
         ]);
 
+        $this->notifyKetuaSetelahDisetujui($laporan->fresh());
+
         return back()->with('success', 'Laporan kegiatan telah disetujui.');
     }
 
@@ -134,6 +137,50 @@ class LaporanController extends Controller
             'keterangan' => $keterangan,
         ]);
 
+        $this->notifyKetuaSetelahDitolak($laporan->fresh());
+
         return back()->with('success', 'Laporan kegiatan telah ditolak.');
+    }
+
+    private function notifyKetuaSetelahDisetujui(LaporanKegiatan $laporan): void
+    {
+        $kegiatan = $laporan->kegiatan()->with('organisasi.ketuaUsers')->first();
+        $organisasi = $kegiatan?->organisasi;
+        $ketuaUsers = $organisasi?->ketuaUsers;
+
+        if (!$ketuaUsers || $ketuaUsers->isEmpty()) {
+            return;
+        }
+
+        foreach ($ketuaUsers as $ketua) {
+            $ketua->notify(new LaporanWorkflowNotification(
+                'Laporan Disetujui Pembina',
+                'Laporan kegiatan "' . $kegiatan->nama_kegiatan . '" telah disetujui pembina.',
+                route('ketua.laporan'),
+                'Lihat Laporan'
+            ));
+        }
+    }
+
+    private function notifyKetuaSetelahDitolak(LaporanKegiatan $laporan): void
+    {
+        $kegiatan = $laporan->kegiatan()->with('organisasi.ketuaUsers')->first();
+        $organisasi = $kegiatan?->organisasi;
+        $ketuaUsers = $organisasi?->ketuaUsers;
+
+        if (!$ketuaUsers || $ketuaUsers->isEmpty()) {
+            return;
+        }
+
+        $keterangan = $laporan->keterangan ?: '-';
+
+        foreach ($ketuaUsers as $ketua) {
+            $ketua->notify(new LaporanWorkflowNotification(
+                'Laporan Ditolak Pembina',
+                'Laporan kegiatan "' . $kegiatan->nama_kegiatan . '" ditolak pembina. Keterangan: ' . $keterangan,
+                route('ketua.laporan'),
+                'Lihat Laporan'
+            ));
+        }
     }
 }
